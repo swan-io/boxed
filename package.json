@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "description": "Utility types",
   "main": "src/Boxed.js",
+  "files": [
+    "README.md",
+    "MIT-LICENSE",
+    "src/*.js",
+    "src/*.d.ts"
+  ],
   "type": "module",
   "license": "MIT",
   "scripts": {
