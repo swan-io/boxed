@@ -25,7 +25,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn
       - run: yarn build
-      - run: yarn test || true # Tests are supposed to fail
+      - run: yarn test
 
       - name: Build docs
         run: cd docs && yarn && yarn build
