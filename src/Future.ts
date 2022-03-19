@@ -272,7 +272,7 @@ function all<Futures extends readonly Future<any>[] | []>(
 export const Future = {
   make: <Value>(
     init: (resolver: (value: Value) => void) => (() => void) | void
-  ) => {
+  ): Future<Value> => {
     return new FutureClass(init) as Future<Value>;
   },
   value: <Value>(value: Value): Future<Value> => {

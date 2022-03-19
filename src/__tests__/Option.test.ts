@@ -88,3 +88,13 @@ test("Option.equals", () => {
     Option.equals(Option.Some(1), Option.Some(6), (a, b) => Math.abs(a - b) < 2)
   ).toBe(false);
 });
+
+test("Option serialize", () => {
+  expect(JSON.parse(JSON.stringify(Option.None()))).toEqual({
+    tag: "None",
+  });
+  expect(JSON.parse(JSON.stringify(Option.Some(1)))).toEqual({
+    tag: "Some",
+    value: 1,
+  });
+});

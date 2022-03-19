@@ -99,3 +99,14 @@ test("Result.equals", () => {
     Result.equals(Result.Ok(1), Result.Ok(6), (a, b) => Math.abs(a - b) < 2)
   ).toBe(false);
 });
+
+test("Result serialize", () => {
+  expect(JSON.parse(JSON.stringify(Result.Error(1)))).toEqual({
+    tag: "Error",
+    value: 1,
+  });
+  expect(JSON.parse(JSON.stringify(Result.Ok(1)))).toEqual({
+    tag: "Ok",
+    value: 1,
+  });
+});
