@@ -77,24 +77,34 @@ class AsyncDataClass<Value> {
 // @ts-expect-error
 AsyncDataClass.prototype.__boxed_type__ = "AsyncData";
 
+const LOADING = (() => {
+  const asyncData = Object.create(AsyncDataClass.prototype);
+  asyncData.tag = "Loading";
+  asyncData.value = undefined;
+  return Object.freeze(asyncData);
+})();
+
+const NOT_ASKED = (() => {
+  const asyncData = Object.create(AsyncDataClass.prototype);
+  asyncData.tag = "NotAsked";
+  asyncData.value = undefined;
+  return Object.freeze(asyncData);
+})();
+
 export const AsyncData = {
   Done: <Value>(value: Value): AsyncData<Value> => {
-    const option = Object.create(AsyncDataClass.prototype) as AsyncData<Value>;
-    option.tag = "Done";
-    option.value = value;
-    return Object.freeze(option);
+    const asyncData = Object.create(
+      AsyncDataClass.prototype
+    ) as AsyncData<Value>;
+    asyncData.tag = "Done";
+    asyncData.value = value;
+    return Object.freeze(asyncData);
   },
   Loading: <Value>(): AsyncData<Value> => {
-    const option = Object.create(AsyncDataClass.prototype) as AsyncData<Value>;
-    option.tag = "Loading";
-    option.value = undefined;
-    return Object.freeze(option);
+    return LOADING as AsyncData<Value>;
   },
   NotAsked: <Value>(): AsyncData<Value> => {
-    const option = Object.create(AsyncDataClass.prototype) as AsyncData<Value>;
-    option.tag = "NotAsked";
-    option.value = undefined;
-    return Object.freeze(option);
+    return NOT_ASKED as AsyncData<Value>;
   },
   equals: <Value>(
     a: AsyncData<Value>,

@@ -67,6 +67,13 @@ class OptionClass<Value> {
 // @ts-expect-error
 OptionClass.prototype.__boxed_type__ = "Option";
 
+const NONE = (() => {
+  const none = Object.create(OptionClass.prototype);
+  none.tag = "None";
+  none.value = undefined;
+  return Object.freeze(none);
+})();
+
 export const Option = {
   Some: <Value>(value: Value): Option<Value> => {
     const option = Object.create(OptionClass.prototype) as Option<Value>;
@@ -75,10 +82,7 @@ export const Option = {
     return Object.freeze(option);
   },
   None: <Value>(): Option<Value> => {
-    const option = Object.create(OptionClass.prototype) as Option<Value>;
-    option.tag = "None";
-    option.value = undefined;
-    return Object.freeze(option);
+    return NONE as Option<Value>;
   },
   fromNullable: <NullableValue>(nullable: NullableValue) => {
     if (nullable == null) {
