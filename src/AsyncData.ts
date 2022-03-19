@@ -65,11 +65,11 @@ class AsyncDataClass<Value> {
   } {
     return this.tag === "NotAsked";
   }
-  toOption() {
+  toOption(): Option<Value> {
     if (this.tag === "Done") {
-      return Option.Some(this.value);
+      return Option.Some(this.value) as Option<Value>;
     } else {
-      return Option.None();
+      return Option.None() as Option<Value>;
     }
   }
 }

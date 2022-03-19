@@ -50,11 +50,11 @@ class ResultClass<Ok, Error> {
   isError(): this is Result<Ok, Error> & { tag: "Error"; value: Error } {
     return this.tag === "Error";
   }
-  toOption() {
+  toOption(): Option<Ok> {
     if (this.tag === "Ok") {
-      return Option.Some(this.value);
+      return Option.Some(this.value) as Option<Ok>;
     } else {
-      return Option.None();
+      return Option.None() as Option<Ok>;
     }
   }
 }
