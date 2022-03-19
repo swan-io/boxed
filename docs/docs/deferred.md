@@ -8,6 +8,8 @@ sidebar_label: Deferred
 Returns a future and its resolver:
 
 ```ts
+import { Deferred } from "@swan-io/boxed";
+
 const [future, resolve] = Deferred.make<string>();
 
 // subscribe to the promise

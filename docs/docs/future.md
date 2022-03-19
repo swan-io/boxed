@@ -19,6 +19,8 @@ Even though we're diverging from `Promise`, you can `await` a `Future`.
 ## Create a Future
 
 ```ts
+import { Future } from "@swan-io/boxed";
+
 // Value
 const future = Future.value(1);
 
