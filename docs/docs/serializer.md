@@ -19,7 +19,7 @@ Serializer.encode({
     name: Option.None(),
   }),
 });
-// {"data":{"__boxed_type":"AsyncData","tag":"Done","value":{"name":{"__boxed_type": "Option","tag":"None"}}}}
+// {"data":{"__boxed_type":"AsyncData","tag":"Done","value":{"name":{"__boxed_type":"Option","tag":"None"}}}}
 ```
 
 ## Serializer.decode(value)
@@ -27,5 +27,5 @@ Serializer.encode({
 Parse the JSON input, reviving the `AsyncData`, `Option` and `Result` types properly.
 
 ```ts
-Serializer.decode(`{"__boxed_type": "Option","tag":"None"}`); // Option.None();
+Serializer.decode(`{"__boxed_type":"Option","tag":"None"}`); // Option.None();
 ```
