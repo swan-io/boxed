@@ -74,6 +74,9 @@ class AsyncDataClass<Value> {
   }
 }
 
+// @ts-expect-error
+AsyncDataClass.prototype.__boxed_type__ = "AsyncData";
+
 export const AsyncData = {
   Done: <Value>(value: Value): AsyncData<Value> => {
     const option = Object.create(AsyncDataClass.prototype) as AsyncData<Value>;

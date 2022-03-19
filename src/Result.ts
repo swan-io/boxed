@@ -59,6 +59,9 @@ class ResultClass<Ok, Error> {
   }
 }
 
+// @ts-expect-error
+ResultClass.prototype.__boxed_type__ = "Result";
+
 export const Result = {
   Ok: <Ok, Error>(ok: Ok): Result<Ok, Error> => {
     const result = Object.create(ResultClass.prototype) as Result<Ok, Error>;

@@ -64,6 +64,9 @@ class OptionClass<Value> {
   }
 }
 
+// @ts-expect-error
+OptionClass.prototype.__boxed_type__ = "Option";
+
 export const Option = {
   Some: <Value>(value: Value): Option<Value> => {
     const option = Object.create(OptionClass.prototype) as Option<Value>;

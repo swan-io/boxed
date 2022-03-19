@@ -6,5 +6,16 @@ import { Future } from "./Future.js";
 import { Deferred } from "./Deferred.js";
 import * as Dict from "./Dict.js";
 import * as Lazy from "./Lazy.js";
+import * as Serializer from "./Serializer.js";
 
-export { Array, AsyncData, Future, Deferred, Dict, Lazy, Option, Result };
+export {
+  Array,
+  AsyncData,
+  Future,
+  Deferred,
+  Dict,
+  Lazy,
+  Option,
+  Result,
+  Serializer,
+};

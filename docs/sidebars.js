@@ -30,6 +30,7 @@ module.exports = {
         "array",
         "dict",
         "lazy",
+        "serializer",
       ],
     },
     {
