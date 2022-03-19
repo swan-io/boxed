@@ -16,6 +16,15 @@ sidebar_label: Getting started
 - Simple **interoperability** (you can convert back and forth to JS native types)
 - Compatibility with `ts-pattern` (using `patterns` we provide).
 
+## What's in the box?
+
+- `Option<Value>`
+- `Result<Ok, Error>`
+- `AsyncData<Value>`
+- `Future<Value>`
+- `Lazy<Value>`
+- Some utils like `Deferred`, `Dict` & `Array`
+
 ## Install
 
 ```console
