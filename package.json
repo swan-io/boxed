@@ -2,7 +2,7 @@
   "name": "@swan-io/boxed",
   "version": "1.0.0",
   "description": "Utility types",
-  "main": "index.js",
+  "main": "src/Boxed.js",
   "type": "module",
   "license": "MIT",
   "scripts": {
