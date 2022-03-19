@@ -34,17 +34,18 @@ Using `Future` can make this easier:
 import { useEffect } from "react";
 import { Future, Result } from "@swan-io/boxed";
 
-const callMyApi = (url) => {
-  return Future.make((resolve) => {
+const callMyApi = (url: string) =>
+  Future.make((resolve) => {
     const controller = new AbortController();
+
     fetch(url, { signal: controller.signal })
       .then((res) => res.json())
       .then((json) => resolve(Result.Ok(json)))
       .catch((error) => resolve(Result.Error(error)));
+
     // Here, the implementation detail is managed in place
     return () => controller.abort();
   });
-};
 
 // And the noise dissapears from your components!
 useEffect(() => {
