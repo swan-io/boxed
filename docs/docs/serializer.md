@@ -3,7 +3,7 @@ title: Serializer
 sidebar_label: Serializer
 ---
 
-The serializer enables you to serialize some Boxed values (e.g. to store in `LocalStorage`).
+The serializer enables you to serialize some Boxed values (e.g. to store in `LocalStorage`, or to hydrate data from SSR).
 
 ```ts
 import { Serializer } from "@swan-io/boxed";
