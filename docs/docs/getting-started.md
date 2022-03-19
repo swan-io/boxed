@@ -11,7 +11,7 @@ sidebar_label: Getting started
 ## Design principles
 
 - Provide utility types that **make data-manipulation and storage easier**
-- **Immutable** (all provided types are immutable)
+- **Immutable** (all provided types are)
 - Give a **good development experience** (chaining API, reliable types)
 - Simple **interoperability** (you can convert back and forth to JS native types)
 - Compatibility with `ts-pattern` (using `patterns` we provide).
