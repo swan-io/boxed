@@ -8,6 +8,16 @@ sidebar_label: Getting started
 
 **Boxed** provides functional utility types and functions, while focusing on ease-of-use.
 
+```ts
+const make = (input) =>
+  Option.fromNullable(input)
+    .map(parseInput)
+    .flatMap((input) => Option.fromNullable(transform(input)))
+    .map(print)
+    .map(prettify)
+    .getWithDefault("fallback");
+```
+
 ## Design principles
 
 - Provide utility types that **make data-manipulation and storage easier**

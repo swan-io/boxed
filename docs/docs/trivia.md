@@ -46,8 +46,12 @@ option.value = value;
 return option;
 ```
 
-## Why don't the types implement monads?
+## Where's _{insert category theory terminology}_?
 
-Even though most of the provided type implement a `.map` and `.flatMap`, that's the furthest we'll go.
+We want this library to be **as simple as possible**.
 
-We want this library to be **as simple as possible**, and feel like those concepts bring too little value in a web application context, which is our main use-case.
+While the theoretical concepts in languages such as Haskell are really interesting and powerful, we don't want to add that kind of **knowledge barrier** for a library that can benefit to lots. That's also the reason why we use simple wording, such as `Result.Ok` & `Result.Error` instead of more abstract naming like `Either.Left` & `Either.Right`.
+
+That's also the reason why we settled on an API that leverages JavaScript objects to provide chaining (although we're likely to provide a functional API once [the pipeline operator](https://github.com/tc39/proposal-pipeline-operator) lands in JS).
+
+![](/img/profunctor-optics.jpg)
