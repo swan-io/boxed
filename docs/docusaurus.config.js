@@ -43,6 +43,13 @@ module.exports = {
       ],
     },
     footer: {
+      logo: {
+        alt: "Swan Open Source",
+        src: "img/swan-opensource.svg",
+        href: "https://swan.io",
+        width: 116,
+        height: 43,
+      },
       style: "dark",
       copyright: `Copyright © ${new Date().getFullYear()} Swan`,
     },

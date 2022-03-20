@@ -4,6 +4,11 @@
     #8266c4 0%,
     rgba(217, 97, 81, 0.5) 70.75%
   );
+  color: #fff;
+}
+
+.hero a {
+  color: #fff;
 }
 
 .logo {
