@@ -1,0 +1,23 @@
+.features {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.svgContainer {
+  width: 64px;
+  height: 64px;
+  background-color: #f7f5fb;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  margin: 0 auto 20px;
+}
+
+.svg {
+  width: 48px;
+  height: 48px;
+}

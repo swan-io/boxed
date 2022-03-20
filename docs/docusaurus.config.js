@@ -21,6 +21,21 @@ module.exports = {
       },
       items: [
         {
+          href: "/getting-started",
+          label: "Getting started",
+          position: "left",
+        },
+        {
+          href: "/option",
+          label: "API",
+          position: "left",
+        },
+        {
+          href: "/react-request",
+          label: "Examples",
+          position: "left",
+        },
+        {
           href: "https://github.com/swan-io/boxed",
           label: "GitHub",
           position: "right",
@@ -32,7 +47,7 @@ module.exports = {
       copyright: `Copyright © ${new Date().getFullYear()} Swan`,
     },
     prism: {
-      theme: lightCodeTheme,
+      theme: darkCodeTheme,
       darkTheme: darkCodeTheme,
     },
   },

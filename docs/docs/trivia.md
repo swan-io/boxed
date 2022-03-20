@@ -3,6 +3,12 @@ title: Trivia
 sidebar_label: Trivia
 ---
 
+## Why is it called Boxed?
+
+Most of the types we provide can be seen as **container** boxing **values**, hence the **box**. This approach makes disambiguation between certain values possible, where regular JavaScript construct don't (e.g. the return value from `array.find(x => x === undefined)` doesn't give you any information).
+
+That's how we think of the `Option`, `Result` and `AsyncData` types: little boxes that may or may not contain certain informations (like [Schrödinger's cat](https://en.wikipedia.org/wiki/Schrödinger%27s_cat) 🐈).
+
 ## How does Boxed work?
 
 We aim for a good compromise between **performance**, **developer experience** and ability to **leverage TypeScript**.

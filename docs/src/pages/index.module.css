@@ -1,0 +1,49 @@
+.hero {
+  background: linear-gradient(
+    to bottom right,
+    #8266c4 0%,
+    rgba(217, 97, 81, 0.5) 70.75%
+  );
+}
+
+.logo {
+  max-width: 150px;
+  height: auto;
+  align-self: center;
+}
+
+@media (max-width: 1000px) {
+  .logo {
+    max-width: 100px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    align-items: stretch;
+  }
+}
+
+.code {
+  text-align: left;
+}
+
+@media (max-width: 1000px) {
+  .code {
+    padding: 30px 10px 0;
+  }
+}
+
+.separator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+}
+
+@media (max-width: 1200px) {
+  .separator {
+    display: block;
+  }
+}
