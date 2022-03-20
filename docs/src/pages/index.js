@@ -34,10 +34,10 @@ const UserCard = ({user: AsyncData<User>}) => {
     Loading: () => \`Loading\`,
     Done: (user) => {
       const name = user.name.getWithDefault("anonymous");
-      return \`Hello \${name}!\`
+      return \`Hello \${name}!\`;
     },
   });
-}`}
+};`}
         </CodeBlock>
       </div>
     </header>
