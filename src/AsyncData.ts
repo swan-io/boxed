@@ -77,28 +77,31 @@ class AsyncDataClass<Value> {
 // @ts-expect-error
 AsyncDataClass.prototype.__boxed_type__ = "AsyncData";
 
+const proto = Object.create(
+  null,
+  Object.getOwnPropertyDescriptors(AsyncDataClass.prototype)
+);
+
 const LOADING = (() => {
-  const asyncData = Object.create(AsyncDataClass.prototype);
+  const asyncData = Object.create(proto);
   asyncData.tag = "Loading";
   asyncData.value = undefined;
-  return Object.freeze(asyncData);
+  return asyncData;
 })();
 
 const NOT_ASKED = (() => {
-  const asyncData = Object.create(AsyncDataClass.prototype);
+  const asyncData = Object.create(proto);
   asyncData.tag = "NotAsked";
   asyncData.value = undefined;
-  return Object.freeze(asyncData);
+  return asyncData;
 })();
 
 export const AsyncData = {
   Done: <Value>(value: Value): AsyncData<Value> => {
-    const asyncData = Object.create(
-      AsyncDataClass.prototype
-    ) as AsyncData<Value>;
+    const asyncData = Object.create(proto) as AsyncData<Value>;
     asyncData.tag = "Done";
     asyncData.value = value;
-    return Object.freeze(asyncData);
+    return asyncData;
   },
   Loading: <Value>(): AsyncData<Value> => {
     return LOADING as AsyncData<Value>;

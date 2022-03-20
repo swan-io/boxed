@@ -8,7 +8,7 @@ The `Future` is a replacement for `Promise`.
 ## Main differences with Promises
 
 - Futures don't handle rejection state, instead leaving it to a contained `Result`
-- Futures handle cancellation
+- Futures have built-in cancellation (and don't reject like the fetch `signal` API does)
 - Futures don't "swallow" futures that are returned from `map` and `flatMap`
 - Future callbacks run synchronously
 

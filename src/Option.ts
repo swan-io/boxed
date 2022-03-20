@@ -67,19 +67,24 @@ class OptionClass<Value> {
 // @ts-expect-error
 OptionClass.prototype.__boxed_type__ = "Option";
 
+const proto = Object.create(
+  null,
+  Object.getOwnPropertyDescriptors(OptionClass.prototype)
+);
+
 const NONE = (() => {
-  const none = Object.create(OptionClass.prototype);
+  const none = Object.create(proto);
   none.tag = "None";
   none.value = undefined;
-  return Object.freeze(none);
+  return none;
 })();
 
 export const Option = {
   Some: <Value>(value: Value): Option<Value> => {
-    const option = Object.create(OptionClass.prototype) as Option<Value>;
+    const option = Object.create(proto) as Option<Value>;
     option.tag = "Some";
     option.value = value;
-    return Object.freeze(option);
+    return option;
   },
   None: <Value>(): Option<Value> => {
     return NONE as Option<Value>;

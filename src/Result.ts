@@ -62,18 +62,23 @@ class ResultClass<Ok, Error> {
 // @ts-expect-error
 ResultClass.prototype.__boxed_type__ = "Result";
 
+const proto = Object.create(
+  null,
+  Object.getOwnPropertyDescriptors(ResultClass.prototype)
+);
+
 export const Result = {
   Ok: <Ok, Error>(ok: Ok): Result<Ok, Error> => {
-    const result = Object.create(ResultClass.prototype) as Result<Ok, Error>;
+    const result = Object.create(proto) as Result<Ok, Error>;
     result.tag = "Ok";
     result.value = ok;
-    return Object.freeze(result);
+    return result;
   },
   Error: <Ok, Error>(error: Error): Result<Ok, Error> => {
-    const result = Object.create(ResultClass.prototype) as Result<Ok, Error>;
+    const result = Object.create(proto) as Result<Ok, Error>;
     result.tag = "Error";
     result.value = error;
-    return Object.freeze(result);
+    return result;
   },
   fromExecution<ReturnValue>(func: () => ReturnValue) {
     try {

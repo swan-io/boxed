@@ -34,7 +34,7 @@ We then use `Object.create(OptionClass.prototype)` to create new instances, on w
 const option = Object.create(OptionClass.prototype) as Option<Value>;
 option.tag = "Some";
 option.value = value;
-return Object.freeze(option);
+return option;
 ```
 
 ## Why don't the types implement monads?

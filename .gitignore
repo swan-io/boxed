@@ -3,3 +3,5 @@
 node_modules/
 src/**/*.js
 src/**/*.d.ts
+benchmark/**/*.js
+benchmark/**/*.d.ts

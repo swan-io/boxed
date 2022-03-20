@@ -13,25 +13,34 @@ export type Future<Value> =
   | (FutureClass<Value> & { tag: "Cancelled" })
   | (FutureClass<Value> & { tag: "Resolved"; value: Value });
 
+function FutureInit<Value>(
+  this: FutureClass<Value>,
+  init: (resolver: (value: Value) => void) => (() => void) | void
+) {
+  const resolver = (value: Value) => {
+    if (this.tag === "Pending") {
+      const pending = this.pending as PendingPayload<Value>;
+      const resolveCallbacks = pending.resolveCallbacks;
+      resolveCallbacks?.forEach((func) => func(value));
+      this.tag = "Resolved";
+      this.value = value;
+      this.pending = undefined;
+    }
+  };
+  const pendingPayload: PendingPayload<Value> = {};
+  this.tag = "Pending";
+  this.pending = pendingPayload;
+  pendingPayload.cancel = init(resolver);
+}
+
 class FutureClass<Value> {
   tag: "Pending" | "Cancelled" | "Resolved";
   value?: Value;
   pending?: PendingPayload<Value>;
   constructor(init: (resolver: (value: Value) => void) => (() => void) | void) {
-    const resolver = (value: Value) => {
-      if (this.tag === "Pending") {
-        const pending = this.pending as PendingPayload<Value>;
-        const resolveCallbacks = pending.resolveCallbacks;
-        resolveCallbacks?.forEach((func) => func(value));
-        this.tag = "Resolved";
-        this.value = value;
-        this.pending = undefined;
-      }
-    };
     const pendingPayload: PendingPayload<Value> = {};
     this.tag = "Pending";
     this.pending = pendingPayload;
-    pendingPayload.cancel = init(resolver);
   }
   isPending(): this is FutureClass<Value> & {
     tag: "Pending";
@@ -86,7 +95,7 @@ class FutureClass<Value> {
     func: (value: Value) => ReturnValue,
     propagateCancel = false
   ): Future<ReturnValue> {
-    const future = new FutureClass<ReturnValue>((resolve) => {
+    const future = Future.make<ReturnValue>((resolve) => {
       this.get((value) => {
         resolve(func(value));
       });
@@ -109,7 +118,7 @@ class FutureClass<Value> {
     func: (value: Value) => Future<ReturnValue>,
     propagateCancel = false
   ): Future<ReturnValue> {
-    const future = new FutureClass<ReturnValue>((resolve) => {
+    const future = Future.make<ReturnValue>((resolve) => {
       this.get((value) => {
         const returnedFuture = func(value);
         returnedFuture.get(resolve);
@@ -269,14 +278,23 @@ function all<Futures extends readonly Future<any>[] | []>(
   }
 }
 
+const proto = Object.create(
+  null,
+  Object.getOwnPropertyDescriptors(FutureClass.prototype)
+);
+
 export const Future = {
   make: <Value>(
     init: (resolver: (value: Value) => void) => (() => void) | void
   ): Future<Value> => {
-    return new FutureClass(init) as Future<Value>;
+    const future = Object.create(proto);
+    FutureInit.call(future, init);
+    return future as Future<Value>;
   },
   value: <Value>(value: Value): Future<Value> => {
-    return new FutureClass((resolve) => resolve(value)) as Future<Value>;
+    const future = Object.create(proto);
+    FutureInit.call(future, (resolve) => resolve(value));
+    return future as Future<Value>;
   },
   fromPromise<Value>(promise: Promise<Value>): Future<Result<Value, unknown>> {
     return Future.make((resolve) => {
