@@ -49,7 +49,7 @@ const Home = () => {
 
   return (
     <Layout
-      title={siteConfig.title}
+      title={`Boxed: ${siteConfig.tagline}`}
       description="Functional utility types and functions for TypeScript"
     >
       <HomepageHeader />
