@@ -5,12 +5,12 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 module.exports = {
   title: "Boxed",
   tagline: "Functional utility types and functions for TypeScript",
-  url: "https://bloodyowl.github.io",
+  url: "https://swan-io.github.io",
   baseUrl: "/boxed/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.png",
-  organizationName: "bloodyowl", // Usually your GitHub org/user name.
+  organizationName: "swan-io", // Usually your GitHub org/user name.
   projectName: "boxed", // Usually your repo name.
   themeConfig: {
     navbar: {

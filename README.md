@@ -33,6 +33,6 @@ or
 $ npm install --save @swan-io/boxed
 ```
 
-## [Documentation](https://bloodyowl.github.io/boxed)
+## [Documentation](https://swan-io.github.io/boxed)
 
 ## [License](./MIT-LICENSE)
