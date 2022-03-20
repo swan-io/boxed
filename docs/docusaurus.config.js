@@ -66,7 +66,7 @@ module.exports = {
           routeBasePath: "/",
           sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
-          editUrl: "https://github.com/bloodyowl/rescript-test/edit/main/docs/",
+          editUrl: "https://github.com/swan-io/boxed/edit/main/docs/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
