@@ -58,7 +58,7 @@ future.onCancel(() => {
 
 ## .map(f)
 
-Takes a `Result<A>` and returns a new `Result<f<A>>`
+Takes a `Future<A>` and returns a new `Future<f<A>>`
 
 ```ts
 future.map((x) => x * 2);
