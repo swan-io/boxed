@@ -27,7 +27,7 @@ The async data type provides a few manipulation functions:
 
 ## .map(f)
 
-If the asyncData is `Done(value)` returns `Done(f(value))`, otherwise returns `NotAsked`.
+If the asyncData is `Done(value)` returns `Done(f(value))`, otherwise returns the async data.
 
 ```ts
 AsyncData.Done(2).map((x) => x * 2); // AsyncData.Done(4)
