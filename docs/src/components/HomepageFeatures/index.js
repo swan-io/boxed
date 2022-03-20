@@ -21,7 +21,7 @@ const FeatureList = [
     ),
     description: (
       <>
-        Boxed provides functional building blocks that makes your code more{" "}
+        Boxed provides functional building blocks that make your code more{" "}
         <strong>maintainable</strong>, more <strong>expressive</strong>, and{" "}
         <strong>safer</strong>.
       </>
