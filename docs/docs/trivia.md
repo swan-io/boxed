@@ -28,10 +28,19 @@ type Option<Value> =
 
 This allows to **pattern-match** the values, while sharing the methods in memory.
 
-We then use `Object.create(OptionClass.prototype)` to create new instances, on which we set our values and then freeze the value:
+For performance, we make the prototype methods cleaner make rebuilding it from `Object.create(null)`:
 
 ```ts
-const option = Object.create(OptionClass.prototype) as Option<Value>;
+const proto = Object.create(
+  null,
+  Object.getOwnPropertyDescriptors(OptionClass.prototype)
+);
+```
+
+We then use `Object.create(proto)` to create new instances, on which we set our values:
+
+```ts
+const option = Object.create(proto) as Option<Value>;
 option.tag = "Some";
 option.value = value;
 return option;
