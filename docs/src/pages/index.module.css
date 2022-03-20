@@ -11,6 +11,17 @@
   color: #fff;
 }
 
+.heroTitle {
+  margin: 0;
+  padding: 0;
+  font-size: 64px;
+}
+
+.heroSubtitle {
+  font-size: 20px;
+  line-height: 1.2;
+}
+
 .logo {
   max-width: 150px;
   height: auto;
@@ -33,6 +44,16 @@
 
 .code {
   text-align: left;
+  border-radius: 10px;
+  box-shadow: 0 20px 30px -10px #d96151;
+}
+
+:global([data-theme="dark"]) .code {
+  box-shadow: 0 20px 30px -10px #572720;
+}
+
+.codeBlock {
+  margin-bottom: 0;
 }
 
 @media (max-width: 1000px) {
