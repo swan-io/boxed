@@ -9,8 +9,8 @@
     "type": "git",
     "url": "https://github.com/swan-io/boxed.git"
   },
-  "main": "dist/index.js",
-  "source": "src/index.ts",
+  "main": "dist/Boxed.js",
+  "source": "src/Boxed.ts",
   "files": [
     "LICENSE",
     "dist",

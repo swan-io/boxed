@@ -1,5 +1,5 @@
 const Benchmark = require("benchmark");
-const { Future } = require("../../dist");
+const { Future } = require("../../dist/Boxed");
 
 const suite = new Benchmark.Suite();
 

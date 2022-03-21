@@ -1,6 +1,6 @@
 const Benchmark = require("benchmark");
 const fp = require("fp-ts");
-const { Result } = require("../../dist");
+const { Result } = require("../../dist/Boxed");
 
 const suite = new Benchmark.Suite();
 
