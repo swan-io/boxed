@@ -58,6 +58,6 @@ We want this library to be **as simple as possible**.
 
 While the theoretical concepts in languages such as Haskell are really interesting and powerful, we don't want to add that kind of **knowledge barrier** for a library that can benefit to lots. That's also the reason why we use simple wording, such as `Result.Ok` & `Result.Error` instead of more abstract naming like `Either.Left` & `Either.Right`.
 
-That's also the reason why we settled on an API that leverages JavaScript objects to provide chaining (although we're likely to provide a functional API once [the pipeline operator](https://github.com/tc39/proposal-pipeline-operator) lands in JS).
+This approach made us settle on an API that leverages JavaScript objects to provide chaining (although we're likely to provide a functional API once [the pipeline operator](https://github.com/tc39/proposal-pipeline-operator) lands in JS).
 
 ![](/img/profunctor-optics.jpg)
