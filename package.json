@@ -11,6 +11,7 @@
   ],
   "type": "module",
   "license": "MIT",
+  "repository": "git://github.com/swan-io/boxed.git",
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
