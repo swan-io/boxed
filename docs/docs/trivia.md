@@ -39,7 +39,7 @@ For performance, we make the prototype methods cleaner make rebuilding it from `
 ```ts
 const proto = Object.create(
   null,
-  Object.getOwnPropertyDescriptors(OptionClass.prototype)
+  Object.getOwnPropertyDescriptors(OptionClass.prototype),
 );
 ```
 

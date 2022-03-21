@@ -1,4 +1,4 @@
-import { Option } from "./Option.js";
+import { Option } from "./Option";
 
 export type AsyncData<Value> =
   | (AsyncDataClass<Value> & { tag: "NotAsked"; value: undefined })
@@ -20,7 +20,7 @@ class AsyncDataClass<Value> {
     }
   }
   flatMap<ReturnValue>(
-    f: (value: Value) => AsyncData<ReturnValue>
+    f: (value: Value) => AsyncData<ReturnValue>,
   ): AsyncData<ReturnValue> {
     if (this.tag === "Done") {
       return f(this.value as Value);
@@ -79,7 +79,7 @@ AsyncDataClass.prototype.__boxed_type__ = "AsyncData";
 
 const proto = Object.create(
   null,
-  Object.getOwnPropertyDescriptors(AsyncDataClass.prototype)
+  Object.getOwnPropertyDescriptors(AsyncDataClass.prototype),
 );
 
 const LOADING = (() => {
@@ -112,7 +112,7 @@ export const AsyncData = {
   equals: <Value>(
     a: AsyncData<Value>,
     b: AsyncData<Value>,
-    equals: (a: Value, b: Value) => boolean
+    equals: (a: Value, b: Value) => boolean,
   ) => {
     if (a.tag === "Done" && b.tag === "Done") {
       return equals(a.value, b.value);

@@ -1,7 +1,17 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/dist
+
+# misc
 .DS_Store
-.DS_Store?
-node_modules/
-src/**/*.js
-src/**/*.d.ts
-benchmark/**/*.js
-benchmark/**/*.d.ts
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

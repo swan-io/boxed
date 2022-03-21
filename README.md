@@ -1,5 +1,9 @@
 # @swan-io/boxed
 
+[![mit licence](https://img.shields.io/dub/l/vibe-d.svg?style=for-the-badge)](https://github.com/swan-io/boxed/blob/main/LICENSE)
+[![npm version](https://img.shields.io/npm/v/@swan-io/boxed?style=for-the-badge)](https://www.npmjs.org/package/@swan-io/boxed)
+[![bundlephobia](https://img.shields.io/bundlephobia/minzip/@swan-io/boxed?label=size&style=for-the-badge)](https://bundlephobia.com/result?p=@swan-io/boxed)
+
 > Utility types for functional TypeScript
 
 **Boxed** provides functional utility types and functions, while focusing on ease-of-use.
@@ -21,7 +25,7 @@
 - `Lazy<Value>`
 - Some utils like `Deferred`, `Dict` & `Array`
 
-## Install
+## Installation
 
 ```console
 $ yarn add @swan-io/boxed
@@ -35,4 +39,4 @@ $ npm install --save @swan-io/boxed
 
 ## [Documentation](https://swan-io.github.io/boxed)
 
-## [License](./MIT-LICENSE)
+## [License](./LICENSE)

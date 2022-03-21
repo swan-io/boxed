@@ -1,4 +1,4 @@
-import { Option } from "./Option.js";
+import { Option } from "./Option";
 
 export type Result<Ok, Error> =
   | (ResultClass<Ok, Error> & { tag: "Ok"; value: Ok })
@@ -19,7 +19,7 @@ class ResultClass<Ok, Error> {
     }
   }
   flatMap<ReturnValue>(
-    f: (value: Ok) => Result<ReturnValue, Error>
+    f: (value: Ok) => Result<ReturnValue, Error>,
   ): Result<ReturnValue, Error> {
     if (this.tag === "Ok") {
       return f(this.value as Ok);
@@ -64,7 +64,7 @@ ResultClass.prototype.__boxed_type__ = "Result";
 
 const proto = Object.create(
   null,
-  Object.getOwnPropertyDescriptors(ResultClass.prototype)
+  Object.getOwnPropertyDescriptors(ResultClass.prototype),
 );
 
 export const Result = {
@@ -98,7 +98,7 @@ export const Result = {
   equals: <Value, Error>(
     a: Result<Value, Error>,
     b: Result<Value, Error>,
-    equals: (a: Value, b: Value) => boolean
+    equals: (a: Value, b: Value) => boolean,
   ) => {
     if (a.tag !== b.tag) {
       return false;

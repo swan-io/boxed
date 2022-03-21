@@ -1,8 +1,8 @@
-import { Option } from "./Option.js";
+import { Option } from "./Option";
 
 export const keepMap = <A, B>(
   array: Array<A>,
-  func: (item: A) => NonNullable<B> | undefined | null
+  func: (item: A) => NonNullable<B> | undefined | null,
 ): Array<NonNullable<B>> => {
   const result: Array<NonNullable<B>> = [];
   array.forEach((item) => {
@@ -16,7 +16,7 @@ export const keepMap = <A, B>(
 
 export const getBy = <A>(
   array: Array<A>,
-  func: (item: A) => boolean
+  func: (item: A) => boolean,
 ): Option<A> => {
   let index = -1;
   while (++index < array.length) {
@@ -30,7 +30,7 @@ export const getBy = <A>(
 
 export const getIndexBy = <A>(
   array: Array<A>,
-  func: (item: A) => boolean
+  func: (item: A) => boolean,
 ): Option<number> => {
   let index = -1;
   while (++index < array.length) {
@@ -52,7 +52,7 @@ const defaultCompare = <A>(a: A, b: A) => {
 export const binarySearchBy = <A>(
   sortedArray: Array<A>,
   key: A,
-  compare = defaultCompare
+  compare = defaultCompare,
 ) => {
   if (sortedArray.length === 0) {
     return -1;

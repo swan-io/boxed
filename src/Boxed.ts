@@ -1,19 +1,19 @@
-import * as Array from "./Array.js";
-import { AsyncData } from "./AsyncData.js";
-import { Option } from "./Option.js";
-import { Result } from "./Result.js";
-import { Future } from "./Future.js";
-import { Deferred } from "./Deferred.js";
-import * as Dict from "./Dict.js";
-import * as Lazy from "./Lazy.js";
-import * as Serializer from "./Serializer.js";
+import * as Array from "./Array";
+import { AsyncData } from "./AsyncData";
+import { Deferred } from "./Deferred";
+import * as Dict from "./Dict";
+import { Future } from "./Future";
+import * as Lazy from "./Lazy";
+import { Option } from "./Option";
+import { Result } from "./Result";
+import * as Serializer from "./Serializer";
 
 export {
   Array,
   AsyncData,
-  Future,
   Deferred,
   Dict,
+  Future,
   Lazy,
   Option,
   Result,

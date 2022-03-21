@@ -1,4 +1,4 @@
-import { Result } from "./Result.js";
+import { Result } from "./Result";
 
 type PendingPayload<Value> = {
   resolveCallbacks?: Array<(value: Value) => void>;
@@ -15,7 +15,7 @@ export type Future<Value> =
 
 function FutureInit<Value>(
   this: FutureClass<Value>,
-  init: (resolver: (value: Value) => void) => (() => void) | void
+  init: (resolver: (value: Value) => void) => (() => void) | void,
 ) {
   const resolver = (value: Value) => {
     if (this.tag === "Pending") {
@@ -37,7 +37,9 @@ class FutureClass<Value> {
   tag: "Pending" | "Cancelled" | "Resolved";
   value?: Value;
   pending?: PendingPayload<Value>;
-  constructor(init: (resolver: (value: Value) => void) => (() => void) | void) {
+  constructor(
+    _init: (resolver: (value: Value) => void) => (() => void) | void,
+  ) {
     const pendingPayload: PendingPayload<Value> = {};
     this.tag = "Pending";
     this.pending = pendingPayload;
@@ -93,7 +95,7 @@ class FutureClass<Value> {
   }
   map<ReturnValue>(
     func: (value: Value) => ReturnValue,
-    propagateCancel = false
+    propagateCancel = false,
   ): Future<ReturnValue> {
     const future = Future.make<ReturnValue>((resolve) => {
       this.get((value) => {
@@ -116,7 +118,7 @@ class FutureClass<Value> {
   }
   flatMap<ReturnValue>(
     func: (value: Value) => Future<ReturnValue>,
-    propagateCancel = false
+    propagateCancel = false,
   ): Future<ReturnValue> {
     const future = Future.make<ReturnValue>((resolve) => {
       this.get((value) => {
@@ -141,7 +143,7 @@ class FutureClass<Value> {
   }
   tapOk<Ok, Error>(
     this: FutureClass<Result<Ok, Error>>,
-    func: (value: Ok) => unknown
+    func: (value: Ok) => unknown,
   ): Future<Result<Ok, Error>> {
     this.get((value) => {
       value.match({
@@ -153,7 +155,7 @@ class FutureClass<Value> {
   }
   tapError<Ok, Error>(
     this: FutureClass<Result<Ok, Error>>,
-    func: (value: Error) => unknown
+    func: (value: Error) => unknown,
   ): Future<Result<Ok, Error>> {
     this.get((value) => {
       value.match({
@@ -166,7 +168,7 @@ class FutureClass<Value> {
   mapResult<Ok, Error, ReturnValue>(
     this: FutureClass<Result<Ok, Error>>,
     func: (value: Ok) => Result<ReturnValue, Error>,
-    propagateCancel = false
+    propagateCancel = false,
   ): Future<Result<ReturnValue, Error>> {
     return this.map((value) => {
       return value.match({
@@ -178,7 +180,7 @@ class FutureClass<Value> {
   mapOk<Ok, Error, ReturnValue>(
     this: FutureClass<Result<Ok, Error>>,
     func: (value: Ok) => ReturnValue,
-    propagateCancel = false
+    propagateCancel = false,
   ): Future<Result<ReturnValue, Error>> {
     return this.map((value) => {
       return value.match({
@@ -190,7 +192,7 @@ class FutureClass<Value> {
   mapError<Ok, Error, ReturnValue>(
     this: FutureClass<Result<Ok, Error>>,
     func: (value: Error) => ReturnValue,
-    propagateCancel = false
+    propagateCancel = false,
   ): Future<Result<Ok, ReturnValue>> {
     return this.map((value) => {
       return value.match({
@@ -202,7 +204,7 @@ class FutureClass<Value> {
   flatMapOk<Ok, Error, ReturnValue>(
     this: FutureClass<Result<Ok, Error>>,
     func: (value: Ok) => Future<Result<ReturnValue, Error>>,
-    propagateCancel = false
+    propagateCancel = false,
   ): Future<Result<ReturnValue, Error>> {
     return this.flatMap((value) => {
       return value.match({
@@ -215,7 +217,7 @@ class FutureClass<Value> {
   flatMapError<Ok, Error, ReturnValue>(
     this: FutureClass<Result<Ok, Error>>,
     func: (value: Error) => Future<Result<Ok, ReturnValue>>,
-    propagateCancel = false
+    propagateCancel = false,
   ): Future<Result<Ok, ReturnValue>> {
     return this.flatMap((value) => {
       return value.match({
@@ -230,7 +232,7 @@ class FutureClass<Value> {
     });
   }
   resultToPromise<Ok, Error>(
-    this: FutureClass<Result<Ok, Error>>
+    this: FutureClass<Result<Ok, Error>>,
   ): Promise<Ok> {
     return new Promise((resolve, reject) => {
       this.get((value) => {
@@ -249,7 +251,7 @@ type Unwrap<Value extends Future<any>> = Value extends Future<infer T>
 
 function all<Futures extends readonly Future<any>[] | []>(
   futures: Futures,
-  propagateCancel = false
+  propagateCancel = false,
 ): Future<{
   -readonly [P in keyof Futures]: Futures[P] extends Future<any>
     ? Unwrap<Futures[P]>
@@ -280,12 +282,12 @@ function all<Futures extends readonly Future<any>[] | []>(
 
 const proto = Object.create(
   null,
-  Object.getOwnPropertyDescriptors(FutureClass.prototype)
+  Object.getOwnPropertyDescriptors(FutureClass.prototype),
 );
 
 export const Future = {
   make: <Value>(
-    init: (resolver: (value: Value) => void) => (() => void) | void
+    init: (resolver: (value: Value) => void) => (() => void) | void,
   ): Future<Value> => {
     const future = Object.create(proto);
     FutureInit.call(future, init);
@@ -300,7 +302,7 @@ export const Future = {
     return Future.make((resolve) => {
       promise.then(
         (ok) => resolve(Result.Ok(ok)),
-        (reason) => resolve(Result.Error(reason))
+        (reason) => resolve(Result.Error(reason)),
       );
     });
   },

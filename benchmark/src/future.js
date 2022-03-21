@@ -1,5 +1,5 @@
-import Benchmark from "benchmark";
-import { Future } from "../../src/Future.js";
+const Benchmark = require("benchmark");
+const { Future } = require("../../dist/Boxed");
 
 const suite = new Benchmark.Suite();
 
@@ -11,7 +11,7 @@ suite.add("Future", () => {
 
 suite.add("Promise", {
   defer: true,
-  fn: (deferred: { resolve: () => void }) => {
+  fn: (deferred) => {
     Promise.resolve(1)
       .then((x) => x + 1)
       .then((v) => {
@@ -20,7 +20,7 @@ suite.add("Promise", {
   },
 });
 
-suite.on("cycle", function (event: { target: string }) {
+suite.on("cycle", function (event) {
   console.log(String(event.target));
 });
 

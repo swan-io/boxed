@@ -1,6 +1,6 @@
-import { test, expect } from "vitest";
-import { AsyncData } from "../AsyncData";
-import { Option } from "../Option";
+import { expect, test } from "vitest";
+import { AsyncData } from "../src/AsyncData";
+import { Option } from "../src/Option";
 
 test("AsyncData.is{Done|Loading|NotAsked}", () => {
   expect(AsyncData.Done(1).isDone()).toBeTruthy();
@@ -18,29 +18,29 @@ test("AsyncData.is{Done|Loading|NotAsked}", () => {
 
 test("AsyncData.map", () => {
   expect(AsyncData.NotAsked<number>().map((x) => x * 2)).toEqual(
-    AsyncData.NotAsked()
+    AsyncData.NotAsked(),
   );
   expect(AsyncData.Loading<number>().map((x) => x * 2)).toEqual(
-    AsyncData.Loading()
+    AsyncData.Loading(),
   );
   expect(AsyncData.Done(5).map((x) => x * 2)).toEqual(AsyncData.Done(10));
 });
 
 test("AsyncData.flatMap", () => {
   expect(
-    AsyncData.NotAsked<number>().flatMap((x) => AsyncData.Done(x * 2))
+    AsyncData.NotAsked<number>().flatMap((x) => AsyncData.Done(x * 2)),
   ).toEqual(AsyncData.NotAsked());
   expect(
-    AsyncData.Loading<number>().flatMap((x) => AsyncData.Done(x * 2))
+    AsyncData.Loading<number>().flatMap((x) => AsyncData.Done(x * 2)),
   ).toEqual(AsyncData.Loading());
   expect(AsyncData.Done(5).flatMap((x) => AsyncData.Done(x * 2))).toEqual(
-    AsyncData.Done(10)
+    AsyncData.Done(10),
   );
   expect(AsyncData.Done(5).flatMap((x) => AsyncData.NotAsked())).toEqual(
-    AsyncData.NotAsked()
+    AsyncData.NotAsked(),
   );
   expect(AsyncData.Done(5).flatMap((x) => AsyncData.Loading())).toEqual(
-    AsyncData.Loading()
+    AsyncData.Loading(),
   );
 });
 
@@ -79,48 +79,52 @@ test("AsyncData.equals", () => {
     AsyncData.equals(
       AsyncData.NotAsked(),
       AsyncData.NotAsked(),
-      (a, b) => a === b
-    )
+      (a, b) => a === b,
+    ),
   ).toBe(true);
   expect(
     AsyncData.equals(
       AsyncData.NotAsked(),
       AsyncData.Loading(),
-      (a, b) => a === b
-    )
+      (a, b) => a === b,
+    ),
   ).toBe(false);
   expect(
-    AsyncData.equals(AsyncData.Done(1), AsyncData.Loading(), (a, b) => a === b)
+    AsyncData.equals(AsyncData.Done(1), AsyncData.Loading(), (a, b) => a === b),
   ).toBe(false);
   expect(
-    AsyncData.equals(AsyncData.Done(1), AsyncData.NotAsked(), (a, b) => a === b)
+    AsyncData.equals(
+      AsyncData.Done(1),
+      AsyncData.NotAsked(),
+      (a, b) => a === b,
+    ),
   ).toBe(false);
   expect(
     AsyncData.equals(
       AsyncData.Loading(),
       AsyncData.Loading(),
-      (a, b) => a === b
-    )
+      (a, b) => a === b,
+    ),
   ).toBe(true);
   expect(
-    AsyncData.equals(AsyncData.Done(1), AsyncData.Done(1), (a, b) => a === b)
+    AsyncData.equals(AsyncData.Done(1), AsyncData.Done(1), (a, b) => a === b),
   ).toBe(true);
   expect(
-    AsyncData.equals(AsyncData.Done(1), AsyncData.Done(2), (a, b) => a === b)
+    AsyncData.equals(AsyncData.Done(1), AsyncData.Done(2), (a, b) => a === b),
   ).toBe(false);
   expect(
     AsyncData.equals(
       AsyncData.Done(1),
       AsyncData.Done(2),
-      (a, b) => Math.abs(a - b) < 2
-    )
+      (a, b) => Math.abs(a - b) < 2,
+    ),
   ).toBe(true);
   expect(
     AsyncData.equals(
       AsyncData.Done(1),
       AsyncData.Done(6),
-      (a, b) => Math.abs(a - b) < 2
-    )
+      (a, b) => Math.abs(a - b) < 2,
+    ),
   ).toBe(false);
 });
 

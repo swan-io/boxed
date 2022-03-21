@@ -17,7 +17,7 @@ class OptionClass<Value> {
     }
   }
   flatMap<ReturnValue>(
-    f: (value: Value) => Option<ReturnValue>
+    f: (value: Value) => Option<ReturnValue>,
   ): Option<ReturnValue> {
     if (this.tag === "Some") {
       return f(this.value as Value);
@@ -69,7 +69,7 @@ OptionClass.prototype.__boxed_type__ = "Option";
 
 const proto = Object.create(
   null,
-  Object.getOwnPropertyDescriptors(OptionClass.prototype)
+  Object.getOwnPropertyDescriptors(OptionClass.prototype),
 );
 
 const NONE = (() => {
@@ -94,7 +94,7 @@ export const Option = {
       return Option.None<NonNullable<NullableValue>>();
     } else {
       return Option.Some<NonNullable<NullableValue>>(
-        nullable as NonNullable<NullableValue>
+        nullable as NonNullable<NullableValue>,
       );
     }
   },
@@ -103,7 +103,7 @@ export const Option = {
       return Option.None<Exclude<NullableValue, null>>();
     } else {
       return Option.Some<Exclude<NullableValue, null>>(
-        nullable as Exclude<NullableValue, null>
+        nullable as Exclude<NullableValue, null>,
       );
     }
   },
@@ -112,14 +112,14 @@ export const Option = {
       return Option.None<Exclude<NullableValue, undefined>>();
     } else {
       return Option.Some<Exclude<NullableValue, undefined>>(
-        nullable as Exclude<NullableValue, undefined>
+        nullable as Exclude<NullableValue, undefined>,
       );
     }
   },
   equals: <Value>(
     a: Option<Value>,
     b: Option<Value>,
-    equals: (a: Value, b: Value) => boolean
+    equals: (a: Value, b: Value) => boolean,
   ) => {
     if (a.tag === "Some" && b.tag === "Some") {
       return equals(a.value, b.value);

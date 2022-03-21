@@ -1,5 +1,5 @@
-import { test, expect } from "vitest";
-import { Deferred } from "../Deferred";
+import { expect, test } from "vitest";
+import { Deferred } from "../src/Deferred";
 
 test("Deferred", async () => {
   const [future, resolve] = Deferred.make();
