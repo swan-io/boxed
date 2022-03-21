@@ -28,7 +28,7 @@ function HomepageHeader() {
         <CodeBlock className={styles.codeBlock} language={"typescript"}>
           {`import { AsyncData } from "@swan-io/boxed";
 
-const UserCard = ({user: AsyncData<User>}) => {
+const UserCard = ({user}: {user: AsyncData<User>}) => {
   return user.match({
     NotAsked: () => null,
     Loading: () => \`Loading\`,
