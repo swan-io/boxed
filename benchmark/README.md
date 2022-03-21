@@ -1,4 +1,4 @@
-# Benchmarks
+# Benchmark
 
 Tested on a M1 Pro MacBook Pro.
 

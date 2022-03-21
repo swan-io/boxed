@@ -32,7 +32,7 @@
     "prepare": "yarn test && yarn build",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "benchmark": "node benchmarks/src/option && node benchmarks/src/result && node benchmarks/src/future"
+    "benchmark": "node benchmark/src/option && node benchmark/src/result && node benchmark/src/future"
   },
   "devDependencies": {
     "@types/benchmark": "^2.1.1",
