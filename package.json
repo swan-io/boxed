@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "description": "Utility types",
   "main": "src/Boxed.js",
+  "author": "Matthias Le Brun <bloodyowl@swan.io>",
+  "homepage": "https://swan-io.github.io/boxed",
   "files": [
     "README.md",
     "MIT-LICENSE",
@@ -11,7 +13,10 @@
   ],
   "type": "module",
   "license": "MIT",
-  "repository": "git://github.com/swan-io/boxed.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/swan-io/boxed.git"
+  },
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
