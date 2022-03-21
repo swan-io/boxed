@@ -1,5 +1,5 @@
-import { test, expect } from "vitest";
-import { entries, keys, values } from "../Dict";
+import { expect, test } from "vitest";
+import { entries, keys, values } from "../src/Dict";
 
 test("Dict.entries", () => {
   expect(entries({ foo: 1, bar: 2 })).toEqual([

@@ -1,5 +1,5 @@
-import { test, expect } from "vitest";
-import { Option } from "../Option";
+import { expect, test } from "vitest";
+import { Option } from "../src/Option";
 
 test("Option.is{Some|None}", () => {
   expect(Option.Some(1).isSome()).toBeTruthy();
@@ -16,10 +16,10 @@ test("Option.map", () => {
 
 test("Option.flatMap", () => {
   expect(Option.Some(1).flatMap((x) => Option.Some(x * 2))).toEqual(
-    Option.Some(2)
+    Option.Some(2),
   );
   expect(Option.None<number>().map((x) => Option.Some(x * 2))).toEqual(
-    Option.None()
+    Option.None(),
   );
   expect(Option.Some(1).flatMap((x) => Option.None())).toEqual(Option.None());
 });
@@ -70,22 +70,30 @@ test("Option.fromUndefined", () => {
 
 test("Option.equals", () => {
   expect(Option.equals(Option.None(), Option.None(), (a, b) => a === b)).toBe(
-    true
+    true,
   );
   expect(Option.equals(Option.None(), Option.Some(1), (a, b) => a === b)).toBe(
-    false
+    false,
   );
   expect(Option.equals(Option.Some(1), Option.Some(1), (a, b) => a === b)).toBe(
-    true
+    true,
   );
   expect(Option.equals(Option.Some(1), Option.Some(2), (a, b) => a === b)).toBe(
-    false
+    false,
   );
   expect(
-    Option.equals(Option.Some(1), Option.Some(2), (a, b) => Math.abs(a - b) < 2)
+    Option.equals(
+      Option.Some(1),
+      Option.Some(2),
+      (a, b) => Math.abs(a - b) < 2,
+    ),
   ).toBe(true);
   expect(
-    Option.equals(Option.Some(1), Option.Some(6), (a, b) => Math.abs(a - b) < 2)
+    Option.equals(
+      Option.Some(1),
+      Option.Some(6),
+      (a, b) => Math.abs(a - b) < 2,
+    ),
   ).toBe(false);
 });
 

@@ -1,6 +1,6 @@
-import { test, expect } from "vitest";
-import { Future } from "../Future";
-import { Result } from "../Result";
+import { expect, test } from "vitest";
+import { Future } from "../src/Future";
+import { Result } from "../src/Result";
 
 test("Future make value", async () => {
   const value = await Future.value(1);
@@ -81,7 +81,7 @@ test("Future mapOk error", async () => {
 
 test("Future mapError", async () => {
   const result = await Future.value(Result.Error("one")).mapError(
-    (x) => `${x}!`
+    (x) => `${x}!`,
   );
   expect(result).toEqual(Result.Error("one!"));
 });
@@ -93,42 +93,42 @@ test("Future mapError ok", async () => {
 
 test("Future mapResult", async () => {
   const result = await Future.value(Result.Ok("one")).mapResult((x) =>
-    Result.Ok(`${x}!`)
+    Result.Ok(`${x}!`),
   );
   expect(result).toEqual(Result.Ok("one!"));
 });
 
 test("Future mapResult error", async () => {
   const result = await Future.value(Result.Error("one")).mapResult((x) =>
-    Result.Ok(`${x}!`)
+    Result.Ok(`${x}!`),
   );
   expect(result).toEqual(Result.Error("one"));
 });
 
 test("Future flatMapOk", async () => {
   const result = await Future.value(Result.Ok("one")).flatMapOk((x) =>
-    Future.value(Result.Ok(`${x}!`))
+    Future.value(Result.Ok(`${x}!`)),
   );
   expect(result).toEqual(Result.Ok("one!"));
 });
 
 test("Future flatMapOk error", async () => {
   const result = await Future.value(Result.Error("one")).flatMapOk((x) =>
-    Future.value(Result.Ok(`${x}!`))
+    Future.value(Result.Ok(`${x}!`)),
   );
   expect(result).toEqual(Result.Error("one"));
 });
 
 test("Future flatMapError", async () => {
   const result = await Future.value(Result.Error("one")).flatMapError((x) =>
-    Future.value(Result.Error(`${x}!`))
+    Future.value(Result.Error(`${x}!`)),
   );
   expect(result).toEqual(Result.Error("one!"));
 });
 
 test("Future flatMapError ok", async () => {
   const result = await Future.value(Result.Ok("one")).flatMapError((x) =>
-    Future.value(Result.Ok(`${x}!`))
+    Future.value(Result.Ok(`${x}!`)),
   );
   expect(result).toEqual(Result.Ok("one"));
 });
@@ -346,14 +346,14 @@ test("Future doesn't consider flatMap returned as dependents", async () => {
 
 test("Future fromPromise", async () => {
   const value = await Future.fromPromise(Promise.resolve("one")).mapOk(
-    (value) => `${value}!`
+    (value) => `${value}!`,
   );
   expect(value).toEqual(Result.Ok("one!"));
 });
 
 test("Future fromPromise", async () => {
   const value = await Future.fromPromise(Promise.reject("one")).mapError(
-    (value) => `${value}!`
+    (value) => `${value}!`,
   );
   expect(value).toEqual(Result.Error("one!"));
 });

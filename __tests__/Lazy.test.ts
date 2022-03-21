@@ -1,5 +1,5 @@
-import { test, expect } from "vitest";
-import { Lazy } from "../Lazy";
+import { expect, test } from "vitest";
+import { Lazy } from "../src/Lazy";
 
 test("Lazy doesn't compute until access", () => {
   const lazy = Lazy(() => {

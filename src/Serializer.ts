@@ -1,6 +1,6 @@
-import { AsyncData } from "./AsyncData.js";
-import { Result } from "./Result.js";
-import { Option } from "./Option.js";
+import { AsyncData } from "./AsyncData";
+import { Option } from "./Option";
+import { Result } from "./Result";
 
 export const encode = (value: any, indent?: number | undefined) => {
   return JSON.stringify(
@@ -32,7 +32,7 @@ export const encode = (value: any, indent?: number | undefined) => {
       }
       return value;
     },
-    indent
+    indent,
   );
 };
 

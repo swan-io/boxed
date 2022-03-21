@@ -1,6 +1,6 @@
-import Benchmark from "benchmark";
-import fp from "fp-ts";
-import { Option } from "../../src/Option.js";
+const Benchmark = require("benchmark");
+const fp = require("fp-ts");
+const { Option } = require("../../dist");
 
 const suite = new Benchmark.Suite();
 
@@ -8,7 +8,7 @@ suite.add("fp-ts Option none", () => {
   return fp.function.pipe(
     fp.option.fromNullable(null),
     fp.option.map((x) => x * 2),
-    fp.option.getOrElse(() => 10)
+    fp.option.getOrElse(() => 10),
   );
 });
 
@@ -16,7 +16,7 @@ suite.add("fp-ts Option some", () => {
   return fp.function.pipe(
     fp.option.fromNullable(10),
     fp.option.map((x) => x * 2),
-    fp.option.getOrElse(() => 10)
+    fp.option.getOrElse(() => 10),
   );
 });
 
@@ -24,7 +24,7 @@ suite.add("fp-ts Option some chain", () => {
   return fp.function.pipe(
     fp.option.fromNullable(10),
     fp.option.chain((x) => fp.option.some(x * 2)),
-    fp.option.getOrElse(() => 10)
+    fp.option.getOrElse(() => 10),
   );
 });
 
@@ -46,7 +46,7 @@ suite.add("Boxed Option some flatMap", () => {
     .getWithDefault(10);
 });
 
-suite.on("cycle", function (event: { target: string }) {
+suite.on("cycle", function (event) {
   console.log(String(event.target));
 });
 

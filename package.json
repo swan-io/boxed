@@ -1,31 +1,46 @@
 {
   "name": "@swan-io/boxed",
   "version": "0.1.0",
-  "description": "Utility types",
-  "main": "src/Boxed.js",
+  "license": "MIT",
+  "description": "Utility types for functional TypeScript",
   "author": "Matthias Le Brun <bloodyowl@swan.io>",
   "homepage": "https://swan-io.github.io/boxed",
-  "files": [
-    "README.md",
-    "MIT-LICENSE",
-    "src/*.js",
-    "src/*.d.ts"
-  ],
-  "type": "module",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/swan-io/boxed.git"
   },
+  "main": "dist/index.js",
+  "source": "src/index.ts",
+  "files": [
+    "LICENSE",
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "typescript",
+    "functional",
+    "utility",
+    "utilities"
+  ],
+  "prettier": {
+    "trailingComma": "all"
+  },
   "scripts": {
-    "build": "tsc",
+    "build": "yarn clean && microbundle -f cjs,es",
+    "clean": "rm -rf dist",
+    "format": "prettier '**/*' -u -w",
+    "prepare": "yarn test && yarn build",
     "test": "vitest run",
-    "benchmark": "node benchmark/src/option.js && node benchmark/src/result.js && node benchmark/src/future.js"
+    "typecheck": "tsc --noEmit",
+    "benchmark": "node benchmarks/src/option && node benchmarks/src/result && node benchmarks/src/future"
   },
   "devDependencies": {
     "@types/benchmark": "^2.1.1",
     "benchmark": "^2.1.4",
     "fp-ts": "^2.11.9",
+    "microbundle": "^0.14.2",
+    "prettier": "^2.6.0",
+    "prettier-plugin-organize-imports": "^2.3.4",
     "ts-pattern": "^3.3.5",
     "typescript": "^4.6.2",
     "vitest": "^0.7.4"
