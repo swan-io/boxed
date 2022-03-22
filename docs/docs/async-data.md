@@ -79,7 +79,7 @@ AsyncData.NotAsked().isLoading(); // false
 
 ## .isNotAsked()
 
-Type guard. Checks if the option is `Loading`
+Type guard. Checks if the option is `NotAsked`
 
 ```ts
 AsyncData.Done(2).isNotAsked(); // false
