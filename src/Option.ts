@@ -1,6 +1,5 @@
-export type Option<Value> =
-  | (OptionClass<Value> & { tag: "Some"; value: Value })
-  | (OptionClass<Value> & { tag: "None"; value: undefined });
+export type Option<Value> = OptionClass<Value> &
+  ({ tag: "Some"; value: Value } | { tag: "None"; value: undefined });
 
 class OptionClass<Value> {
   tag: "Some" | "None";

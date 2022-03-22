@@ -1,9 +1,11 @@
 import { Option } from "./Option";
 
-export type AsyncData<Value> =
-  | (AsyncDataClass<Value> & { tag: "NotAsked"; value: undefined })
-  | (AsyncDataClass<Value> & { tag: "Loading"; value: undefined })
-  | (AsyncDataClass<Value> & { tag: "Done"; value: Value });
+export type AsyncData<Value> = AsyncDataClass<Value> &
+  (
+    | { tag: "NotAsked"; value: undefined }
+    | { tag: "Loading"; value: undefined }
+    | { tag: "Done"; value: Value }
+  );
 
 class AsyncDataClass<Value> {
   tag: "NotAsked" | "Loading" | "Done";
