@@ -1,8 +1,7 @@
 import { Option } from "./Option";
 
-export type Result<Ok, Error> =
-  | (ResultClass<Ok, Error> & { tag: "Ok"; value: Ok })
-  | (ResultClass<Ok, Error> & { tag: "Error"; value: Error });
+export type Result<Ok, Error> = ResultClass<Ok, Error> &
+  ({ tag: "Ok"; value: Ok } | { tag: "Error"; value: Error });
 
 class ResultClass<Ok, Error> {
   tag: "Ok" | "Error";

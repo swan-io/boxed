@@ -6,12 +6,12 @@ type PendingPayload<Value> = {
   cancel?: void | (() => void);
 };
 
-export type Simplify<T> = { [KeyType in keyof T]: T[KeyType] };
-
-export type Future<Value> =
-  | (FutureClass<Value> & { tag: "Pending"; pending: PendingPayload<Value> })
-  | (FutureClass<Value> & { tag: "Cancelled" })
-  | (FutureClass<Value> & { tag: "Resolved"; value: Value });
+export type Future<Value> = FutureClass<Value> &
+  (
+    | { tag: "Pending"; pending: PendingPayload<Value> }
+    | { tag: "Cancelled" }
+    | { tag: "Resolved"; value: Value }
+  );
 
 function FutureInit<Value>(
   this: FutureClass<Value>,
