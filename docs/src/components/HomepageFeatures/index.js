@@ -81,7 +81,7 @@ const FeatureList = [
 function Feature({ svg, title, description }) {
   return (
     <div className="col col--4">
-      <div class={styles.svgContainer}>{svg}</div>
+      <div className={styles.svgContainer}>{svg}</div>
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>
         <p>{description}</p>

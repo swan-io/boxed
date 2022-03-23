@@ -58,6 +58,12 @@ module.exports = {
       darkTheme: darkCodeTheme,
     },
   },
+  scripts: [
+    {
+      src: "/boxed/try.js",
+      async: true,
+    },
+  ],
   presets: [
     [
       "@docusaurus/preset-classic",
