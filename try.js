@@ -10,4 +10,10 @@ import("https://unpkg.com/@swan-io/boxed/dist/Boxed.esm.js").then((Boxed) => {
     "color: #ccc;",
     "",
   );
+  console.log("%c---", "color: #ccc;");
+  console.log("%cLooking for a job? 👀", "font-weight: 700;");
+  console.log(
+    "👋 %cSwan is hiring: https://www.welcometothejungle.com/fr/companies/swan/jobs",
+    "font-weight: 700;",
+  );
 });
