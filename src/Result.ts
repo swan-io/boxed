@@ -79,19 +79,23 @@ export const Result = {
     result.value = error;
     return result;
   },
-  fromExecution<ReturnValue>(func: () => ReturnValue) {
+  fromExecution<ReturnValue, Error = unknown>(
+    func: () => ReturnValue,
+  ): Result<ReturnValue, Error> {
     try {
       return Result.Ok(func());
     } catch (err) {
-      return Result.Error(err);
+      return Result.Error(err) as Result<ReturnValue, Error>;
     }
   },
-  async fromPromise<ReturnValue>(promise: Promise<ReturnValue>) {
+  async fromPromise<ReturnValue, Error = unknown>(
+    promise: Promise<ReturnValue>,
+  ): Promise<Result<ReturnValue, Error>> {
     try {
       const value = await promise;
-      return Result.Ok<ReturnValue, unknown>(value);
+      return Result.Ok<ReturnValue, Error>(value);
     } catch (err) {
-      return Result.Error<ReturnValue, unknown>(err);
+      return Result.Error<ReturnValue, Error>(err as Error);
     }
   },
   equals: <Value, Error>(
