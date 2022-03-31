@@ -1,5 +1,13 @@
 import { expect, test } from "vitest";
-import { binarySearchBy, getBy, getIndexBy, keepMap } from "../src/Array";
+import {
+  binarySearchBy,
+  from,
+  getBy,
+  getIndexBy,
+  isArray,
+  keepMap,
+  of,
+} from "../src/Array";
 import { Option } from "../src/Option";
 
 test("Array.keepMap", () => {
@@ -48,4 +56,13 @@ test("Array.binarySearchBy", () => {
   expect(binarySearchBy([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 5)).toEqual(4);
   expect(binarySearchBy([1, 2, 3, 4, 6, 7, 8, 9, 10], 5)).toEqual(4);
   expect(binarySearchBy([], 2)).toEqual(-1);
+});
+
+test("Array.of", () => {
+  expect(of(1, 2, 3)).toEqual([1, 2, 3]);
+
+  expect(from({ length: 3 }, (_, index) => index)).toEqual([0, 1, 2]);
+
+  expect(isArray([])).toEqual(true);
+  expect(isArray({ length: 0 })).toEqual(false);
 });

@@ -1,5 +1,11 @@
 import { Option } from "./Option";
 
+export const from = Array.from;
+
+export const of = Array.of;
+
+export const isArray = Array.isArray;
+
 export const keepMap = <A, B>(
   array: Array<A>,
   func: (item: A) => NonNullable<B> | undefined | null,
