@@ -1,3 +1,9 @@
+# 0.2.1
+
+Features:
+
+- Reexport `Array` static methods than can be shadowed when importing `Array` from boxed (2dd970b)
+
 # 0.2.0
 
 Changes:
