@@ -52,3 +52,28 @@ Returns the index of the item if there's an exact match, return the index of the
 ```ts
 const index = Array.binarySearchBy(array, "my value");
 ```
+
+## Array.from(arrayLike)
+
+[Array.from](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Array/from), reexported for convenience when Boxed `Array` shadows the `Array` constructor in scope.
+
+```ts
+Array.from({ length: 3 }, (_, key) => key); // [0, 1, 2]
+```
+
+## Array.of(...items)
+
+[Array.of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/of), reexported for convenience when Boxed `Array` shadows the `Array` constructor in scope.
+
+```ts
+Array.of(1, 2, 3); // [1, 2, 3]
+```
+
+## Array.isArray(value)
+
+[Array.isArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray), reexported for convenience when Boxed `Array` shadows the `Array` constructor in scope.
+
+```ts
+Array.isArray(""); // false
+Array.isArray([1, 2, 3]); // true
+```
