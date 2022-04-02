@@ -22,6 +22,10 @@
     "utility",
     "utilities"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
   "prettier": {
     "trailingComma": "all"
   },
