@@ -51,7 +51,7 @@ The result type provides a few manipulation functions:
 
 ## .map(f)
 
-If the result is `Ok(value)` returns `Ok(f(value))`, otherwise returns `None`.
+If the result is `Ok(value)` returns `Ok(f(value))`, otherwise returns `Error(error)`.
 
 ```ts
 Result.Ok(2).map((x) => x * 2); // Result.Ok(4)
