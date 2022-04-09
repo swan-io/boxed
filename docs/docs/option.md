@@ -62,7 +62,7 @@ Option.Some(2).flatMap((x) => {
 
 If the option is `None` returns `optionB`, otherwise returns the option.
 
-If you want to have a lazy verion of this function, use `.orElse(f)`.
+If you want to have a lazy version of this function, use `.orElse(f)`.
 
 ```ts
 Option.None<number>().or(Option.Some(2));
