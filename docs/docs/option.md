@@ -65,7 +65,8 @@ If the option is `None` returns `optionB`, otherwise returns the option.
 If you want to have a lazy version of this function, use `.orElse(f)`.
 
 ```ts
-Option.None<number>().or(Option.Some(2));
+Option.None<number>().or(Option.Some(2)); // Option.Some(2)
+Option.Some(1).or(Option.Some(2)); // Option.Some(1)
 ```
 
 ## .orElse(f)
@@ -73,7 +74,8 @@ Option.None<number>().or(Option.Some(2));
 If the option is `None` returns `f()`, otherwise returns the option.
 
 ```ts
-Option.None<number>().orElse(() => Option.Some(2));
+Option.None<number>().orElse(() => Option.Some(2));// Option.Some(2)
+Option.Some(1).or(() => Option.Some(2)); // Option.Some(1)
 ```
 
 ## .flatMap(f)
