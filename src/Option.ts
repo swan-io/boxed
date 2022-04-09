@@ -24,6 +24,20 @@ class OptionClass<Value> {
       return this as unknown as Option<ReturnValue>;
     }
   }
+  or(optionB: Option<Value>): Option<Value> {
+    if(this.tag === "None"){
+      return optionB;
+    } else {
+      return this as Option<Value>;
+    }
+  }
+  orElse(f: () => Option<Value>): Option<Value> {
+    if(this.tag === "None"){
+      return f();
+    } else {
+      return this as Option<Value>;
+    }
+  }
   getWithDefault(defaultValue: Value): Value {
     if (this.tag === "Some") {
       return this.value as Value;

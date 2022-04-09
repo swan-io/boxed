@@ -58,6 +58,38 @@ Option.Some(2).flatMap((x) => {
 });
 ```
 
+## .or(optionB)
+
+If the option is `None` returns `optionB`, otherwise returns the option.
+
+If you want to have a lazy verion of this function, use `.orElse(f)`.
+
+```ts
+Option.None<number>().or(Option.Some(2));
+```
+
+## .orElse(f)
+
+If the option is `None` returns `f()`, otherwise returns the option.
+
+```ts
+Option.None<number>().orElse(() => Option.Some(2));
+```
+
+## .flatMap(f)
+
+If the option is `Some(value)` returns `f(value)`, otherwise returns `None`.
+
+```ts
+Option.Some(2).flatMap((x) => {
+  if (x > 1) {
+    return Option.None();
+  } else {
+    return Option.Some(2);
+  }
+});
+```
+
 ## .getWithDefault(defaultValue)
 
 If the option is `Some(value)` returns `value`, otherwise returns `defaultValue`.
