@@ -17,6 +17,13 @@ test("Result.map", () => {
   );
 });
 
+test("Result.mapError", () => {
+  expect(Result.Ok(1).mapError((x) => x * 2)).toEqual(Result.Ok(1));
+  expect(Result.Error<number, number>(1).mapError((x) => x * 2)).toEqual(
+    Result.Error(2),
+  );
+});
+
 type A = 1;
 type B = 2;
 
@@ -29,6 +36,24 @@ test("Result.flatMap", () => {
   const resultA: Result<number, A> = Result.Ok(1);
   const resultB: Result<number, B> = Result.Error(2);
   const resultC = resultA.flatMap((item) => {
+    return resultB;
+  });
+  expect(resultC).toEqual(Result.Error(2));
+});
+
+test("Result.flatMapError", () => {
+  expect(
+    Result.Ok<number, number>(1).flatMapError((x) => Result.Ok(x * 2)),
+  ).toEqual(Result.Ok(1));
+  expect(
+    Result.Error<number, number>(1).flatMapError((x) => Result.Ok(x * 2)),
+  ).toEqual(Result.Ok(2));
+  expect(Result.Error(1).flatMapError((x) => Result.Error(2))).toEqual(
+    Result.Error(2),
+  );
+  const resultA: Result<A, number> = Result.Error(1);
+  const resultB: Result<B, number> = Result.Error(2);
+  const resultC = resultA.flatMapError((item) => {
     return resultB;
   });
   expect(resultC).toEqual(Result.Error(2));

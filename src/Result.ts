@@ -17,6 +17,15 @@ class ResultClass<Ok, Error> {
       return this as unknown as Result<ReturnValue, Error>;
     }
   }
+  mapError<ReturnError>(
+    f: (value: Error) => ReturnError,
+  ): Result<Ok, ReturnError> {
+    if (this.tag === "Ok") {
+      return this as unknown as Result<Ok, ReturnError>;
+    } else {
+      return Result.Error(f(this.value as Error));
+    }
+  }
   flatMap<ReturnValue, ResultError = Error>(
     f: (value: Ok) => Result<ReturnValue, ResultError | Error>,
   ): Result<ReturnValue, ResultError | Error> {
@@ -24,6 +33,15 @@ class ResultClass<Ok, Error> {
       return f(this.value as Ok);
     } else {
       return this as unknown as Result<ReturnValue, ResultError | Error>;
+    }
+  }
+  flatMapError<ReturnValue, ResultError>(
+    f: (value: Error) => Result<ReturnValue, ResultError>,
+  ): Result<Ok | ReturnValue, ResultError> {
+    if (this.tag === "Ok") {
+      return this as unknown as Result<Ok | ReturnValue, ResultError>;
+    } else {
+      return f(this.value as Error);
     }
   }
   getWithDefault(defaultValue: Ok): Ok {

@@ -57,6 +57,14 @@ If the result is `Ok(value)` returns `Ok(f(value))`, otherwise returns `Error(er
 Result.Ok(2).map((x) => x * 2); // Result.Ok(4)
 ```
 
+## .mapError(f)
+
+If the result is `Error(error)` returns `Error(f(error))`, otherwise returns `Ok(value)`.
+
+```ts
+Result.Error(2).mapError((x) => x * 2); // Result.Error(4)
+```
+
 ## .flatMap(f)
 
 If the result is `Ok(value)` returns `f(value)`, otherwise returns `Error(error)`.
@@ -71,7 +79,19 @@ Result.Ok(2).flatMap((x) => {
 });
 ```
 
-> NOTE: the returned result must have the same `error` type
+## .flatMapError(f)
+
+If the result is `Error(error)` returns `f(error)`, otherwise returns `Ok(value)`.
+
+```ts
+Result.Error(2).flatMapError((x) => {
+  if (x > 1) {
+    return Result.Error("some error");
+  } else {
+    return Result.Ok(2);
+  }
+});
+```
 
 ## .getWithDefault(defaultValue)
 
