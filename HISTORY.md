@@ -1,3 +1,10 @@
+# 0.3.1
+
+Changes:
+
+- Improve typing for `Future` (f8d9e12)
+- Make `Future.flatMapOk` & `Future.flatMapError` behave like the result ones (f8d9e12)
+
 # 0.3.0
 
 Changes:
