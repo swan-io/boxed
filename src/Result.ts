@@ -61,6 +61,31 @@ class ResultClass<Ok, Error> {
       return config.Error(this.value as Error);
     }
   }
+  tap(
+    this: Result<Ok, Error>,
+    func: (result: Result<Ok, Error>) => unknown,
+  ): Result<Ok, Error> {
+    func(this);
+    return this;
+  }
+  tapOk(
+    this: Result<Ok, Error>,
+    func: (value: Ok) => unknown,
+  ): Result<Ok, Error> {
+    if (this.tag === "Ok") {
+      func(this.value);
+    }
+    return this;
+  }
+  tapError(
+    this: Result<Ok, Error>,
+    func: (error: Error) => unknown,
+  ): Result<Ok, Error> {
+    if (this.tag === "Error") {
+      func(this.value);
+    }
+    return this;
+  }
   isOk(): this is Result<Ok, Error> & { tag: "Ok"; value: Ok } {
     return this.tag === "Ok";
   }

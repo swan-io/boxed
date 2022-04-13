@@ -18,7 +18,9 @@ test("Result.map", () => {
 });
 
 test("Result.mapError", () => {
-  expect(Result.Ok(1).mapError((x) => x * 2)).toEqual(Result.Ok(1));
+  expect(Result.Ok<number, number>(1).mapError((x) => x * 2)).toEqual(
+    Result.Ok(1),
+  );
   expect(Result.Error<number, number>(1).mapError((x) => x * 2)).toEqual(
     Result.Error(2),
   );
@@ -143,4 +145,27 @@ test("Result serialize", () => {
     tag: "Ok",
     value: 1,
   });
+});
+
+test("Result.tap", () => {
+  expect(
+    Result.Ok(1).tap((value) => expect(value).toEqual(Result.Ok(1))),
+  ).toEqual(Result.Ok(1));
+  expect(
+    Result.Error(1).tap((value) => expect(value).toEqual(Result.Error(1))),
+  ).toEqual(Result.Error(1));
+});
+
+test("Result.tapOk", () => {
+  expect(Result.Ok(1).tapOk((value) => expect(value).toEqual(1))).toEqual(
+    Result.Ok(1),
+  );
+  expect(Result.Error(1).tapOk(() => expect.fail())).toEqual(Result.Error(1));
+});
+
+test("Result.tapError", () => {
+  expect(Result.Ok(1).tapError((value) => expect.fail())).toEqual(Result.Ok(1));
+  expect(Result.Error(1).tapError((value) => expect(value).toEqual(1))).toEqual(
+    Result.Error(1),
+  );
 });

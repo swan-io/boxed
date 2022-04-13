@@ -52,6 +52,13 @@ class AsyncDataClass<Value> {
       }
     }
   }
+  tap(
+    this: AsyncData<Value>,
+    func: (asyncData: AsyncData<Value>) => unknown,
+  ): AsyncData<Value> {
+    func(this);
+    return this;
+  }
   isDone(): this is AsyncDataClass<Value> & { tag: "Done"; value: Value } {
     return this.tag === "Done";
   }

@@ -106,3 +106,12 @@ test("Option serialize", () => {
     value: 1,
   });
 });
+
+test("Option.tap", () => {
+  expect(
+    Option.Some(1).tap((value) => expect(value).toEqual(Option.Some(1))),
+  ).toEqual(Option.Some(1));
+  expect(
+    Option.None().tap((value) => expect(value).toEqual(Option.None())),
+  ).toEqual(Option.None());
+});

@@ -41,6 +41,13 @@ class OptionClass<Value> {
       return config.None();
     }
   }
+  tap(
+    this: Option<Value>,
+    func: (option: Option<Value>) => unknown,
+  ): Option<Value> {
+    func(this);
+    return this;
+  }
   toUndefined() {
     if (this.tag === "None") {
       return undefined;

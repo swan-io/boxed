@@ -114,6 +114,14 @@ const valueToDisplay = option.match({
 });
 ```
 
+## .tap(func)
+
+Executes `func` with `option`, and returns `option`. Useful for logging and debugging.
+
+```ts
+option.tap(console.log).map((x) => x * 2);
+```
+
 ## TS Pattern interop
 
 ```ts

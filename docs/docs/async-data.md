@@ -109,6 +109,14 @@ const valueToDisplay = result.match({
 });
 ```
 
+## .tap(func)
+
+Executes `func` with `asyncData`, and returns `asyncData`. Useful for logging and debugging.
+
+```ts
+asyncData.tap(console.log).map((x) => x * 2);
+```
+
 ## TS Pattern interop
 
 ```ts

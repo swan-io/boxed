@@ -143,6 +143,30 @@ const valueToDisplay = result.match({
 });
 ```
 
+## .tap(func)
+
+Executes `func` with `result`, and returns `result`. Useful for logging and debugging.
+
+```ts
+result.tap(console.log).map((x) => x * 2);
+```
+
+## .tapOk(func)
+
+Executes `func` with `ok`, and returns `result`. Useful for logging and debugging. No-op if `result` is an error.
+
+```ts
+result.tapOk(console.log).map((x) => x * 2);
+```
+
+## .tapError(func)
+
+Executes `func` with `error`, and returns `result`. Useful for logging and debugging. No-op if `result` is ok.
+
+```ts
+result.tapError(console.log).map((x) => x * 2);
+```
+
 ## TS Pattern interop
 
 ```ts

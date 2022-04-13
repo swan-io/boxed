@@ -140,3 +140,19 @@ test("AsyncData serialize", () => {
     value: 1,
   });
 });
+
+test("AsyncData.tap", () => {
+  expect(
+    AsyncData.NotAsked().tap((value) =>
+      expect(value).toEqual(AsyncData.NotAsked()),
+    ),
+  ).toEqual(AsyncData.NotAsked());
+  expect(
+    AsyncData.Loading().tap((value) =>
+      expect(value).toEqual(AsyncData.Loading()),
+    ),
+  ).toEqual(AsyncData.Loading());
+  expect(
+    AsyncData.Done(1).tap((value) => expect(value).toEqual(AsyncData.Done(1))),
+  ).toEqual(AsyncData.Done(1));
+});
