@@ -1,3 +1,9 @@
+# 0.3.0
+
+Changes:
+
+- Make `flatMap` aggregate error types with a union (015da3b)
+
 # 0.2.1
 
 Features:
