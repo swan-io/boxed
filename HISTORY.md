@@ -1,3 +1,10 @@
+# 0.3.2
+
+Features:
+
+- Add tap functions on `Option`, `Result` and `AsyncData` for debugging (cb63dcf)
+- Add `mapError` and `flatMapError` to `Result` (0d36a03)
+
 # 0.3.1
 
 Changes:
