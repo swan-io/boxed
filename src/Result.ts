@@ -17,13 +17,13 @@ class ResultClass<Ok, Error> {
       return this as unknown as Result<ReturnValue, Error>;
     }
   }
-  flatMap<ReturnValue>(
-    f: (value: Ok) => Result<ReturnValue, Error>,
-  ): Result<ReturnValue, Error> {
+  flatMap<ReturnValue, ResultError = Error>(
+    f: (value: Ok) => Result<ReturnValue, ResultError | Error>,
+  ): Result<ReturnValue, ResultError | Error> {
     if (this.tag === "Ok") {
       return f(this.value as Ok);
     } else {
-      return this as unknown as Result<ReturnValue, Error>;
+      return this as unknown as Result<ReturnValue, ResultError | Error>;
     }
   }
   getWithDefault(defaultValue: Ok): Ok {

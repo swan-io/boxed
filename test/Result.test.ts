@@ -17,12 +17,21 @@ test("Result.map", () => {
   );
 });
 
+type A = 1;
+type B = 2;
+
 test("Result.flatMap", () => {
   expect(Result.Ok(1).flatMap((x) => Result.Ok(x * 2))).toEqual(Result.Ok(2));
   expect(
     Result.Error<number, number>(1).flatMap((x) => Result.Ok(x * 2)),
   ).toEqual(Result.Error(1));
   expect(Result.Ok(1).flatMap((x) => Result.Error(1))).toEqual(Result.Error(1));
+  const resultA: Result<number, A> = Result.Ok(1);
+  const resultB: Result<number, B> = Result.Error(2);
+  const resultC = resultA.flatMap((item) => {
+    return resultB;
+  });
+  expect(resultC).toEqual(Result.Error(2));
 });
 
 test("Result.getWithDefault", () => {
