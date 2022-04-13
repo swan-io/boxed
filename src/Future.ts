@@ -44,19 +44,19 @@ class FutureClass<Value> {
     this.tag = "Pending";
     this.pending = pendingPayload;
   }
-  isPending(): this is FutureClass<Value> & {
+  isPending(): this is Future<Value> & {
     tag: "Pending";
     value: PendingPayload<Value>;
   } {
     return this.tag === "Pending";
   }
-  isCancelled(): this is FutureClass<Value> & {
+  isCancelled(): this is Future<Value> & {
     tag: "Cancelled";
     value: undefined;
   } {
     return this.tag === "Cancelled";
   }
-  isResolved(): this is FutureClass<Value> & {
+  isResolved(): this is Future<Value> & {
     tag: "Resolved";
     value: Value;
   } {
@@ -142,7 +142,7 @@ class FutureClass<Value> {
     return this as Future<Value>;
   }
   tapOk<Ok, Error>(
-    this: FutureClass<Result<Ok, Error>>,
+    this: Future<Result<Ok, Error>>,
     func: (value: Ok) => unknown,
   ): Future<Result<Ok, Error>> {
     this.get((value) => {
@@ -154,7 +154,7 @@ class FutureClass<Value> {
     return this as Future<Result<Ok, Error>>;
   }
   tapError<Ok, Error>(
-    this: FutureClass<Result<Ok, Error>>,
+    this: Future<Result<Ok, Error>>,
     func: (value: Error) => unknown,
   ): Future<Result<Ok, Error>> {
     this.get((value) => {
@@ -166,7 +166,7 @@ class FutureClass<Value> {
     return this as Future<Result<Ok, Error>>;
   }
   mapResult<Ok, Error, ReturnValue>(
-    this: FutureClass<Result<Ok, Error>>,
+    this: Future<Result<Ok, Error>>,
     func: (value: Ok) => Result<ReturnValue, Error>,
     propagateCancel = false,
   ): Future<Result<ReturnValue, Error>> {
@@ -178,7 +178,7 @@ class FutureClass<Value> {
     }, propagateCancel);
   }
   mapOk<Ok, Error, ReturnValue>(
-    this: FutureClass<Result<Ok, Error>>,
+    this: Future<Result<Ok, Error>>,
     func: (value: Ok) => ReturnValue,
     propagateCancel = false,
   ): Future<Result<ReturnValue, Error>> {
@@ -190,7 +190,7 @@ class FutureClass<Value> {
     }, propagateCancel);
   }
   mapError<Ok, Error, ReturnValue>(
-    this: FutureClass<Result<Ok, Error>>,
+    this: Future<Result<Ok, Error>>,
     func: (value: Error) => ReturnValue,
     propagateCancel = false,
   ): Future<Result<Ok, ReturnValue>> {
@@ -201,28 +201,35 @@ class FutureClass<Value> {
       });
     }, propagateCancel);
   }
-  flatMapOk<Ok, Error, ReturnValue>(
-    this: FutureClass<Result<Ok, Error>>,
-    func: (value: Ok) => Future<Result<ReturnValue, Error>>,
+  flatMapOk<Ok, Error, ReturnValue, ReturnError = Error>(
+    this: Future<Result<Ok, Error>>,
+    func: (value: Ok) => Future<Result<ReturnValue, ReturnError>>,
     propagateCancel = false,
-  ): Future<Result<ReturnValue, Error>> {
+  ): Future<Result<ReturnValue, ReturnError | Error>> {
     return this.flatMap((value) => {
       return value.match({
-        Ok: (value) => func(value),
+        Ok: (value) =>
+          func(value) as Future<Result<ReturnValue, ReturnError | Error>>,
         Error: () =>
-          Future.value(value as unknown as Result<ReturnValue, Error>),
+          Future.value(
+            value as unknown as Result<ReturnValue, ReturnError | Error>,
+          ),
       });
     }, propagateCancel);
   }
-  flatMapError<Ok, Error, ReturnValue>(
-    this: FutureClass<Result<Ok, Error>>,
-    func: (value: Error) => Future<Result<Ok, ReturnValue>>,
+  flatMapError<Ok, Error, ReturnValue, ReturnError>(
+    this: Future<Result<Ok, Error>>,
+    func: (value: Error) => Future<Result<ReturnValue, ReturnError>>,
     propagateCancel = false,
-  ): Future<Result<Ok, ReturnValue>> {
+  ): Future<Result<Ok | ReturnValue, ReturnError>> {
     return this.flatMap((value) => {
       return value.match({
-        Ok: () => Future.value(value as unknown as Result<Ok, ReturnValue>),
-        Error: (error) => func(error),
+        Ok: () =>
+          Future.value(
+            value as unknown as Result<Ok | ReturnValue, ReturnError>,
+          ),
+        Error: (error) =>
+          func(error) as Future<Result<Ok | ReturnValue, ReturnError>>,
       });
     }, propagateCancel);
   }
@@ -231,9 +238,7 @@ class FutureClass<Value> {
       this.get(resolve);
     });
   }
-  resultToPromise<Ok, Error>(
-    this: FutureClass<Result<Ok, Error>>,
-  ): Promise<Ok> {
+  resultToPromise<Ok, Error>(this: Future<Result<Ok, Error>>): Promise<Ok> {
     return new Promise((resolve, reject) => {
       this.get((value) => {
         value.match({
