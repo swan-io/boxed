@@ -15,6 +15,10 @@ module.exports = {
     },
     {
       type: "doc",
+      id: "core-concepts",
+    },
+    {
+      type: "doc",
       id: "trivia",
     },
     {
