@@ -1,3 +1,9 @@
+# 0.3.4
+
+Changes:
+
+- Simplify `Future.mapResult` type (ce2749a)
+
 # 0.3.3
 
 Features:
