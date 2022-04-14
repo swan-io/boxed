@@ -165,15 +165,16 @@ class FutureClass<Value> {
     });
     return this as Future<Result<Ok, Error>>;
   }
-  mapResult<Ok, Error, ReturnValue>(
+  mapResult<Ok, Error, ReturnValue, ReturnError = Error>(
     this: Future<Result<Ok, Error>>,
-    func: (value: Ok) => Result<ReturnValue, Error>,
+    func: (value: Ok) => Result<ReturnValue, ReturnError>,
     propagateCancel = false,
-  ): Future<Result<ReturnValue, Error>> {
+  ): Future<Result<ReturnValue, ReturnError | Error>> {
     return this.map((value) => {
       return value.match({
         Ok: (value) => func(value),
-        Error: () => value as unknown as Result<ReturnValue, Error>,
+        Error: () =>
+          value as unknown as Result<ReturnValue, Error | ReturnError>,
       });
     }, propagateCancel);
   }
