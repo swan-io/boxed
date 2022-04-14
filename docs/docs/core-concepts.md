@@ -55,7 +55,7 @@ const doubledNone = none.map((x) => x * 2);
 // None() -> Nothing to transform!
 ```
 
-The `flatMap` let's you return another option, which can be useful for nested optional values:
+The `flatMap` lets you return another option, which can be useful for nested optional values:
 
 ```ts
 type UserInfo = {
