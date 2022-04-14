@@ -1,3 +1,9 @@
+# 0.3.6
+
+Changes:
+
+- Add more guarantees on Future (7ba99ec)
+
 # 0.3.5
 
 Changes:
