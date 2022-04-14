@@ -251,16 +251,12 @@ class FutureClass<Value> {
   }
 }
 
-type Unwrap<Value extends Future<any>> = Value extends Future<infer T>
-  ? T
-  : unknown;
-
 function all<Futures extends readonly Future<any>[] | []>(
   futures: Futures,
   propagateCancel = false,
 ): Future<{
-  -readonly [P in keyof Futures]: Futures[P] extends Future<any>
-    ? Unwrap<Futures[P]>
+  -readonly [P in keyof Futures]: Futures[P] extends Future<infer T>
+    ? T
     : never;
 }> {
   const length = futures.length;
@@ -269,8 +265,8 @@ function all<Futures extends readonly Future<any>[] | []>(
   while (true) {
     if (index >= length) {
       return acc as unknown as Future<{
-        -readonly [P in keyof Futures]: Futures[P] extends Future<any>
-          ? Unwrap<Futures[P]>
+        -readonly [P in keyof Futures]: Futures[P] extends Future<infer T>
+          ? T
           : never;
       }>;
     }
