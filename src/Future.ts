@@ -62,7 +62,7 @@ class FutureClass<Value> {
   } {
     return this.tag === "Resolved";
   }
-  get(func: (value: Value) => void) {
+  get(this: Future<Value>, func: (value: Value) => void) {
     if (this.isPending()) {
       const pending = this.pending as PendingPayload<Value>;
       pending.resolveCallbacks = pending.resolveCallbacks ?? [];
@@ -72,7 +72,7 @@ class FutureClass<Value> {
       func(this.value);
     }
   }
-  onCancel(func: () => void) {
+  onCancel(this: Future<Value>, func: () => void) {
     if (this.isPending()) {
       const pending = this.pending as PendingPayload<Value>;
       pending.cancelCallbacks = pending.cancelCallbacks ?? [];
@@ -94,6 +94,7 @@ class FutureClass<Value> {
     }
   }
   map<ReturnValue>(
+    this: Future<Value>,
     func: (value: Value) => ReturnValue,
     propagateCancel = false,
   ): Future<ReturnValue> {
@@ -112,11 +113,12 @@ class FutureClass<Value> {
     });
     return future as Future<ReturnValue>;
   }
-  then(func: (value: Value) => void) {
+  then(this: Future<Value>, func: (value: Value) => void) {
     this.get(func);
     return this;
   }
   flatMap<ReturnValue>(
+    this: Future<Value>,
     func: (value: Value) => Future<ReturnValue>,
     propagateCancel = false,
   ): Future<ReturnValue> {
@@ -137,7 +139,7 @@ class FutureClass<Value> {
     });
     return future as Future<ReturnValue>;
   }
-  tap(func: (value: Value) => unknown): Future<Value> {
+  tap(this: Future<Value>, func: (value: Value) => unknown): Future<Value> {
     this.get(func);
     return this as Future<Value>;
   }
@@ -234,7 +236,7 @@ class FutureClass<Value> {
       });
     }, propagateCancel);
   }
-  toPromise(): Promise<Value> {
+  toPromise(this: Future<Value>): Promise<Value> {
     return new Promise((resolve) => {
       this.get(resolve);
     });
