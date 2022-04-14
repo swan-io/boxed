@@ -1,3 +1,9 @@
+# 0.3.3
+
+Features:
+
+- Add `Option.all`, `Result.all` & `AsyncData.all` (039eeda)
+
 # 0.3.2
 
 Features:
