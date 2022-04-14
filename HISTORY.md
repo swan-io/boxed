@@ -1,3 +1,9 @@
+# 0.3.5
+
+Changes:
+
+- Remove `Unwrap` type removing guarantees (bb83047)
+
 # 0.3.4
 
 Changes:
