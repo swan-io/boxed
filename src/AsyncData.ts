@@ -118,6 +118,36 @@ export const AsyncData = {
   NotAsked: <Value>(): AsyncData<Value> => {
     return NOT_ASKED as AsyncData<Value>;
   },
+  all: <AsyncDatas extends readonly AsyncData<any>[] | []>(
+    asyncDatas: AsyncDatas,
+  ): AsyncData<{
+    -readonly [P in keyof AsyncDatas]: AsyncDatas[P] extends AsyncData<infer V>
+      ? V
+      : never;
+  }> => {
+    const length = asyncDatas.length;
+    let acc = AsyncData.Done<Array<unknown>>([]);
+    let index = 0;
+    while (true) {
+      if (index >= length) {
+        return acc as unknown as AsyncData<{
+          -readonly [P in keyof AsyncDatas]: AsyncDatas[P] extends AsyncData<
+            infer V
+          >
+            ? V
+            : never;
+        }>;
+      }
+      const item = asyncDatas[index] as AsyncData<unknown>;
+      acc = acc.flatMap((array) => {
+        return item.map((value) => {
+          array.push(value);
+          return array;
+        });
+      });
+      index++;
+    }
+  },
   equals: <Value>(
     a: AsyncData<Value>,
     b: AsyncData<Value>,

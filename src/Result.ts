@@ -141,6 +141,54 @@ export const Result = {
       return Result.Error<ReturnValue, Error>(err as Error);
     }
   },
+  all: <Results extends readonly Result<any, any>[] | []>(
+    results: Results,
+  ): Result<
+    {
+      -readonly [P in keyof Results]: Results[P] extends Result<infer V, any>
+        ? V
+        : never;
+    },
+    {
+      -readonly [P in keyof Results]: Results[P] extends Result<any, infer E>
+        ? E
+        : never;
+    }[number]
+  > => {
+    const length = results.length;
+    let acc = Result.Ok<Array<unknown>, unknown>([]);
+    let index = 0;
+    while (true) {
+      if (index >= length) {
+        return acc as unknown as Result<
+          {
+            -readonly [P in keyof Results]: Results[P] extends Result<
+              infer V,
+              any
+            >
+              ? V
+              : never;
+          },
+          {
+            -readonly [P in keyof Results]: Results[P] extends Result<
+              any,
+              infer E
+            >
+              ? E
+              : never;
+          }[number]
+        >;
+      }
+      const item = results[index] as Result<unknown, unknown>;
+      acc = acc.flatMap((array) => {
+        return item.map((value) => {
+          array.push(value);
+          return array;
+        });
+      });
+      index++;
+    }
+  },
   equals: <Value, Error>(
     a: Result<Value, Error>,
     b: Result<Value, Error>,

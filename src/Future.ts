@@ -274,9 +274,8 @@ function all<Futures extends readonly Future<any>[] | []>(
       }>;
     }
     const item = futures[index] as Future<unknown>;
-    let accCache = acc;
-    acc = item.flatMap((value) => {
-      return accCache.map((array) => {
+    acc = acc.flatMap((array) => {
+      return item.map((value) => {
         array.push(value);
         return array;
       }, propagateCancel);

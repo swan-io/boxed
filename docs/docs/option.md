@@ -122,6 +122,17 @@ Executes `func` with `option`, and returns `option`. Useful for logging and debu
 option.tap(console.log).map((x) => x * 2);
 ```
 
+## Option.all(options)
+
+Turns an "array of options of value" into a "option of array of value".
+
+```ts
+Option.all([Option.Some(1), Option.Some(2), Option.Some(3)]);
+// Some([1, 2, 3])
+Option.all([Option.None(), Option.Some(2), Option.Some(3)]);
+// None
+```
+
 ## TS Pattern interop
 
 ```ts

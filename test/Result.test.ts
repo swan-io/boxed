@@ -169,3 +169,16 @@ test("Result.tapError", () => {
     Result.Error(1),
   );
 });
+
+test("Result.all", () => {
+  expect(Result.all([])).toEqual(Result.Ok([]));
+  expect(Result.all([Result.Ok(1), Result.Ok(2), Result.Ok(3)])).toEqual(
+    Result.Ok([1, 2, 3]),
+  );
+  expect(Result.all([Result.Error(1), Result.Ok(2), Result.Ok(3)])).toEqual(
+    Result.Error(1),
+  );
+  expect(Result.all([Result.Ok(1), Result.Error(2), Result.Ok(3)])).toEqual(
+    Result.Error(2),
+  );
+});

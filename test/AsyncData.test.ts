@@ -156,3 +156,30 @@ test("AsyncData.tap", () => {
     AsyncData.Done(1).tap((value) => expect(value).toEqual(AsyncData.Done(1))),
   ).toEqual(AsyncData.Done(1));
 });
+
+test("AsyncData.all", () => {
+  expect(AsyncData.all([])).toEqual(AsyncData.Done([]));
+  expect(
+    AsyncData.all([AsyncData.Done(1), AsyncData.Done(2), AsyncData.Done(3)]),
+  ).toEqual(AsyncData.Done([1, 2, 3]));
+  expect(
+    AsyncData.all([AsyncData.NotAsked(), AsyncData.Done(2), AsyncData.Done(3)]),
+  ).toEqual(AsyncData.NotAsked());
+  expect(
+    AsyncData.all([AsyncData.Done(1), AsyncData.Loading(), AsyncData.Done(3)]),
+  ).toEqual(AsyncData.Loading());
+  expect(
+    AsyncData.all([
+      AsyncData.Loading(),
+      AsyncData.NotAsked(),
+      AsyncData.Done(3),
+    ]),
+  ).toEqual(AsyncData.Loading());
+  expect(
+    AsyncData.all([
+      AsyncData.NotAsked(),
+      AsyncData.Loading(),
+      AsyncData.Done(3),
+    ]),
+  ).toEqual(AsyncData.NotAsked());
+});

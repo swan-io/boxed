@@ -115,3 +115,16 @@ test("Option.tap", () => {
     Option.None().tap((value) => expect(value).toEqual(Option.None())),
   ).toEqual(Option.None());
 });
+
+test("Option.all", () => {
+  expect(Option.all([])).toEqual(Option.Some([]));
+  expect(Option.all([Option.Some(1), Option.Some(2), Option.Some(3)])).toEqual(
+    Option.Some([1, 2, 3]),
+  );
+  expect(Option.all([Option.None(), Option.Some(2), Option.Some(3)])).toEqual(
+    Option.None(),
+  );
+  expect(Option.all([Option.Some(1), Option.None(), Option.Some(3)])).toEqual(
+    Option.None(),
+  );
+});

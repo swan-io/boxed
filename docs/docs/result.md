@@ -167,6 +167,17 @@ Executes `func` with `error`, and returns `result`. Useful for logging and debug
 result.tapError(console.log).map((x) => x * 2);
 ```
 
+## Result.all(results)
+
+Turns an "array of results of value" into a "result of array of value".
+
+```ts
+Result.all([Result.Ok(1), Result.Ok(2), Result.Ok(3)]);
+// Ok([1, 2, 3])
+Result.all([Result.Error("error"), Result.Ok(2), Result.Ok(3)]);
+// Error("error")
+```
+
 ## TS Pattern interop
 
 ```ts

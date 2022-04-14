@@ -117,6 +117,19 @@ Executes `func` with `asyncData`, and returns `asyncData`. Useful for logging an
 asyncData.tap(console.log).map((x) => x * 2);
 ```
 
+## AsyncData.all(asyncDatas)
+
+Turns an "array of asyncDatas of value" into a "asyncData of array of value".
+
+```ts
+AsyncData.all([AsyncData.Done(1), AsyncData.Done(2), AsyncData.Done(3)]);
+// Done([1, 2, 3])
+AsyncData.all([Result.NotAsked(), AsyncData.Done(2), AsyncData.Done(3)]);
+// Result.NotAsked()
+AsyncData.all([Result.Loading(), AsyncData.Done(2), AsyncData.Done(3)]);
+// Result.Loading()
+```
+
 ## TS Pattern interop
 
 ```ts

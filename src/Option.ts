@@ -122,6 +122,34 @@ export const Option = {
       );
     }
   },
+  all: <Options extends readonly Option<any>[] | []>(
+    options: Options,
+  ): Option<{
+    -readonly [P in keyof Options]: Options[P] extends Option<infer V>
+      ? V
+      : never;
+  }> => {
+    const length = options.length;
+    let acc = Option.Some<Array<unknown>>([]);
+    let index = 0;
+    while (true) {
+      if (index >= length) {
+        return acc as unknown as Option<{
+          -readonly [P in keyof Options]: Options[P] extends Option<infer V>
+            ? V
+            : never;
+        }>;
+      }
+      const item = options[index] as Option<unknown>;
+      acc = acc.flatMap((array) => {
+        return item.map((value) => {
+          array.push(value);
+          return array;
+        });
+      });
+      index++;
+    }
+  },
   equals: <Value>(
     a: Option<Value>,
     b: Option<Value>,
