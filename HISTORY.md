@@ -1,3 +1,9 @@
+# 0.3.7
+
+Fixes:
+
+- Fix issue with `Lazy` export (10064dc)
+
 # 0.3.6
 
 Changes:
