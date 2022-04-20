@@ -3,7 +3,7 @@ import { AsyncData } from "./AsyncData";
 import { Deferred } from "./Deferred";
 import * as Dict from "./Dict";
 import { Future } from "./Future";
-import * as Lazy from "./Lazy";
+import { Lazy } from "./Lazy";
 import { Option } from "./Option";
 import { Result } from "./Result";
 import * as Serializer from "./Serializer";
