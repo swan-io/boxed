@@ -24,6 +24,26 @@ test("Option.flatMap", () => {
   expect(Option.Some(1).flatMap((x) => Option.None())).toEqual(Option.None());
 });
 
+test("Option.or", () => {
+  expect(Option.Some(1).or(Option.Some(3))).toEqual(
+    Option.Some(1),
+  );
+  expect(Option.None<number>().or(Option.Some(3))).toEqual(
+    Option.Some(3),
+  );
+  expect(Option.None<number>().or(Option.None<number>())).toEqual(Option.None());
+});
+
+test("Option.orElse", () => {
+  expect(Option.Some(1).orElse(() => Option.Some(3))).toEqual(
+    Option.Some(1),
+  );
+  expect(Option.None<number>().orElse(() => Option.Some(3))).toEqual(
+    Option.Some(3),
+  );
+  expect(Option.None<number>().orElse(() => Option.None<number>())).toEqual(Option.None());
+});
+
 test("Option.getWithDefault", () => {
   expect(Option.Some(1).getWithDefault(0)).toEqual(1);
   expect(Option.None<number>().getWithDefault(0)).toEqual(0);
