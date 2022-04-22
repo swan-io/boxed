@@ -178,6 +178,28 @@ Result.all([Result.Error("error"), Result.Ok(2), Result.Ok(3)]);
 // Error("error")
 ```
 
+## Interop
+
+### Result.fromExecution(() => value)
+
+Takes a function returning `Value` that can throw an `Error` and returns a `Result<Value, Error>`
+
+```ts
+Result.fromExecution(() => 1); // Future(Ok(1))
+Result.fromExecution(() => {
+  throw "Something went wrong";
+}); // Future<Error<"Something went wrong">>
+```
+
+### Result.fromPromise(promise)
+
+Takes a `Promise<Value>` that can fail with `Error` and returns a `Promise<Result<Value, Error>>`
+
+```ts
+await Result.fromPromise(Promise.resolve(1)); // Future(Ok(1))
+await Result.fromPromise(Promise.reject(1)); // Future<Error<1>>
+```
+
 ## TS Pattern interop
 
 ```ts
