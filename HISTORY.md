@@ -1,3 +1,9 @@
+# 0.4.2
+
+Fixes:
+
+- Fixed a failing test (64feaff)
+
 # 0.4.1
 
 Fixes:
