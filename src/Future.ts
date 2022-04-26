@@ -27,6 +27,9 @@ function FutureInit<Value>(
 }
 
 export class Future<Value> {
+  /**
+   * Creates a new future from its initializer function (like `new Promise(...)`)
+   */
   static make = <Value>(
     init: (resolver: (value: Value) => void) => (() => void) | void,
   ): Future<Value> => {
@@ -35,12 +38,18 @@ export class Future<Value> {
     return future as Future<Value>;
   };
 
+  /**
+   * Creates a future resolved to the passed value
+   */
   static value = <Value>(value: Value): Future<Value> => {
     const future = Object.create(proto);
     FutureInit.call(future, (resolve) => resolve(value));
     return future as Future<Value>;
   };
 
+  /**
+   * Converts a Promise to a Future\<Result\<Value, unknown>>
+   */
   static fromPromise<Value>(
     promise: Promise<Value>,
   ): Future<Result<Value, unknown>> {
@@ -52,7 +61,38 @@ export class Future<Value> {
     });
   }
 
-  static all = all;
+  /**
+   * Turns an array of futures into a future of array
+   */
+  static all = <Futures extends readonly Future<any>[] | []>(
+    futures: Futures,
+    propagateCancel = false,
+  ): Future<{
+    -readonly [P in keyof Futures]: Futures[P] extends Future<infer T>
+      ? T
+      : never;
+  }> => {
+    const length = futures.length;
+    let acc = Future.value<Array<unknown>>([]);
+    let index = 0;
+    while (true) {
+      if (index >= length) {
+        return acc as unknown as Future<{
+          -readonly [P in keyof Futures]: Futures[P] extends Future<infer T>
+            ? T
+            : never;
+        }>;
+      }
+      const item = futures[index] as Future<unknown>;
+      acc = acc.flatMap((array) => {
+        return item.map((value) => {
+          array.push(value);
+          return array;
+        }, propagateCancel);
+      }, propagateCancel);
+      index++;
+    }
+  };
 
   tag: "Pending" | "Cancelled" | "Resolved";
   value?: Value;
@@ -82,6 +122,9 @@ export class Future<Value> {
   } {
     return this.tag === "Resolved";
   }
+  /**
+   * Runs the callback with the future value when resolved
+   */
   get(this: Future<Value>, func: (value: Value) => void) {
     if (this.isPending()) {
       const pending = this.pending as PendingPayload<Value>;
@@ -92,6 +135,9 @@ export class Future<Value> {
       func(this.value);
     }
   }
+  /**
+   * Runs the callback if and when the future is cancelled
+   */
   onCancel(this: Future<Value>, func: () => void) {
     if (this.isPending()) {
       const pending = this.pending as PendingPayload<Value>;
@@ -102,6 +148,9 @@ export class Future<Value> {
       func();
     }
   }
+  /**
+   * Cancels the future
+   */
   cancel() {
     if (this.tag === "Pending") {
       this.tag = "Cancelled";
@@ -113,6 +162,11 @@ export class Future<Value> {
       this.pending = undefined;
     }
   }
+  /**
+   * Returns the Future containing the value from the callback
+   *
+   * (Future\<A>, A => B) => Future\<B>
+   */
   map<ReturnValue>(
     this: Future<Value>,
     func: (value: Value) => ReturnValue,
@@ -137,6 +191,11 @@ export class Future<Value> {
     this.get(func);
     return this;
   }
+  /**
+   * Returns the Future containing the value from the callback
+   *
+   * (Future\<A>, A => Future\<B>) => Future\<B>
+   */
   flatMap<ReturnValue>(
     this: Future<Value>,
     func: (value: Value) => Future<ReturnValue>,
@@ -159,10 +218,18 @@ export class Future<Value> {
     });
     return future as Future<ReturnValue>;
   }
+  /**
+   * Runs the callback and returns `this`
+   */
   tap(this: Future<Value>, func: (value: Value) => unknown): Future<Value> {
     this.get(func);
     return this as Future<Value>;
   }
+  /**
+   * For Future<Result<*>>:
+   *
+   * Runs the callback with the value if ok and returns `this`
+   */
   tapOk<Ok, Error>(
     this: Future<Result<Ok, Error>>,
     func: (value: Ok) => unknown,
@@ -175,6 +242,11 @@ export class Future<Value> {
     });
     return this as Future<Result<Ok, Error>>;
   }
+  /**
+   * For Future<Result<*>>:
+   *
+   * Runs the callback with the error if in error and returns `this`
+   */
   tapError<Ok, Error>(
     this: Future<Result<Ok, Error>>,
     func: (value: Error) => unknown,
@@ -187,6 +259,11 @@ export class Future<Value> {
     });
     return this as Future<Result<Ok, Error>>;
   }
+  /**
+   * For Future<Result<*>>:
+   *
+   * Takes a callback taking the Ok value and returning a new result and returns a future resolving to this new result
+   */
   mapResult<Ok, Error, ReturnValue, ReturnError = Error>(
     this: Future<Result<Ok, Error>>,
     func: (value: Ok) => Result<ReturnValue, ReturnError>,
@@ -200,6 +277,11 @@ export class Future<Value> {
       });
     }, propagateCancel);
   }
+  /**
+   * For Future<Result<*>>:
+   *
+   * Takes a callback taking the Ok value and returning a new ok value and returns a future resolving to this new result
+   */
   mapOk<Ok, Error, ReturnValue>(
     this: Future<Result<Ok, Error>>,
     func: (value: Ok) => ReturnValue,
@@ -212,6 +294,11 @@ export class Future<Value> {
       });
     }, propagateCancel);
   }
+  /**
+   * For Future<Result<*>>:
+   *
+   * Takes a callback taking the Error value and returning a new error value and returns a future resolving to this new result
+   */
   mapError<Ok, Error, ReturnValue>(
     this: Future<Result<Ok, Error>>,
     func: (value: Error) => ReturnValue,
@@ -224,6 +311,11 @@ export class Future<Value> {
       });
     }, propagateCancel);
   }
+  /**
+   * For Future<Result<*>>:
+   *
+   * Takes a callback taking the Ok value and returning a future
+   */
   flatMapOk<Ok, Error, ReturnValue, ReturnError = Error>(
     this: Future<Result<Ok, Error>>,
     func: (value: Ok) => Future<Result<ReturnValue, ReturnError>>,
@@ -240,6 +332,11 @@ export class Future<Value> {
       });
     }, propagateCancel);
   }
+  /**
+   * For Future<Result<*>>:
+   *
+   * Takes a callback taking the Error value and returning a future
+   */
   flatMapError<Ok, Error, ReturnValue, ReturnError>(
     this: Future<Result<Ok, Error>>,
     func: (value: Error) => Future<Result<ReturnValue, ReturnError>>,
@@ -256,11 +353,19 @@ export class Future<Value> {
       });
     }, propagateCancel);
   }
+  /**
+   * Converts the future into a promise
+   */
   toPromise(this: Future<Value>): Promise<Value> {
     return new Promise((resolve) => {
       this.get(resolve);
     });
   }
+  /**
+   * For Future<Result<*>>:
+   *
+   * Converts the future into a promise (rejecting if in Error)
+   */
   resultToPromise<Ok, Error>(this: Future<Result<Ok, Error>>): Promise<Ok> {
     return new Promise((resolve, reject) => {
       this.get((value) => {
@@ -270,36 +375,6 @@ export class Future<Value> {
         });
       });
     });
-  }
-}
-
-function all<Futures extends readonly Future<any>[] | []>(
-  futures: Futures,
-  propagateCancel = false,
-): Future<{
-  -readonly [P in keyof Futures]: Futures[P] extends Future<infer T>
-    ? T
-    : never;
-}> {
-  const length = futures.length;
-  let acc = Future.value<Array<unknown>>([]);
-  let index = 0;
-  while (true) {
-    if (index >= length) {
-      return acc as unknown as Future<{
-        -readonly [P in keyof Futures]: Futures[P] extends Future<infer T>
-          ? T
-          : never;
-      }>;
-    }
-    const item = futures[index] as Future<unknown>;
-    acc = acc.flatMap((array) => {
-      return item.map((value) => {
-        array.push(value);
-        return array;
-      }, propagateCancel);
-    }, propagateCancel);
-    index++;
   }
 }
 
