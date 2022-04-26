@@ -1,3 +1,13 @@
+# 0.4.0
+
+Breaking changes:
+
+- In case of `Error`, `Result` class stores the value in `result.error` (57e254b)
+
+Features:
+
+- Better IDE integration and TypeScript errors (57e254b)
+
 # 0.3.7
 
 Fixes:
