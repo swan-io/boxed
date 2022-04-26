@@ -6,8 +6,7 @@ export class AsyncData<Value> {
    */
   static Done = <Value>(value: Value): AsyncData<Value> => {
     const asyncData = Object.create(proto) as AsyncData<Value>;
-    asyncData.tag = "Done";
-    asyncData.value = value;
+    asyncData.value = { tag: "Done", value };
     return asyncData;
   };
 
@@ -65,22 +64,24 @@ export class AsyncData<Value> {
     equals: (a: Value, b: Value) => boolean,
   ) => {
     if (a.isDone() && b.isDone()) {
-      return equals(a.value, b.value);
+      return equals(a.value.value, b.value.value);
     }
-    return a.tag === b.tag;
+    return a.value.tag === b.value.tag;
   };
 
   static pattern = {
-    Done: <T>(x: T) => ({ tag: "Done", value: x } as const),
-    NotAsked: { tag: "NotAsked" } as const,
-    Loading: { tag: "Loading" } as const,
+    Done: <T>(x: T) => ({ value: { tag: "Done", value: x } } as const),
+    NotAsked: { value: { tag: "NotAsked" } } as const,
+    Loading: { value: { tag: "Loading" } } as const,
   };
 
-  tag: "NotAsked" | "Loading" | "Done";
-  value: Value | undefined;
+  value:
+    | { tag: "NotAsked" }
+    | { tag: "Loading" }
+    | { tag: "Done"; value: Value };
+
   constructor() {
-    this.tag = "NotAsked";
-    this.value = undefined;
+    this.value = { tag: "NotAsked" };
   }
   /**
    * Returns the AsyncData containing the value from the callback
@@ -91,8 +92,8 @@ export class AsyncData<Value> {
     this: AsyncData<Value>,
     f: (value: Value) => ReturnValue,
   ): AsyncData<ReturnValue> {
-    if (this.tag === "Done") {
-      return AsyncData.Done(f(this.value as Value));
+    if (this.value.tag === "Done") {
+      return AsyncData.Done(f(this.value.value as Value));
     } else {
       return this as unknown as AsyncData<ReturnValue>;
     }
@@ -106,8 +107,8 @@ export class AsyncData<Value> {
     this: AsyncData<Value>,
     f: (value: Value) => AsyncData<ReturnValue>,
   ): AsyncData<ReturnValue> {
-    if (this.tag === "Done") {
-      return f(this.value as Value);
+    if (this.value.tag === "Done") {
+      return f(this.value.value as Value);
     } else {
       return this as unknown as AsyncData<ReturnValue>;
     }
@@ -118,8 +119,8 @@ export class AsyncData<Value> {
    * (AsyncData\<A>, A) => A
    */
   getWithDefault(this: AsyncData<Value>, defaultValue: Value): Value {
-    if (this.tag === "Done") {
-      return this.value as Value;
+    if (this.value.tag === "Done") {
+      return this.value.value as Value;
     } else {
       return defaultValue;
     }
@@ -135,10 +136,10 @@ export class AsyncData<Value> {
       NotAsked: () => ReturnValue;
     },
   ): ReturnValue {
-    if (this.tag === "Done") {
-      return config.Done(this.value as Value);
+    if (this.value.tag === "Done") {
+      return config.Done(this.value.value as Value);
     } else {
-      if (this.tag === "Loading") {
+      if (this.value.tag === "Loading") {
         return config.Loading();
       } else {
         return config.NotAsked();
@@ -158,26 +159,26 @@ export class AsyncData<Value> {
   /**
    * Typeguard
    */
-  isDone(): this is AsyncData<Value> & { tag: "Done"; value: Value } {
-    return this.tag === "Done";
+  isDone(): this is AsyncData<Value> & {
+    value: { tag: "Done"; value: Value };
+  } {
+    return this.value.tag === "Done";
   }
   /**
    * Typeguard
    */
   isLoading(): this is AsyncData<Value> & {
-    tag: "Loading";
-    value: undefined;
+    value: { tag: "Loading" };
   } {
-    return this.tag === "Loading";
+    return this.value.tag === "Loading";
   }
   /**
    * Typeguard
    */
   isNotAsked(): this is AsyncData<Value> & {
-    tag: "NotAsked";
-    value: undefined;
+    value: { tag: "NotAsked" };
   } {
-    return this.tag === "NotAsked";
+    return this.value.tag === "NotAsked";
   }
   /**
    * Return an option of the value
@@ -185,8 +186,8 @@ export class AsyncData<Value> {
    * (AsyncData\<A>) => Option\<A>
    */
   toOption(): Option<Value> {
-    if (this.tag === "Done") {
-      return Option.Some(this.value) as Option<Value>;
+    if (this.value.tag === "Done") {
+      return Option.Some(this.value.value) as Option<Value>;
     } else {
       return Option.None() as Option<Value>;
     }
@@ -203,14 +204,12 @@ const proto = Object.create(
 
 const LOADING = (() => {
   const asyncData = Object.create(proto);
-  asyncData.tag = "Loading";
-  asyncData.value = undefined;
+  asyncData.value = { tag: "Loading" };
   return asyncData;
 })();
 
 const NOT_ASKED = (() => {
   const asyncData = Object.create(proto);
-  asyncData.tag = "NotAsked";
-  asyncData.value = undefined;
+  asyncData.value = { tag: "NotAsked" };
   return asyncData;
 })();

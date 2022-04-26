@@ -12,8 +12,8 @@ export const encode = (value: any, indent?: number | undefined) => {
       if (value.__boxed_type__ === "Option") {
         return {
           __boxed_type__: "Option",
-          tag: value.tag,
-          value: value.value,
+          tag: value.value.tag,
+          value: value.value.value,
         };
       }
       if (value.__boxed_type__ === "Result") {
@@ -26,8 +26,8 @@ export const encode = (value: any, indent?: number | undefined) => {
       if (value.__boxed_type__ === "AsyncData") {
         return {
           __boxed_type__: "AsyncData",
-          tag: value.tag,
-          value: value.value,
+          tag: value.value.tag,
+          value: value.value.value,
         };
       }
       return value;

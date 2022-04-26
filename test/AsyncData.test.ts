@@ -131,14 +131,13 @@ test("AsyncData.equals", () => {
 
 test("AsyncData serialize", () => {
   expect(JSON.parse(JSON.stringify(AsyncData.NotAsked()))).toEqual({
-    tag: "NotAsked",
+    value: { tag: "NotAsked" },
   });
   expect(JSON.parse(JSON.stringify(AsyncData.Loading()))).toEqual({
-    tag: "Loading",
+    value: { tag: "Loading" },
   });
   expect(JSON.parse(JSON.stringify(AsyncData.Done(1)))).toEqual({
-    tag: "Done",
-    value: 1,
+    value: { tag: "Done", value: 1 },
   });
 });
 

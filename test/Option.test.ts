@@ -100,11 +100,10 @@ test("Option.equals", () => {
 
 test("Option serialize", () => {
   expect(JSON.parse(JSON.stringify(Option.None()))).toEqual({
-    tag: "None",
+    value: { tag: "None" },
   });
   expect(JSON.parse(JSON.stringify(Option.Some(1)))).toEqual({
-    tag: "Some",
-    value: 1,
+    value: { tag: "Some", value: 1 },
   });
 });
 
@@ -145,3 +144,9 @@ test("ts-pattern", () => {
       .exhaustive(),
   ).toEqual(2);
 });
+
+const f = (a: Option<any>) =>
+  match(a)
+    .with(Option.pattern.Some(P.select()), (value) => value)
+    .with(Option.pattern.None, () => 2)
+    .exhaustive();

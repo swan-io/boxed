@@ -4,8 +4,7 @@ export class Option<Value> {
    */
   static Some = <Value>(value: Value): Option<Value> => {
     const option = Object.create(proto) as Option<Value>;
-    option.tag = "Some";
-    option.value = value;
+    option.value = { tag: "Some", value };
     return option;
   };
 
@@ -93,22 +92,20 @@ export class Option<Value> {
     equals: (a: Value, b: Value) => boolean,
   ) => {
     if (a.isSome() && b.isSome()) {
-      return equals(a.value, b.value);
+      return equals(a.value.value, b.value.value);
     }
-    return a.tag === b.tag;
+    return a.value.tag === b.value.tag;
   };
 
   static pattern = {
-    Some: <T>(x: T) => ({ tag: "Some", value: x } as const),
-    None: { tag: "None" } as const,
+    Some: <T>(x: T) => ({ value: { tag: "Some", value: x } } as const),
+    None: { value: { tag: "None" } } as const,
   };
 
-  tag: "Some" | "None";
-  value: Value | undefined;
+  value: { tag: "Some"; value: Value } | { tag: "None" };
 
   constructor() {
-    this.tag = "None";
-    this.value = undefined;
+    this.value = { tag: "None" };
   }
   /**
    * Returns the Option containing the value from the callback
@@ -116,8 +113,8 @@ export class Option<Value> {
    * (Option\<A>, A => B) => Option\<B>
    */
   map<ReturnValue>(f: (value: Value) => ReturnValue): Option<ReturnValue> {
-    if (this.tag === "Some") {
-      return Option.Some(f(this.value as Value));
+    if (this.value.tag === "Some") {
+      return Option.Some(f(this.value.value as Value));
     } else {
       return this as unknown as Option<ReturnValue>;
     }
@@ -130,8 +127,8 @@ export class Option<Value> {
   flatMap<ReturnValue>(
     f: (value: Value) => Option<ReturnValue>,
   ): Option<ReturnValue> {
-    if (this.tag === "Some") {
-      return f(this.value as Value);
+    if (this.value.tag === "Some") {
+      return f(this.value.value as Value);
     } else {
       return this as unknown as Option<ReturnValue>;
     }
@@ -142,8 +139,8 @@ export class Option<Value> {
    * (Option\<A>, A) => A
    */
   getWithDefault(defaultValue: Value): Value {
-    if (this.tag === "Some") {
-      return this.value as Value;
+    if (this.value.tag === "Some") {
+      return this.value.value as Value;
     } else {
       return defaultValue;
     }
@@ -155,8 +152,8 @@ export class Option<Value> {
     Some: (value: Value) => ReturnValue;
     None: () => ReturnValue;
   }): ReturnValue {
-    if (this.tag === "Some") {
-      return config.Some(this.value as Value);
+    if (this.value.tag === "Some") {
+      return config.Some(this.value.value as Value);
     } else {
       return config.None();
     }
@@ -175,33 +172,33 @@ export class Option<Value> {
    * Converts the Option\<A> to a `A | undefined`
    */
   toUndefined() {
-    if (this.tag === "None") {
+    if (this.value.tag === "None") {
       return undefined;
     } else {
-      return this.value as Value;
+      return this.value.value as Value;
     }
   }
   /**
    * Converts the Option\<A> to a `A | null`
    */
   toNull() {
-    if (this.tag === "None") {
+    if (this.value.tag === "None") {
       return null;
     } else {
-      return this.value as Value;
+      return this.value.value as Value;
     }
   }
   /**
    * Typeguard
    */
-  isSome(): this is Option<Value> & { tag: "Some"; value: Value } {
-    return this.tag === "Some";
+  isSome(): this is Option<Value> & { value: { tag: "Some"; value: Value } } {
+    return this.value.tag === "Some";
   }
   /**
    * Typeguard
    */
-  isNone(): this is Option<Value> & { tag: "None"; value: undefined } {
-    return this.tag === "None";
+  isNone(): this is Option<Value> & { value: { tag: "None" } } {
+    return this.value.tag === "None";
   }
 }
 
@@ -215,7 +212,6 @@ const proto = Object.create(
 
 const NONE = (() => {
   const none = Object.create(proto);
-  none.tag = "None";
-  none.value = undefined;
+  none.value = { tag: "None" };
   return none;
 })();
