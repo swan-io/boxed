@@ -1,101 +1,25 @@
-export type Option<Value> = OptionClass<Value> &
-  ({ tag: "Some"; value: Value } | { tag: "None"; value: undefined });
-
-class OptionClass<Value> {
-  tag: "Some" | "None";
-  value: Value | undefined;
-  constructor() {
-    this.tag = "None";
-    this.value = undefined;
-  }
-  map<ReturnValue>(f: (value: Value) => ReturnValue): Option<ReturnValue> {
-    if (this.tag === "Some") {
-      return Option.Some(f(this.value as Value));
-    } else {
-      return this as unknown as Option<ReturnValue>;
-    }
-  }
-  flatMap<ReturnValue>(
-    f: (value: Value) => Option<ReturnValue>,
-  ): Option<ReturnValue> {
-    if (this.tag === "Some") {
-      return f(this.value as Value);
-    } else {
-      return this as unknown as Option<ReturnValue>;
-    }
-  }
-  getWithDefault(defaultValue: Value): Value {
-    if (this.tag === "Some") {
-      return this.value as Value;
-    } else {
-      return defaultValue;
-    }
-  }
-  match<ReturnValue>(config: {
-    Some: (value: Value) => ReturnValue;
-    None: () => ReturnValue;
-  }): ReturnValue {
-    if (this.tag === "Some") {
-      return config.Some(this.value as Value);
-    } else {
-      return config.None();
-    }
-  }
-  tap(
-    this: Option<Value>,
-    func: (option: Option<Value>) => unknown,
-  ): Option<Value> {
-    func(this);
-    return this;
-  }
-  toUndefined() {
-    if (this.tag === "None") {
-      return undefined;
-    } else {
-      return this.value as Value;
-    }
-  }
-  toNull() {
-    if (this.tag === "None") {
-      return null;
-    } else {
-      return this.value as Value;
-    }
-  }
-  isSome(): this is OptionClass<Value> & { tag: "Some"; value: Value } {
-    return this.tag === "Some";
-  }
-  isNone(): this is OptionClass<Value> & { tag: "None"; value: undefined } {
-    return this.tag === "None";
-  }
-}
-
-// @ts-expect-error
-OptionClass.prototype.__boxed_type__ = "Option";
-
-const proto = Object.create(
-  null,
-  Object.getOwnPropertyDescriptors(OptionClass.prototype),
-);
-
-const NONE = (() => {
-  const none = Object.create(proto);
-  none.tag = "None";
-  none.value = undefined;
-  return none;
-})();
-
-export const Option = {
-  Some: <Value>(value: Value): Option<Value> => {
+export class Option<Value> {
+  /**
+   * Create an AsyncData.Some value
+   */
+  static Some = <Value>(value: Value): Option<Value> => {
     const option = Object.create(proto) as Option<Value>;
     option.tag = "Some";
     option.value = value;
     return option;
-  },
-  None: <Value>(): Option<Value> => {
+  };
+
+  /**
+   * Create an Option.None value
+   */
+  static None = <Value>(): Option<Value> => {
     return NONE as Option<Value>;
-  },
-  fromNullable: <NullableValue>(nullable: NullableValue) => {
+  };
+
+  /**
+   * Create an Option from a nullable value
+   */
+  static fromNullable = <NullableValue>(nullable: NullableValue) => {
     if (nullable == null) {
       return Option.None<NonNullable<NullableValue>>();
     } else {
@@ -103,8 +27,12 @@ export const Option = {
         nullable as NonNullable<NullableValue>,
       );
     }
-  },
-  fromNull: <NullableValue>(nullable: NullableValue) => {
+  };
+
+  /**
+   * Create an Option from a null | value
+   */
+  static fromNull = <NullableValue>(nullable: NullableValue) => {
     if (nullable === null) {
       return Option.None<Exclude<NullableValue, null>>();
     } else {
@@ -112,8 +40,12 @@ export const Option = {
         nullable as Exclude<NullableValue, null>,
       );
     }
-  },
-  fromUndefined: <NullableValue>(nullable: NullableValue) => {
+  };
+
+  /**
+   * Create an Option from a undefined | value
+   */
+  static fromUndefined = <NullableValue>(nullable: NullableValue) => {
     if (nullable === undefined) {
       return Option.None<Exclude<NullableValue, undefined>>();
     } else {
@@ -121,8 +53,12 @@ export const Option = {
         nullable as Exclude<NullableValue, undefined>,
       );
     }
-  },
-  all: <Options extends readonly Option<any>[] | []>(
+  };
+
+  /**
+   * Turns an array of options into an option of array
+   */
+  static all = <Options extends readonly Option<any>[] | []>(
     options: Options,
   ): Option<{
     -readonly [P in keyof Options]: Options[P] extends Option<infer V>
@@ -149,19 +85,137 @@ export const Option = {
       });
       index++;
     }
-  },
-  equals: <Value>(
+  };
+
+  static equals = <Value>(
     a: Option<Value>,
     b: Option<Value>,
     equals: (a: Value, b: Value) => boolean,
   ) => {
-    if (a.tag === "Some" && b.tag === "Some") {
+    if (a.isSome() && b.isSome()) {
       return equals(a.value, b.value);
     }
     return a.tag === b.tag;
-  },
-  pattern: {
+  };
+
+  static pattern = {
     Some: <T>(x: T) => ({ tag: "Some", value: x } as const),
     None: { tag: "None" } as const,
-  },
-};
+  };
+
+  tag: "Some" | "None";
+  value: Value | undefined;
+
+  constructor() {
+    this.tag = "None";
+    this.value = undefined;
+  }
+  /**
+   * Returns the Option containing the value from the callback
+   *
+   * (Option\<A>, A => B) => Option\<B>
+   */
+  map<ReturnValue>(f: (value: Value) => ReturnValue): Option<ReturnValue> {
+    if (this.tag === "Some") {
+      return Option.Some(f(this.value as Value));
+    } else {
+      return this as unknown as Option<ReturnValue>;
+    }
+  }
+  /**
+   * Returns the Option containing the value from the callback
+   *
+   * (Option\<A>, A => Option\<B>) => Option\<B>
+   */
+  flatMap<ReturnValue>(
+    f: (value: Value) => Option<ReturnValue>,
+  ): Option<ReturnValue> {
+    if (this.tag === "Some") {
+      return f(this.value as Value);
+    } else {
+      return this as unknown as Option<ReturnValue>;
+    }
+  }
+  /**
+   * Return the value if present, and the fallback otherwise
+   *
+   * (Option\<A>, A) => A
+   */
+  getWithDefault(defaultValue: Value): Value {
+    if (this.tag === "Some") {
+      return this.value as Value;
+    } else {
+      return defaultValue;
+    }
+  }
+  /**
+   * Explodes the Option given its case
+   */
+  match<ReturnValue>(config: {
+    Some: (value: Value) => ReturnValue;
+    None: () => ReturnValue;
+  }): ReturnValue {
+    if (this.tag === "Some") {
+      return config.Some(this.value as Value);
+    } else {
+      return config.None();
+    }
+  }
+  /**
+   * Runs the callback and returns `this`
+   */
+  tap(
+    this: Option<Value>,
+    func: (option: Option<Value>) => unknown,
+  ): Option<Value> {
+    func(this);
+    return this;
+  }
+  /**
+   * Converts the Option\<A> to a `A | undefined`
+   */
+  toUndefined() {
+    if (this.tag === "None") {
+      return undefined;
+    } else {
+      return this.value as Value;
+    }
+  }
+  /**
+   * Converts the Option\<A> to a `A | null`
+   */
+  toNull() {
+    if (this.tag === "None") {
+      return null;
+    } else {
+      return this.value as Value;
+    }
+  }
+  /**
+   * Typeguard
+   */
+  isSome(): this is Option<Value> & { tag: "Some"; value: Value } {
+    return this.tag === "Some";
+  }
+  /**
+   * Typeguard
+   */
+  isNone(): this is Option<Value> & { tag: "None"; value: undefined } {
+    return this.tag === "None";
+  }
+}
+
+// @ts-expect-error
+Option.prototype.__boxed_type__ = "Option";
+
+const proto = Object.create(
+  null,
+  Object.getOwnPropertyDescriptors(Option.prototype),
+);
+
+const NONE = (() => {
+  const none = Object.create(proto);
+  none.tag = "None";
+  none.value = undefined;
+  return none;
+})();

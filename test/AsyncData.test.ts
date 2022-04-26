@@ -1,3 +1,4 @@
+import { match, P } from "ts-pattern";
 import { expect, test } from "vitest";
 import { AsyncData } from "../src/AsyncData";
 import { Option } from "../src/Option";
@@ -182,4 +183,28 @@ test("AsyncData.all", () => {
       AsyncData.Done(3),
     ]),
   ).toEqual(AsyncData.NotAsked());
+});
+
+test("ts-pattern", () => {
+  expect(
+    match(AsyncData.Done(1))
+      .with(AsyncData.pattern.Done(P.select()), (value) => value)
+      .with(AsyncData.pattern.Loading, () => 2)
+      .with(AsyncData.pattern.NotAsked, () => 3)
+      .exhaustive(),
+  ).toEqual(1);
+  expect(
+    match(AsyncData.Loading())
+      .with(AsyncData.pattern.Done(P.any), (value) => value)
+      .with(AsyncData.pattern.Loading, () => 2)
+      .with(AsyncData.pattern.NotAsked, () => 3)
+      .exhaustive(),
+  ).toEqual(2);
+  expect(
+    match(AsyncData.NotAsked())
+      .with(AsyncData.pattern.Done(P.any), (value) => value)
+      .with(AsyncData.pattern.Loading, () => 2)
+      .with(AsyncData.pattern.NotAsked, () => 3)
+      .exhaustive(),
+  ).toEqual(3);
 });

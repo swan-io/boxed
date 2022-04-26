@@ -1,3 +1,4 @@
+import { match, P } from "ts-pattern";
 import { expect, test } from "vitest";
 import { Option } from "../src/Option";
 
@@ -127,4 +128,20 @@ test("Option.all", () => {
   expect(Option.all([Option.Some(1), Option.None(), Option.Some(3)])).toEqual(
     Option.None(),
   );
+});
+
+test("ts-pattern", () => {
+  expect(
+    match(Option.Some(1))
+      .with(Option.pattern.Some(P.select()), (value) => value)
+      .with(Option.pattern.None, () => 2)
+      .exhaustive(),
+  ).toEqual(1);
+
+  expect(
+    match(Option.None())
+      .with(Option.pattern.Some(P.any), (value) => value)
+      .with(Option.pattern.None, () => 2)
+      .exhaustive(),
+  ).toEqual(2);
 });

@@ -1,3 +1,4 @@
+import { match, P } from "ts-pattern";
 import { expect, test } from "vitest";
 import { Option } from "../src/Option";
 import { Result } from "../src/Result";
@@ -139,7 +140,7 @@ test("Result.equals", () => {
 test("Result serialize", () => {
   expect(JSON.parse(JSON.stringify(Result.Error(1)))).toEqual({
     tag: "Error",
-    value: 1,
+    error: 1,
   });
   expect(JSON.parse(JSON.stringify(Result.Ok(1)))).toEqual({
     tag: "Ok",
@@ -181,4 +182,20 @@ test("Result.all", () => {
   expect(Result.all([Result.Ok(1), Result.Error(2), Result.Ok(3)])).toEqual(
     Result.Error(2),
   );
+});
+
+test("ts-pattern", () => {
+  expect(
+    match(Result.Ok(1))
+      .with(Result.pattern.Ok(P.select()), (value) => value)
+      .with(Result.pattern.Error(P.any), () => 2)
+      .exhaustive(),
+  ).toEqual(1);
+
+  expect(
+    match(Result.Error(2))
+      .with(Result.pattern.Ok(P.any), (value) => value)
+      .with(Result.pattern.Error(P.select()), (value) => value)
+      .exhaustive(),
+  ).toEqual(2);
 });
