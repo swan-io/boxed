@@ -1,3 +1,9 @@
+# 0.5.2
+
+Features:
+
+- Add convenience `get` methods (23592b0)
+
 # 0.5.1
 
 Changes:
