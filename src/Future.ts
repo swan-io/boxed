@@ -6,15 +6,8 @@ type PendingPayload<Value> = {
   cancel?: void | (() => void);
 };
 
-export type Future<Value> = FutureClass<Value> &
-  (
-    | { tag: "Pending"; pending: PendingPayload<Value> }
-    | { tag: "Cancelled" }
-    | { tag: "Resolved"; value: Value }
-  );
-
 function FutureInit<Value>(
-  this: FutureClass<Value>,
+  this: Future<Value>,
   init: (resolver: (value: Value) => void) => (() => void) | void,
 ) {
   const resolver = (value: Value) => {
@@ -33,7 +26,34 @@ function FutureInit<Value>(
   pendingPayload.cancel = init(resolver);
 }
 
-class FutureClass<Value> {
+export class Future<Value> {
+  static make = <Value>(
+    init: (resolver: (value: Value) => void) => (() => void) | void,
+  ): Future<Value> => {
+    const future = Object.create(proto);
+    FutureInit.call(future, init);
+    return future as Future<Value>;
+  };
+
+  static value = <Value>(value: Value): Future<Value> => {
+    const future = Object.create(proto);
+    FutureInit.call(future, (resolve) => resolve(value));
+    return future as Future<Value>;
+  };
+
+  static fromPromise<Value>(
+    promise: Promise<Value>,
+  ): Future<Result<Value, unknown>> {
+    return Future.make((resolve) => {
+      promise.then(
+        (ok) => resolve(Result.Ok(ok)),
+        (reason) => resolve(Result.Error(reason)),
+      );
+    });
+  }
+
+  static all = all;
+
   tag: "Pending" | "Cancelled" | "Resolved";
   value?: Value;
   pending?: PendingPayload<Value>;
@@ -285,29 +305,5 @@ function all<Futures extends readonly Future<any>[] | []>(
 
 const proto = Object.create(
   null,
-  Object.getOwnPropertyDescriptors(FutureClass.prototype),
+  Object.getOwnPropertyDescriptors(Future.prototype),
 );
-
-export const Future = {
-  make: <Value>(
-    init: (resolver: (value: Value) => void) => (() => void) | void,
-  ): Future<Value> => {
-    const future = Object.create(proto);
-    FutureInit.call(future, init);
-    return future as Future<Value>;
-  },
-  value: <Value>(value: Value): Future<Value> => {
-    const future = Object.create(proto);
-    FutureInit.call(future, (resolve) => resolve(value));
-    return future as Future<Value>;
-  },
-  fromPromise<Value>(promise: Promise<Value>): Future<Result<Value, unknown>> {
-    return Future.make((resolve) => {
-      promise.then(
-        (ok) => resolve(Result.Ok(ok)),
-        (reason) => resolve(Result.Error(reason)),
-      );
-    });
-  },
-  all,
-};
