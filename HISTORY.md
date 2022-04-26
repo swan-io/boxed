@@ -1,3 +1,9 @@
+# 0.4.1
+
+Fixes:
+
+- Fixed a compatibility issue with ts-pattern (37337ed)
+
 # 0.4.0
 
 Breaking changes:
