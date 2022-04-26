@@ -1,3 +1,9 @@
+# 0.5.1
+
+Changes:
+
+- Add inline docs to future (6fd938c)
+
 # 0.5.0
 
 Breaking changes:
