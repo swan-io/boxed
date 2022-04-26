@@ -200,6 +200,13 @@ export class Option<Value> {
   isNone(): this is Option<Value> & { value: { tag: "None" } } {
     return this.value.tag === "None";
   }
+
+  /**
+   * Returns the value. Use within `if (option.isSome()) { ... }`
+   */
+  get(this: Option<Value> & { value: { tag: "Some"; value: Value } }): Value {
+    return this.value.value;
+  }
 }
 
 // @ts-expect-error

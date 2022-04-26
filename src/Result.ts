@@ -265,6 +265,20 @@ export class Result<Ok, Error> {
       return Option.None() as Option<Ok>;
     }
   }
+  /**
+   * Returns the ok value. Use within `if (result.isOk()) { ... }`
+   */
+  get(this: Result<Ok, Error> & { value: { tag: "Ok"; value: Ok } }): Ok {
+    return this.value.value;
+  }
+  /**
+   * Returns the error value. Use within `if (result.isError()) { ... }`
+   */
+  getError(
+    this: Result<Ok, Error> & { value: { tag: "Error"; value: Error } },
+  ): Error {
+    return this.value.value;
+  }
 }
 
 // @ts-expect-error

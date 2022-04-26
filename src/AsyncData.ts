@@ -192,6 +192,15 @@ export class AsyncData<Value> {
       return Option.None() as Option<Value>;
     }
   }
+
+  /**
+   * Returns the value. Use within `if (asyncData.isDone()) { ... }`
+   */
+  get(
+    this: AsyncData<Value> & { value: { tag: "Done"; value: Value } },
+  ): Value {
+    return this.value.value;
+  }
 }
 
 // @ts-expect-error

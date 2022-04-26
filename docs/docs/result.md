@@ -109,6 +109,10 @@ Type guard. Checks if the option is `Ok(value)`
 ```ts
 Result.Ok(2).isOk(); // true
 Result.Error(2).isOk(); // false
+
+if (result.isOk()) {
+  const value = result.get();
+}
 ```
 
 ## .isError()
@@ -118,6 +122,10 @@ Type guard. Checks if the option is `None`
 ```ts
 Result.Ok(2).isError(); // false
 Result.Error().isError(); // true
+
+if (result.isError()) {
+  const value = result.getError();
+}
 ```
 
 ## .toOption()

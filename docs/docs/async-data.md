@@ -65,6 +65,10 @@ Type guard. Checks if the option is `Done(value)`
 AsyncData.Done(2).isDone(); // true
 AsyncData.Loading().isDone(); // false
 AsyncData.NotAsked().isDone(); // false
+
+if (asyncData.isDone()) {
+  const value = asyncData.get();
+}
 ```
 
 ## .isLoading()

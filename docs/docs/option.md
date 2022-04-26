@@ -56,6 +56,8 @@ Option.Some(2).flatMap((x) => {
     return Option.Some(2);
   }
 });
+
+option.flatMap((value) => value.optionalProperty); // Option<optionalProperty>
 ```
 
 ## .getWithDefault(defaultValue)
@@ -74,6 +76,10 @@ Type guard. Checks if the option is `Some(value)`
 ```ts
 Option.Some(2).isSome(); // true
 Option.None().isSome(); // false
+
+if (option.isSome()) {
+  const value = option.get();
+}
 ```
 
 ## .isNone()
