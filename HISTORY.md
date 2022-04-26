@@ -1,3 +1,9 @@
+# 0.5.0
+
+Breaking changes:
+
+- Update internal representation (181feac)
+
 # 0.4.2
 
 Fixes:
