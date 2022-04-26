@@ -268,14 +268,14 @@ export class Result<Ok, Error> {
   /**
    * Returns the ok value. Use within `if (result.isOk()) { ... }`
    */
-  get(this: Result<Ok, Error> & { value: { tag: "Ok"; value: Ok } }): Ok {
+  get(this: Result<Ok, Error> & { tag: "Ok"; value: { value: Ok } }): Ok {
     return this.value.value;
   }
   /**
    * Returns the error value. Use within `if (result.isError()) { ... }`
    */
   getError(
-    this: Result<Ok, Error> & { value: { tag: "Error"; value: Error } },
+    this: Result<Ok, Error> & { tag: "Error"; value: { value: Error } },
   ): Error {
     return this.value.value;
   }

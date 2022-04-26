@@ -67,6 +67,20 @@ test("Result.getWithDefault", () => {
   expect(Result.Error<number, number>(1).getWithDefault(0)).toEqual(0);
 });
 
+test("Result.get", () => {
+  const result: Result<number, unknown> = Result.Ok(1);
+  if (result.isOk()) {
+    expect(result.get()).toEqual(1);
+  }
+});
+
+test("Result.getError", () => {
+  const result: Result<unknown, number> = Result.Error(1);
+  if (result.isError()) {
+    expect(result.getError()).toEqual(1);
+  }
+});
+
 test("Result.match", () => {
   Result.Error<number, number>(1).match({
     Error: (value) => expect(value).toBe(1),
