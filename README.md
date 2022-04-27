@@ -1,4 +1,4 @@
-<img width="108" alt="@swan-io/boxed logo" src="docs/static/img/logo.svg">
+<img width="108" alt="@swan-io/boxed logo" src="https://github.com/swan-io/boxed/blob/main/docs/static/img/logo.svg?raw=true">
 
 # @swan-io/boxed
 
