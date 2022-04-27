@@ -1,3 +1,9 @@
+# 0.6.0
+
+Breaking changes:
+
+- Move from `value` getter to `get` method in `Lazy` (4d26820)
+
 # 0.5.3
 
 Fixes:
