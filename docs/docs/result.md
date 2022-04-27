@@ -104,7 +104,7 @@ Result.Error(2).getWithDefault(1); // 1
 
 ## .isOk()
 
-Type guard. Checks if the option is `Ok(value)`
+Type guard. Checks if the result is `Ok(value)`
 
 ```ts
 Result.Ok(2).isOk(); // true
@@ -117,7 +117,7 @@ if (result.isOk()) {
 
 ## .isError()
 
-Type guard. Checks if the option is `None`
+Type guard. Checks if the result is `Error(error)`
 
 ```ts
 Result.Ok(2).isError(); // false
