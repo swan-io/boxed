@@ -1,3 +1,5 @@
+<img width="108" alt="@swan-io/boxed logo" src="docs/static/img/logo.svg">
+
 # @swan-io/boxed
 
 [![mit licence](https://img.shields.io/dub/l/vibe-d.svg?style=for-the-badge)](https://github.com/swan-io/boxed/blob/main/LICENSE)
@@ -20,23 +22,20 @@
 
 - `Option<Value>`
 - `Result<Ok, Error>`
-- `AsyncData<Value>`
 - `Future<Value>`
+- `AsyncData<Value>`
 - `Lazy<Value>`
 - Some utils like `Deferred`, `Dict` & `Array`
 
 ## Installation
 
-```console
-$ yarn add @swan-io/boxed
+```bash
+$ yarn add @swan-io/chicane
+# --- or ---
+$ npm install --save @swan-io/chicane
 ```
 
-or
+## Links
 
-```console
-$ npm install --save @swan-io/boxed
-```
-
-## [Documentation](https://swan-io.github.io/boxed)
-
-## [License](./LICENSE)
+- 📘 [**Documentation**](https://swan-io.github.io/chicane)
+- ⚖️ [**License**](./LICENSE)
