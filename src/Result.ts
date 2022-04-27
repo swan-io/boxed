@@ -241,15 +241,14 @@ export class Result<Ok, Error> {
   /**
    * Typeguard
    */
-  isOk(): this is Result<Ok, Error> & { tag: "Ok"; value: { value: Ok } } {
+  isOk(): this is Result<Ok, Error> & { value: { tag: "Ok"; value: Ok } } {
     return this.value.tag === "Ok";
   }
   /**
    * Typeguard
    */
   isError(): this is Result<Ok, Error> & {
-    tag: "Error";
-    value: { value: Error };
+    value: { tag: "Error"; value: Error };
   } {
     return this.value.tag === "Error";
   }

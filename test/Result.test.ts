@@ -197,3 +197,17 @@ test("ts-pattern", () => {
       .exhaustive(),
   ).toEqual(2);
 });
+
+test("Result.get", () => {
+  const result: Result<number, unknown> = Result.Ok(1);
+  if (result.isOk()) {
+    expect(result.get()).toEqual(1);
+  }
+});
+
+test("Result.getError", () => {
+  const result: Result<unknown, number> = Result.Error(1);
+  if (result.isError()) {
+    expect(result.getError()).toEqual(1);
+  }
+});

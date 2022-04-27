@@ -207,3 +207,10 @@ test("ts-pattern", () => {
       .exhaustive(),
   ).toEqual(3);
 });
+
+test("Option.get", () => {
+  const asyncData: AsyncData<number> = AsyncData.Done(1);
+  if (asyncData.isDone()) {
+    expect(asyncData.get()).toEqual(1);
+  }
+});

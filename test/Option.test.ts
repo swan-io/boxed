@@ -145,8 +145,9 @@ test("ts-pattern", () => {
   ).toEqual(2);
 });
 
-const f = (a: Option<any>) =>
-  match(a)
-    .with(Option.pattern.Some(P.select()), (value) => value)
-    .with(Option.pattern.None, () => 2)
-    .exhaustive();
+test("Option.get", () => {
+  const option: Option<number> = Option.Some(1);
+  if (option.isSome()) {
+    expect(option.get()).toEqual(1);
+  }
+});
