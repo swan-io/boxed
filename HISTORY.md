@@ -1,3 +1,9 @@
+# 0.5.3
+
+Fixes:
+
+- Fixed `get` typing for `Result` type (thanks [@ansavchenco](https://github.com/ansavchenco)!) (54fe9aa)
+
 # 0.5.2
 
 Features:
