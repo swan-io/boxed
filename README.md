@@ -30,12 +30,12 @@
 ## Installation
 
 ```bash
-$ yarn add @swan-io/chicane
+$ yarn add @swan-io/boxed
 # --- or ---
-$ npm install --save @swan-io/chicane
+$ npm install --save @swan-io/boxed
 ```
 
 ## Links
 
-- 📘 [**Documentation**](https://swan-io.github.io/chicane)
+- 📘 [**Documentation**](https://swan-io.github.io/boxed)
 - ⚖️ [**License**](./LICENSE)
