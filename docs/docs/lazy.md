@@ -7,7 +7,7 @@ sidebar_label: Lazy
 
 Creates a lazy value. The computation won't happen until the first access.
 
-A `lazy` type contains a `value` property that'll contain the result from the computation.
+A `lazy` type exposes a `get` method that'll return the result from the computation.
 
 ```ts
 import { Lazy } from "@swan-io/boxed";
@@ -17,10 +17,10 @@ const lazy = Lazy(() => {
 });
 ```
 
-## lazy.value
+## lazy.get()
 
 Computes the value **once** and returns it.
 
 ```ts
-lazy.value; // value is computed and return here
+lazy.get(); // value is computed and return here
 ```

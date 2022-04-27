@@ -12,7 +12,7 @@ test("Lazy computes on access", () => {
   const lazy = Lazy(() => {
     return 1;
   });
-  expect(lazy.value).toBe(1);
+  expect(lazy.get()).toBe(1);
 });
 
 test("Lazy computes only once", () => {
@@ -20,7 +20,7 @@ test("Lazy computes only once", () => {
   const lazy = Lazy(() => {
     return ++count;
   });
-  expect(lazy.value).toBe(1);
-  expect(lazy.value).toBe(1);
-  expect(lazy.value).toBe(1);
+  expect(lazy.get()).toBe(1);
+  expect(lazy.get()).toBe(1);
+  expect(lazy.get()).toBe(1);
 });
