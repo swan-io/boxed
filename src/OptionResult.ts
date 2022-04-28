@@ -377,7 +377,7 @@ export class Result<A, E> {
    *
    * (Result\<A, E>, A => Result\<B, F>) => Result\<B, E | F>
    */
-  flatMap<B, F = E>(f: (value: A) => Result<B, F | E>): Result<B, F | E> {
+  flatMap<B, F = E>(f: (value: A) => Result<B, F>): Result<B, F | E> {
     if (this.value.tag === "Ok") {
       return f(this.value.value);
     } else {
