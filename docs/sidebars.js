@@ -45,7 +45,7 @@ module.exports = {
       items: [
         "react-request",
         "form-validation",
-        "defaults",
+        "nested-optional-values",
         "cancellable-request",
       ],
     },

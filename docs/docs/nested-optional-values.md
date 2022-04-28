@@ -1,6 +1,6 @@
 ---
-title: Defaults
-sidebar_label: Defaults
+title: Nested optional values
+sidebar_label: Nested optional values
 ---
 
 Managing optionality with `undefined` and `null` can lead to tedious code, especially when dealing with default values.
