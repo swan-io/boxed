@@ -104,7 +104,7 @@ Type guard. Returns wether the future is resolved or not.
 future.isResolved();
 ```
 
-## [Future<Result<Ok, Error>>](./future-result)
+## [Future<Result<Ok, Error>>](/future-result)
 
 ## Future.all(futures)
 
