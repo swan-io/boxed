@@ -30,6 +30,7 @@ module.exports = {
         "result",
         "async-data",
         "future",
+        "future-result",
         "deferred",
         "array",
         "dict",

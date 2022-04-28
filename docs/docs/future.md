@@ -43,7 +43,7 @@ const otherFuture = Future.make((resolve) => {
 Runs `f` with the future value as argument when available.
 
 ```ts
-future.get(console.log);
+Future.value(1).get(console.log); // logs 1
 ```
 
 ## .onCancel(f)
@@ -61,7 +61,7 @@ future.onCancel(() => {
 Takes a `Future<A>` and returns a new `Future<f<A>>`
 
 ```ts
-future.map((x) => x * 2);
+Future.value(3).map((x) => x * 2); // Future<6>
 ```
 
 ## .flatMap(f)
@@ -69,7 +69,7 @@ future.map((x) => x * 2);
 Takes a `Future<A>`, and returns a new future taking the value of the future returned by `f(A)`
 
 ```ts
-future.flatMap((x) => Future.value(x * 2));
+Future.value(3).flatMap((x) => Future.value(x * 2)); // Future<6>
 ```
 
 ## .tap(f)
@@ -77,7 +77,7 @@ future.flatMap((x) => Future.value(x * 2));
 Runs `f` with the future value, and returns the original future. Useful for debugging.
 
 ```ts
-future.tap(console.log);
+Future.value(3).tap(console.log); // logs 3, returns Future<3>
 ```
 
 ## .isPending()
@@ -104,71 +104,7 @@ Type guard. Returns wether the future is resolved or not.
 future.isResolved();
 ```
 
-## Future<Result<Ok, Error>>
-
-We provide a few utility functions for `Future` containing a `Result` value.
-
-### .mapResult(f)
-
-Takes a `Future<Result<Ok, Error>>` and a `f` function taking `Ok` and returning `Result<ReturnValue, Error>` and returns a new `Future<Result<ReturnValue, Error>>`
-
-```ts
-future.mapResult((ok) => {
-  return Result.Ok(ok * 2);
-});
-```
-
-### .mapOk(f)
-
-Takes a `Future<Result<Ok, Error>>` and a `f` function taking `Ok` and returning `ReturnValue` and returns a new `Future<Result<ReturnValue, Error>>`
-
-```ts
-future.mapOk((ok) => {
-  return ok * 2;
-});
-```
-
-### .mapError(f)
-
-Takes a `Future<Result<Ok, Error>>` and a `f` function taking `Error` and returning `ReturnValue` and returns a new `Future<Result<Ok, ReturnValue>>`
-
-```ts
-future.mapError((error) => {
-  return ok * 2;
-});
-```
-
-### .flatMapOk(f)
-
-Takes a `Future<Result<Ok, Error>>` and a `f` function taking `Ok` returning a `Future<Result<ReturnValue, Error>>`
-
-```ts
-future.flatMapOk((ok) => Future.value(Result.Ok(1)));
-```
-
-### .flatMapError(f)
-
-Takes a `Future<Result<Ok, Error>>` and a `f` function taking `Error` returning a `Future<Result<Ok, ReturnValue>>`
-
-```ts
-future.flatMapError((error) => Future.value(Result.Ok(1)));
-```
-
-### .tapOk(f)
-
-Runs `f` if value is `Ok` with the future value, and returns the original future. Useful for debugging.
-
-```ts
-future.tapOk(console.log);
-```
-
-### .tapError(f)
-
-Runs `f` if value is `Error` with the future value, and returns the original future. Useful for debugging.
-
-```ts
-future.tapError(console.log);
-```
+## [Future<Result<Ok, Error>>](./future-result)
 
 ## Future.all(futures)
 
