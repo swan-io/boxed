@@ -1,3 +1,9 @@
+# 0.6.4
+
+Fixes:
+
+- Fix flatMap type (fcd4acc)
+
 # 0.6.3
 
 Changes:
