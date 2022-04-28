@@ -107,6 +107,15 @@ Option.Some(2).toUndefined(); // 2
 Option.None().toUndefined(); // undefined
 ```
 
+## .toResult(errorWhenNone)
+
+Returns `undefined` if the option is `None`, returns the value otherwise
+
+```ts
+const a = Option.Some(1).toResult("NotFound"); // Ok<1>
+const b = Option.None().toResult("NotFound"); // Error<"NotFound">
+```
+
 ## .match()
 
 Match the option state

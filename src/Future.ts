@@ -1,4 +1,4 @@
-import { Result } from "./Result";
+import { Result } from "./OptionResult";
 
 type PendingPayload<A> = {
   resolveCallbacks?: Array<(value: A) => void>;

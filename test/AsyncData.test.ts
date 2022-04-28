@@ -1,7 +1,7 @@
 import { match, P } from "ts-pattern";
 import { expect, test } from "vitest";
 import { AsyncData } from "../src/AsyncData";
-import { Option } from "../src/Option";
+import { Option } from "../src/OptionResult";
 
 test("AsyncData.is{Done|Loading|NotAsked}", () => {
   expect(AsyncData.Done(1).isDone()).toBeTruthy();

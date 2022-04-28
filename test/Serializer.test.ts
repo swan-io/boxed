@@ -1,7 +1,6 @@
 import { expect, test } from "vitest";
 import { AsyncData } from "../src/AsyncData";
-import { Option } from "../src/Option";
-import { Result } from "../src/Result";
+import { Option, Result } from "../src/OptionResult";
 import { decode, encode } from "../src/Serializer";
 
 test("Serializer", () => {

@@ -1,6 +1,6 @@
 import { match, P } from "ts-pattern";
 import { expect, test } from "vitest";
-import { Option } from "../src/Option";
+import { Option, Result } from "../src/OptionResult";
 
 test("Option.is{Some|None}", () => {
   expect(Option.Some(1).isSome()).toBeTruthy();
@@ -150,4 +150,9 @@ test("Option.get", () => {
   if (option.isSome()) {
     expect(option.get()).toEqual(1);
   }
+});
+
+test("Option.toResult", () => {
+  expect(Option.Some(1).toResult("NotFound")).toEqual(Result.Ok(1));
+  expect(Option.None().toResult("NotFound")).toEqual(Result.Error("NotFound"));
 });

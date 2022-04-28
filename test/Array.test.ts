@@ -8,7 +8,7 @@ import {
   keepMap,
   of,
 } from "../src/Array";
-import { Option } from "../src/Option";
+import { Option } from "../src/OptionResult";
 
 test("Array.keepMap", () => {
   expect(

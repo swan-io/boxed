@@ -4,8 +4,7 @@ import { Deferred } from "./Deferred";
 import * as Dict from "./Dict";
 import { Future } from "./Future";
 import { Lazy } from "./Lazy";
-import { Option } from "./Option";
-import { Result } from "./Result";
+import { Option, Result } from "./OptionResult";
 import * as Serializer from "./Serializer";
 
 export {

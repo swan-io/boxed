@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 import { Future } from "../src/Future";
-import { Result } from "../src/Result";
+import { Result } from "../src/OptionResult";
 
 test("Future make value", async () => {
   const value = await Future.value(1);

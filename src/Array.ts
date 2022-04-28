@@ -1,4 +1,4 @@
-import { Option } from "./Option";
+import { Option } from "./OptionResult";
 
 export const from = Array.from;
 

@@ -1,7 +1,6 @@
 import { match, P } from "ts-pattern";
 import { expect, test } from "vitest";
-import { Option } from "../src/Option";
-import { Result } from "../src/Result";
+import { Option, Result } from "../src/OptionResult";
 
 test("Result.is{Ok|Error}", () => {
   expect(Result.Ok(1).isOk()).toBeTruthy();
