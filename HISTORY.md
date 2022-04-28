@@ -1,3 +1,9 @@
+# 0.6.2
+
+Features:
+
+- Add `option.toResult` for better discoverability (cc8a058)
+
 # 0.6.1
 
 Features:
