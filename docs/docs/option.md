@@ -49,13 +49,11 @@ Option.Some(2).map((x) => x * 2); // Option.Some(4)
 If the option is `Some(value)` returns `f(value)`, otherwise returns `None`.
 
 ```ts
-Option.Some(2).flatMap((x) => {
-  if (x > 1) {
-    return Option.None();
-  } else {
-    return Option.Some(2);
-  }
-});
+Option.Some(2).flatMap((x) => (x > 1 ? Option.None() : Option.Some(2)));
+// None()
+
+Option.Some(1).flatMap((x) => (x > 1 ? Option.None() : Option.Some(2)));
+// Some(2)
 
 option.flatMap((value) => value.optionalProperty); // Option<optionalProperty>
 ```

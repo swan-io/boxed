@@ -79,13 +79,15 @@ Result.Error(2).mapError((x) => x * 2); // Result.Error(4)
 If the result is `Ok(value)` returns `f(value)`, otherwise returns `Error(error)`.
 
 ```ts
-Result.Ok(2).flatMap((x) => {
-  if (x > 1) {
-    return Result.Error("some error");
-  } else {
-    return Result.Ok(2);
-  }
-});
+Result.Ok(1).flatMap((x) =>
+  x > 1 ? Result.Error("some error") : Result.Ok(2),
+);
+// Ok(2)
+
+Result.Ok(2).flatMap((x) =>
+  x > 1 ? Result.Error("some error") : Result.Ok(2),
+);
+// Error("some error")
 ```
 
 ## .flatMapError(f)
@@ -215,6 +217,15 @@ Takes a `Promise<Value>` that can fail with `Error` and returns a `Promise<Resul
 ```ts
 await Result.fromPromise(Promise.resolve(1)); // Future(Ok(1))
 await Result.fromPromise(Promise.reject(1)); // Future<Error<1>>
+```
+
+### Result.fromOption(option, valueIfNone)
+
+Takes a function returning `Value` that can throw an `Error` and returns a `Result<Value, Error>`
+
+```ts
+const a = Result.fromOption(Option.Some(1), "NotFound"); // Ok<1>
+const b = Result.fromOption(Option.None(), "NotFound"); // Error<"NotFound">
 ```
 
 ## TS Pattern interop
