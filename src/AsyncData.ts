@@ -1,11 +1,11 @@
 import { Option } from "./Option";
 
-export class AsyncData<Value> {
+export class AsyncData<A> {
   /**
    * Create an AsyncData.Done value
    */
-  static Done = <Value>(value: Value): AsyncData<Value> => {
-    const asyncData = Object.create(proto) as AsyncData<Value>;
+  static Done = <A>(value: A): AsyncData<A> => {
+    const asyncData = Object.create(proto) as AsyncData<A>;
     asyncData.value = { tag: "Done", value };
     return asyncData;
   };
@@ -13,15 +13,15 @@ export class AsyncData<Value> {
   /**
    * Create an AsyncData.Loading value
    */
-  static Loading = <Value>(): AsyncData<Value> => {
-    return LOADING as AsyncData<Value>;
+  static Loading = <A>(): AsyncData<A> => {
+    return LOADING as AsyncData<A>;
   };
 
   /**
    * Create an AsyncData.NotAsked value
    */
-  static NotAsked = <Value>(): AsyncData<Value> => {
-    return NOT_ASKED as AsyncData<Value>;
+  static NotAsked = <A>(): AsyncData<A> => {
+    return NOT_ASKED as AsyncData<A>;
   };
 
   /**
@@ -58,10 +58,10 @@ export class AsyncData<Value> {
     }
   };
 
-  static equals = <Value>(
-    a: AsyncData<Value>,
-    b: AsyncData<Value>,
-    equals: (a: Value, b: Value) => boolean,
+  static equals = <A>(
+    a: AsyncData<A>,
+    b: AsyncData<A>,
+    equals: (a: A, b: A) => boolean,
   ) => {
     if (a.isDone() && b.isDone()) {
       return equals(a.value.value, b.value.value);
@@ -75,10 +75,7 @@ export class AsyncData<Value> {
     Loading: { value: { tag: "Loading" } } as const,
   };
 
-  value:
-    | { tag: "NotAsked" }
-    | { tag: "Loading" }
-    | { tag: "Done"; value: Value };
+  value: { tag: "NotAsked" } | { tag: "Loading" } | { tag: "Done"; value: A };
 
   constructor() {
     this.value = { tag: "NotAsked" };
@@ -88,14 +85,11 @@ export class AsyncData<Value> {
    *
    * (AsyncData\<A>, A => B) => AsyncData\<B>
    */
-  map<ReturnValue>(
-    this: AsyncData<Value>,
-    f: (value: Value) => ReturnValue,
-  ): AsyncData<ReturnValue> {
+  map<B>(f: (value: A) => B): AsyncData<B> {
     if (this.value.tag === "Done") {
-      return AsyncData.Done(f(this.value.value as Value));
+      return AsyncData.Done(f(this.value.value as A));
     } else {
-      return this as unknown as AsyncData<ReturnValue>;
+      return this as unknown as AsyncData<B>;
     }
   }
   /**
@@ -103,14 +97,11 @@ export class AsyncData<Value> {
    *
    * (AsyncData\<A>, A => AsyncData\<B>) => AsyncData\<B>
    */
-  flatMap<ReturnValue>(
-    this: AsyncData<Value>,
-    f: (value: Value) => AsyncData<ReturnValue>,
-  ): AsyncData<ReturnValue> {
+  flatMap<B>(f: (value: A) => AsyncData<B>): AsyncData<B> {
     if (this.value.tag === "Done") {
-      return f(this.value.value as Value);
+      return f(this.value.value as A);
     } else {
-      return this as unknown as AsyncData<ReturnValue>;
+      return this as unknown as AsyncData<B>;
     }
   }
   /**
@@ -118,9 +109,9 @@ export class AsyncData<Value> {
    *
    * (AsyncData\<A>, A) => A
    */
-  getWithDefault(this: AsyncData<Value>, defaultValue: Value): Value {
+  getWithDefault(defaultValue: A): A {
     if (this.value.tag === "Done") {
-      return this.value.value as Value;
+      return this.value.value as A;
     } else {
       return defaultValue;
     }
@@ -128,16 +119,13 @@ export class AsyncData<Value> {
   /**
    * Explodes the AsyncData given its case
    */
-  match<ReturnValue>(
-    this: AsyncData<Value>,
-    config: {
-      Done: (value: Value) => ReturnValue;
-      Loading: () => ReturnValue;
-      NotAsked: () => ReturnValue;
-    },
-  ): ReturnValue {
+  match<B>(config: {
+    Done: (value: A) => B;
+    Loading: () => B;
+    NotAsked: () => B;
+  }): B {
     if (this.value.tag === "Done") {
-      return config.Done(this.value.value as Value);
+      return config.Done(this.value.value as A);
     } else {
       if (this.value.tag === "Loading") {
         return config.Loading();
@@ -149,25 +137,22 @@ export class AsyncData<Value> {
   /**
    * Runs the callback and returns `this`
    */
-  tap(
-    this: AsyncData<Value>,
-    func: (asyncData: AsyncData<Value>) => unknown,
-  ): AsyncData<Value> {
+  tap(func: (asyncData: AsyncData<A>) => unknown): AsyncData<A> {
     func(this);
     return this;
   }
   /**
    * Typeguard
    */
-  isDone(): this is AsyncData<Value> & {
-    value: { tag: "Done"; value: Value };
+  isDone(): this is AsyncData<A> & {
+    value: { tag: "Done"; value: A };
   } {
     return this.value.tag === "Done";
   }
   /**
    * Typeguard
    */
-  isLoading(): this is AsyncData<Value> & {
+  isLoading(): this is AsyncData<A> & {
     value: { tag: "Loading" };
   } {
     return this.value.tag === "Loading";
@@ -175,7 +160,7 @@ export class AsyncData<Value> {
   /**
    * Typeguard
    */
-  isNotAsked(): this is AsyncData<Value> & {
+  isNotAsked(): this is AsyncData<A> & {
     value: { tag: "NotAsked" };
   } {
     return this.value.tag === "NotAsked";
@@ -185,20 +170,18 @@ export class AsyncData<Value> {
    *
    * (AsyncData\<A>) => Option\<A>
    */
-  toOption(): Option<Value> {
+  toOption(): Option<A> {
     if (this.value.tag === "Done") {
-      return Option.Some(this.value.value) as Option<Value>;
+      return Option.Some(this.value.value) as Option<A>;
     } else {
-      return Option.None() as Option<Value>;
+      return Option.None() as Option<A>;
     }
   }
 
   /**
    * Returns the value. Use within `if (asyncData.isDone()) { ... }`
    */
-  get(
-    this: AsyncData<Value> & { value: { tag: "Done"; value: Value } },
-  ): Value {
+  get(this: AsyncData<A> & { value: { tag: "Done"; value: A } }): A {
     return this.value.value;
   }
 }

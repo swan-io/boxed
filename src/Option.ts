@@ -1,9 +1,9 @@
-export class Option<Value> {
+export class Option<A> {
   /**
    * Create an AsyncData.Some value
    */
-  static Some = <Value>(value: Value): Option<Value> => {
-    const option = Object.create(proto) as Option<Value>;
+  static Some = <A>(value: A): Option<A> => {
+    const option = Object.create(proto) as Option<A>;
     option.value = { tag: "Some", value };
     return option;
   };
@@ -11,45 +11,41 @@ export class Option<Value> {
   /**
    * Create an Option.None value
    */
-  static None = <Value>(): Option<Value> => {
-    return NONE as Option<Value>;
+  static None = <A>(): Option<A> => {
+    return NONE as Option<A>;
   };
 
   /**
    * Create an Option from a nullable value
    */
-  static fromNullable = <NullableValue>(nullable: NullableValue) => {
+  static fromNullable = <A>(nullable: A) => {
     if (nullable == null) {
-      return Option.None<NonNullable<NullableValue>>();
+      return Option.None<NonNullable<A>>();
     } else {
-      return Option.Some<NonNullable<NullableValue>>(
-        nullable as NonNullable<NullableValue>,
-      );
+      return Option.Some<NonNullable<A>>(nullable as NonNullable<A>);
     }
   };
 
   /**
    * Create an Option from a null | value
    */
-  static fromNull = <NullableValue>(nullable: NullableValue) => {
+  static fromNull = <A>(nullable: A) => {
     if (nullable === null) {
-      return Option.None<Exclude<NullableValue, null>>();
+      return Option.None<Exclude<A, null>>();
     } else {
-      return Option.Some<Exclude<NullableValue, null>>(
-        nullable as Exclude<NullableValue, null>,
-      );
+      return Option.Some<Exclude<A, null>>(nullable as Exclude<A, null>);
     }
   };
 
   /**
    * Create an Option from a undefined | value
    */
-  static fromUndefined = <NullableValue>(nullable: NullableValue) => {
+  static fromUndefined = <A>(nullable: A) => {
     if (nullable === undefined) {
-      return Option.None<Exclude<NullableValue, undefined>>();
+      return Option.None<Exclude<A, undefined>>();
     } else {
-      return Option.Some<Exclude<NullableValue, undefined>>(
-        nullable as Exclude<NullableValue, undefined>,
+      return Option.Some<Exclude<A, undefined>>(
+        nullable as Exclude<A, undefined>,
       );
     }
   };
@@ -86,10 +82,10 @@ export class Option<Value> {
     }
   };
 
-  static equals = <Value>(
-    a: Option<Value>,
-    b: Option<Value>,
-    equals: (a: Value, b: Value) => boolean,
+  static equals = <A>(
+    a: Option<A>,
+    b: Option<A>,
+    equals: (a: A, b: A) => boolean,
   ) => {
     if (a.isSome() && b.isSome()) {
       return equals(a.value.value, b.value.value);
@@ -102,7 +98,7 @@ export class Option<Value> {
     None: { value: { tag: "None" } } as const,
   };
 
-  value: { tag: "Some"; value: Value } | { tag: "None" };
+  value: { tag: "Some"; value: A } | { tag: "None" };
 
   constructor() {
     this.value = { tag: "None" };
@@ -112,11 +108,11 @@ export class Option<Value> {
    *
    * (Option\<A>, A => B) => Option\<B>
    */
-  map<ReturnValue>(f: (value: Value) => ReturnValue): Option<ReturnValue> {
+  map<B>(f: (value: A) => B): Option<B> {
     if (this.value.tag === "Some") {
-      return Option.Some(f(this.value.value as Value));
+      return Option.Some(f(this.value.value));
     } else {
-      return this as unknown as Option<ReturnValue>;
+      return this as unknown as Option<B>;
     }
   }
   /**
@@ -124,13 +120,11 @@ export class Option<Value> {
    *
    * (Option\<A>, A => Option\<B>) => Option\<B>
    */
-  flatMap<ReturnValue>(
-    f: (value: Value) => Option<ReturnValue>,
-  ): Option<ReturnValue> {
+  flatMap<B>(f: (value: A) => Option<B>): Option<B> {
     if (this.value.tag === "Some") {
-      return f(this.value.value as Value);
+      return f(this.value.value);
     } else {
-      return this as unknown as Option<ReturnValue>;
+      return this as unknown as Option<B>;
     }
   }
   /**
@@ -138,9 +132,9 @@ export class Option<Value> {
    *
    * (Option\<A>, A) => A
    */
-  getWithDefault(defaultValue: Value): Value {
+  getWithDefault(defaultValue: A): A {
     if (this.value.tag === "Some") {
-      return this.value.value as Value;
+      return this.value.value;
     } else {
       return defaultValue;
     }
@@ -148,12 +142,9 @@ export class Option<Value> {
   /**
    * Explodes the Option given its case
    */
-  match<ReturnValue>(config: {
-    Some: (value: Value) => ReturnValue;
-    None: () => ReturnValue;
-  }): ReturnValue {
+  match<B>(config: { Some: (value: A) => B; None: () => B }): B {
     if (this.value.tag === "Some") {
-      return config.Some(this.value.value as Value);
+      return config.Some(this.value.value);
     } else {
       return config.None();
     }
@@ -161,10 +152,7 @@ export class Option<Value> {
   /**
    * Runs the callback and returns `this`
    */
-  tap(
-    this: Option<Value>,
-    func: (option: Option<Value>) => unknown,
-  ): Option<Value> {
+  tap(func: (option: Option<A>) => unknown): Option<A> {
     func(this);
     return this;
   }
@@ -175,7 +163,7 @@ export class Option<Value> {
     if (this.value.tag === "None") {
       return undefined;
     } else {
-      return this.value.value as Value;
+      return this.value.value;
     }
   }
   /**
@@ -185,26 +173,27 @@ export class Option<Value> {
     if (this.value.tag === "None") {
       return null;
     } else {
-      return this.value.value as Value;
+      return this.value.value;
     }
   }
+
   /**
    * Typeguard
    */
-  isSome(): this is Option<Value> & { value: { tag: "Some"; value: Value } } {
+  isSome(): this is Option<A> & { value: { tag: "Some"; value: A } } {
     return this.value.tag === "Some";
   }
   /**
    * Typeguard
    */
-  isNone(): this is Option<Value> & { value: { tag: "None" } } {
+  isNone(): this is Option<A> & { value: { tag: "None" } } {
     return this.value.tag === "None";
   }
 
   /**
    * Returns the value. Use within `if (option.isSome()) { ... }`
    */
-  get(this: Option<Value> & { value: { tag: "Some"; value: Value } }): Value {
+  get(this: Option<A> & { value: { tag: "Some"; value: A } }): A {
     return this.value.value;
   }
 }
