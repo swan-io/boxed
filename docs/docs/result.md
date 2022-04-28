@@ -23,6 +23,15 @@ const ok = Result.Ok(1);
 const notOk = Result.Error("something happened");
 ```
 
+You can convert an option to a `Result`:
+
+```ts
+import { Result, Option } from "@swan-io/boxed";
+
+const a = Result.fromOption(Option.Some(1), "NotFound"); // Ok<1>
+const b = Result.fromOption(Option.None(), "NotFound"); // Error<"NotFound">
+```
+
 You get interop with exceptions and promises:
 
 ```ts

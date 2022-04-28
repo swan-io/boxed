@@ -47,6 +47,19 @@ export class Result<Ok, Error> {
   }
 
   /**
+   * Takes the promise and resolves a result of its value, or to an error if rejected
+   */
+  static fromOption<A, Error>(
+    option: Option<A>,
+    valueWhenNone: Error,
+  ): Result<A, Error> {
+    return option.match({
+      Some: (ok) => Result.Ok(ok),
+      None: () => Result.Error(valueWhenNone),
+    });
+  }
+
+  /**
    * Turns an array of results into an result of array
    */
   static all = <Results extends readonly Result<any, any>[] | []>(
@@ -132,7 +145,7 @@ export class Result<Ok, Error> {
    */
   map<ReturnValue>(f: (value: Ok) => ReturnValue): Result<ReturnValue, Error> {
     if (this.value.tag === "Ok") {
-      return Result.Ok(f(this.value.value as Ok));
+      return Result.Ok(f(this.value.value));
     } else {
       return this as unknown as Result<ReturnValue, Error>;
     }
@@ -148,7 +161,7 @@ export class Result<Ok, Error> {
     if (this.value.tag === "Ok") {
       return this as unknown as Result<Ok, ReturnError>;
     } else {
-      return Result.Error(f(this.value.value as Error));
+      return Result.Error(f(this.value.value));
     }
   }
   /**
@@ -160,7 +173,7 @@ export class Result<Ok, Error> {
     f: (value: Ok) => Result<ReturnValue, ResultError | Error>,
   ): Result<ReturnValue, ResultError | Error> {
     if (this.value.tag === "Ok") {
-      return f(this.value.value as Ok);
+      return f(this.value.value);
     } else {
       return this as unknown as Result<ReturnValue, ResultError | Error>;
     }
@@ -176,7 +189,7 @@ export class Result<Ok, Error> {
     if (this.value.tag === "Ok") {
       return this as unknown as Result<Ok | ReturnValue, ResultError>;
     } else {
-      return f(this.value.value as Error);
+      return f(this.value.value);
     }
   }
   /**
@@ -186,7 +199,7 @@ export class Result<Ok, Error> {
    */
   getWithDefault(defaultValue: Ok): Ok {
     if (this.value.tag === "Ok") {
-      return this.value.value as Ok;
+      return this.value.value;
     } else {
       return defaultValue;
     }
@@ -199,28 +212,22 @@ export class Result<Ok, Error> {
     Error: (error: Error) => ReturnValue;
   }): ReturnValue {
     if (this.value.tag === "Ok") {
-      return config.Ok(this.value.value as Ok);
+      return config.Ok(this.value.value);
     } else {
-      return config.Error(this.value.value as Error);
+      return config.Error(this.value.value);
     }
   }
   /**
    * Runs the callback and returns `this`
    */
-  tap(
-    this: Result<Ok, Error>,
-    func: (result: Result<Ok, Error>) => unknown,
-  ): Result<Ok, Error> {
+  tap(func: (result: Result<Ok, Error>) => unknown): Result<Ok, Error> {
     func(this);
     return this;
   }
   /**
    * Runs the callback if ok and returns `this`
    */
-  tapOk(
-    this: Result<Ok, Error>,
-    func: (value: Ok) => unknown,
-  ): Result<Ok, Error> {
+  tapOk(func: (value: Ok) => unknown): Result<Ok, Error> {
     if (this.isOk()) {
       func(this.value.value);
     }
@@ -229,10 +236,7 @@ export class Result<Ok, Error> {
   /**
    * Runs the callback if error and returns `this`
    */
-  tapError(
-    this: Result<Ok, Error>,
-    func: (error: Error) => unknown,
-  ): Result<Ok, Error> {
+  tapError(func: (error: Error) => unknown): Result<Ok, Error> {
     if (this.isError()) {
       func(this.value.value);
     }

@@ -211,3 +211,10 @@ test("Result.getError", () => {
     expect(result.getError()).toEqual(1);
   }
 });
+
+test("Result.fromOption", () => {
+  expect(Result.fromOption(Option.Some(1), "NotFound")).toEqual(Result.Ok(1));
+  expect(Result.fromOption(Option.None(), "NotFound")).toEqual(
+    Result.Error("NotFound"),
+  );
+});
