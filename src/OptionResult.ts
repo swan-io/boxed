@@ -221,12 +221,12 @@ const NONE = (() => {
   return none;
 })();
 
-export class Result<Ok, Error> {
+export class Result<A, E> {
   /**
    * Create an Result.Ok value
    */
-  static Ok = <Ok, Error>(ok: Ok): Result<Ok, Error> => {
-    const result = Object.create(protoResult) as Result<Ok, Error>;
+  static Ok = <A, E>(ok: A): Result<A, E> => {
+    const result = Object.create(protoResult) as Result<A, E>;
     result.value = { tag: "Ok", value: ok };
     return result;
   };
@@ -234,8 +234,8 @@ export class Result<Ok, Error> {
   /**
    * Create an Result.Error value
    */
-  static Error = <Ok, Error>(error: Error): Result<Ok, Error> => {
-    const result = Object.create(protoResult) as Result<Ok, Error>;
+  static Error = <A, E>(error: E): Result<A, E> => {
+    const result = Object.create(protoResult) as Result<A, E>;
     result.value = { tag: "Error", value: error };
     return result;
   };
@@ -243,37 +243,32 @@ export class Result<Ok, Error> {
   /**
    * Runs the function and resolves a result of its return value, or to an error if thrown
    */
-  static fromExecution = <ReturnValue, Error = unknown>(
-    func: () => ReturnValue,
-  ): Result<ReturnValue, Error> => {
+  static fromExecution = <A, E = unknown>(func: () => A): Result<A, E> => {
     try {
       return Result.Ok(func());
     } catch (err) {
-      return Result.Error(err) as Result<ReturnValue, Error>;
+      return Result.Error(err) as Result<A, E>;
     }
   };
 
   /**
    * Takes the promise and resolves a result of its value, or to an error if rejected
    */
-  static async fromPromise<ReturnValue, Error = unknown>(
-    promise: Promise<ReturnValue>,
-  ): Promise<Result<ReturnValue, Error>> {
+  static async fromPromise<A, E = unknown>(
+    promise: Promise<A>,
+  ): Promise<Result<A, E>> {
     try {
       const value = await promise;
-      return Result.Ok<ReturnValue, Error>(value);
+      return Result.Ok<A, E>(value);
     } catch (err) {
-      return Result.Error<ReturnValue, Error>(err as Error);
+      return Result.Error<A, E>(err as E);
     }
   }
 
   /**
    * Takes the option and turns it into Ok(value) is Some, or Error(valueWhenNone)
    */
-  static fromOption<A, Error>(
-    option: Option<A>,
-    valueWhenNone: Error,
-  ): Result<A, Error> {
+  static fromOption<A, E>(option: Option<A>, valueWhenNone: E): Result<A, E> {
     return option.toResult(valueWhenNone);
   }
 
@@ -329,10 +324,10 @@ export class Result<Ok, Error> {
     }
   };
 
-  static equals = <Value, Error>(
-    a: Result<Value, Error>,
-    b: Result<Value, Error>,
-    equals: (a: Value, b: Value) => boolean,
+  static equals = <A, E>(
+    a: Result<A, E>,
+    b: Result<A, E>,
+    equals: (a: A, b: A) => boolean,
   ) => {
     if (a.value.tag !== b.value.tag) {
       return false;
@@ -340,10 +335,7 @@ export class Result<Ok, Error> {
     if (a.isError() && b.isError()) {
       return true;
     }
-    return equals(
-      a.value.value as unknown as Value,
-      b.value.value as unknown as Value,
-    );
+    return equals(a.value.value as unknown as A, b.value.value as unknown as A);
   };
 
   static pattern = {
@@ -351,21 +343,21 @@ export class Result<Ok, Error> {
     Error: <T>(x: T) => ({ value: { tag: "Error", value: x } } as const),
   };
 
-  value: { tag: "Ok"; value: Ok } | { tag: "Error"; value: Error };
+  value: { tag: "Ok"; value: A } | { tag: "Error"; value: E };
 
   constructor() {
-    this.value = { tag: "Error", value: undefined as unknown as Error };
+    this.value = { tag: "Error", value: undefined as unknown as E };
   }
   /**
    * Returns the Result containing the value from the callback
    *
    * (Result\<A, E>, A => B) => Result\<B>
    */
-  map<ReturnValue>(f: (value: Ok) => ReturnValue): Result<ReturnValue, Error> {
+  map<B>(f: (value: A) => B): Result<B, E> {
     if (this.value.tag === "Ok") {
       return Result.Ok(f(this.value.value));
     } else {
-      return this as unknown as Result<ReturnValue, Error>;
+      return this as unknown as Result<B, E>;
     }
   }
   /**
@@ -373,11 +365,9 @@ export class Result<Ok, Error> {
    *
    * (Result\<A, E>, E => F) => Result\<F>
    */
-  mapError<ReturnError>(
-    f: (value: Error) => ReturnError,
-  ): Result<Ok, ReturnError> {
+  mapError<F>(f: (value: E) => F): Result<A, F> {
     if (this.value.tag === "Ok") {
-      return this as unknown as Result<Ok, ReturnError>;
+      return this as unknown as Result<A, F>;
     } else {
       return Result.Error(f(this.value.value));
     }
@@ -387,13 +377,11 @@ export class Result<Ok, Error> {
    *
    * (Result\<A, E>, A => Result\<B, F>) => Result\<B, E | F>
    */
-  flatMap<ReturnValue, ResultError = Error>(
-    f: (value: Ok) => Result<ReturnValue, ResultError | Error>,
-  ): Result<ReturnValue, ResultError | Error> {
+  flatMap<B, F = E>(f: (value: A) => Result<B, F | E>): Result<B, F | E> {
     if (this.value.tag === "Ok") {
       return f(this.value.value);
     } else {
-      return this as unknown as Result<ReturnValue, ResultError | Error>;
+      return this as unknown as Result<B, F | E>;
     }
   }
   /**
@@ -401,11 +389,9 @@ export class Result<Ok, Error> {
    *
    * (Result\<A, E>, E => Result\<A, F>) => Result\<A | B, F>
    */
-  flatMapError<ReturnValue, ResultError>(
-    f: (value: Error) => Result<ReturnValue, ResultError>,
-  ): Result<Ok | ReturnValue, ResultError> {
+  flatMapError<B, F>(f: (value: E) => Result<B, F>): Result<A | B, F> {
     if (this.value.tag === "Ok") {
-      return this as unknown as Result<Ok | ReturnValue, ResultError>;
+      return this as unknown as Result<A | B, F>;
     } else {
       return f(this.value.value);
     }
@@ -415,7 +401,7 @@ export class Result<Ok, Error> {
    *
    * (Result\<A, E>, A) => A
    */
-  getWithDefault(defaultValue: Ok): Ok {
+  getWithDefault(defaultValue: A): A {
     if (this.value.tag === "Ok") {
       return this.value.value;
     } else {
@@ -425,10 +411,7 @@ export class Result<Ok, Error> {
   /**
    * Explodes the Result given its case
    */
-  match<ReturnValue>(config: {
-    Ok: (value: Ok) => ReturnValue;
-    Error: (error: Error) => ReturnValue;
-  }): ReturnValue {
+  match<B>(config: { Ok: (value: A) => B; Error: (error: E) => B }): B {
     if (this.value.tag === "Ok") {
       return config.Ok(this.value.value);
     } else {
@@ -438,14 +421,14 @@ export class Result<Ok, Error> {
   /**
    * Runs the callback and returns `this`
    */
-  tap(func: (result: Result<Ok, Error>) => unknown): Result<Ok, Error> {
+  tap(func: (result: Result<A, E>) => unknown): Result<A, E> {
     func(this);
     return this;
   }
   /**
    * Runs the callback if ok and returns `this`
    */
-  tapOk(func: (value: Ok) => unknown): Result<Ok, Error> {
+  tapOk(func: (value: A) => unknown): Result<A, E> {
     if (this.isOk()) {
       func(this.value.value);
     }
@@ -454,7 +437,7 @@ export class Result<Ok, Error> {
   /**
    * Runs the callback if error and returns `this`
    */
-  tapError(func: (error: Error) => unknown): Result<Ok, Error> {
+  tapError(func: (error: E) => unknown): Result<A, E> {
     if (this.isError()) {
       func(this.value.value);
     }
@@ -463,14 +446,14 @@ export class Result<Ok, Error> {
   /**
    * Typeguard
    */
-  isOk(): this is Result<Ok, Error> & { value: { tag: "Ok"; value: Ok } } {
+  isOk(): this is Result<A, E> & { value: { tag: "Ok"; value: A } } {
     return this.value.tag === "Ok";
   }
   /**
    * Typeguard
    */
-  isError(): this is Result<Ok, Error> & {
-    value: { tag: "Error"; value: Error };
+  isError(): this is Result<A, E> & {
+    value: { tag: "Error"; value: E };
   } {
     return this.value.tag === "Error";
   }
@@ -479,25 +462,23 @@ export class Result<Ok, Error> {
    *
    * (Result\<A, E>) => Option\<A>
    */
-  toOption(): Option<Ok> {
+  toOption(): Option<A> {
     if (this.value.tag === "Ok") {
-      return Option.Some(this.value.value) as Option<Ok>;
+      return Option.Some(this.value.value) as Option<A>;
     } else {
-      return Option.None() as Option<Ok>;
+      return Option.None() as Option<A>;
     }
   }
   /**
    * Returns the ok value. Use within `if (result.isOk()) { ... }`
    */
-  get(this: Result<Ok, Error> & { value: { tag: "Ok"; value: Ok } }): Ok {
+  get(this: Result<A, E> & { value: { tag: "Ok"; value: A } }): A {
     return this.value.value;
   }
   /**
    * Returns the error value. Use within `if (result.isError()) { ... }`
    */
-  getError(
-    this: Result<Ok, Error> & { value: { tag: "Error"; value: Error } },
-  ): Error {
+  getError(this: Result<A, E> & { value: { tag: "Error"; value: E } }): E {
     return this.value.value;
   }
 }

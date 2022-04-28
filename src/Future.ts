@@ -221,50 +221,49 @@ export class Future<A> {
    *
    * Runs the callback with the value if ok and returns `this`
    */
-  tapOk<Ok, Error>(
-    this: Future<Result<Ok, Error>>,
-    func: (value: Ok) => unknown,
-  ): Future<Result<Ok, Error>> {
+  tapOk<A, E>(
+    this: Future<Result<A, E>>,
+    func: (value: A) => unknown,
+  ): Future<Result<A, E>> {
     this.get((value) => {
       value.match({
         Ok: (value) => func(value),
         Error: () => {},
       });
     });
-    return this as Future<Result<Ok, Error>>;
+    return this as Future<Result<A, E>>;
   }
   /**
    * For Future<Result<*>>:
    *
    * Runs the callback with the error if in error and returns `this`
    */
-  tapError<Ok, Error>(
-    this: Future<Result<Ok, Error>>,
-    func: (value: Error) => unknown,
-  ): Future<Result<Ok, Error>> {
+  tapError<A, E>(
+    this: Future<Result<A, E>>,
+    func: (value: E) => unknown,
+  ): Future<Result<A, E>> {
     this.get((value) => {
       value.match({
         Ok: () => {},
         Error: (error) => func(error),
       });
     });
-    return this as Future<Result<Ok, Error>>;
+    return this as Future<Result<A, E>>;
   }
   /**
    * For Future<Result<*>>:
    *
    * Takes a callback taking the Ok value and returning a new result and returns a future resolving to this new result
    */
-  mapResult<Ok, Error, ReturnValue, ReturnError = Error>(
-    this: Future<Result<Ok, Error>>,
-    func: (value: Ok) => Result<ReturnValue, ReturnError>,
+  mapResult<A, E, B, F = E>(
+    this: Future<Result<A, E>>,
+    func: (value: A) => Result<B, F>,
     propagateCancel = false,
-  ): Future<Result<ReturnValue, ReturnError | Error>> {
+  ): Future<Result<B, F | E>> {
     return this.map((value) => {
       return value.match({
         Ok: (value) => func(value),
-        Error: () =>
-          value as unknown as Result<ReturnValue, Error | ReturnError>,
+        Error: () => value as unknown as Result<B, E | F>,
       });
     }, propagateCancel);
   }
@@ -273,15 +272,15 @@ export class Future<A> {
    *
    * Takes a callback taking the Ok value and returning a new ok value and returns a future resolving to this new result
    */
-  mapOk<Ok, Error, ReturnValue>(
-    this: Future<Result<Ok, Error>>,
-    func: (value: Ok) => ReturnValue,
+  mapOk<A, E, B>(
+    this: Future<Result<A, E>>,
+    func: (value: A) => B,
     propagateCancel = false,
-  ): Future<Result<ReturnValue, Error>> {
+  ): Future<Result<B, E>> {
     return this.map((value) => {
       return value.match({
         Ok: (value) => Result.Ok(func(value)),
-        Error: () => value as unknown as Result<ReturnValue, Error>,
+        Error: () => value as unknown as Result<B, E>,
       });
     }, propagateCancel);
   }
@@ -290,14 +289,14 @@ export class Future<A> {
    *
    * Takes a callback taking the Error value and returning a new error value and returns a future resolving to this new result
    */
-  mapError<Ok, Error, ReturnValue>(
-    this: Future<Result<Ok, Error>>,
-    func: (value: Error) => ReturnValue,
+  mapError<A, E, B>(
+    this: Future<Result<A, E>>,
+    func: (value: E) => B,
     propagateCancel = false,
-  ): Future<Result<Ok, ReturnValue>> {
+  ): Future<Result<A, B>> {
     return this.map((value) => {
       return value.match({
-        Ok: () => value as unknown as Result<Ok, ReturnValue>,
+        Ok: () => value as unknown as Result<A, B>,
         Error: (error) => Result.Error(func(error)),
       });
     }, propagateCancel);
@@ -307,19 +306,15 @@ export class Future<A> {
    *
    * Takes a callback taking the Ok value and returning a future
    */
-  flatMapOk<Ok, Error, ReturnValue, ReturnError = Error>(
-    this: Future<Result<Ok, Error>>,
-    func: (value: Ok) => Future<Result<ReturnValue, ReturnError>>,
+  flatMapOk<A, E, B, F = E>(
+    this: Future<Result<A, E>>,
+    func: (value: A) => Future<Result<B, F>>,
     propagateCancel = false,
-  ): Future<Result<ReturnValue, ReturnError | Error>> {
+  ): Future<Result<B, F | E>> {
     return this.flatMap((value) => {
       return value.match({
-        Ok: (value) =>
-          func(value) as Future<Result<ReturnValue, ReturnError | Error>>,
-        Error: () =>
-          Future.value(
-            value as unknown as Result<ReturnValue, ReturnError | Error>,
-          ),
+        Ok: (value) => func(value) as Future<Result<B, F | E>>,
+        Error: () => Future.value(value as unknown as Result<B, F | E>),
       });
     }, propagateCancel);
   }
@@ -328,19 +323,15 @@ export class Future<A> {
    *
    * Takes a callback taking the Error value and returning a future
    */
-  flatMapError<Ok, Error, ReturnValue, ReturnError>(
-    this: Future<Result<Ok, Error>>,
-    func: (value: Error) => Future<Result<ReturnValue, ReturnError>>,
+  flatMapError<A, E, B, F>(
+    this: Future<Result<A, E>>,
+    func: (value: E) => Future<Result<B, F>>,
     propagateCancel = false,
-  ): Future<Result<Ok | ReturnValue, ReturnError>> {
+  ): Future<Result<A | B, F>> {
     return this.flatMap((value) => {
       return value.match({
-        Ok: () =>
-          Future.value(
-            value as unknown as Result<Ok | ReturnValue, ReturnError>,
-          ),
-        Error: (error) =>
-          func(error) as Future<Result<Ok | ReturnValue, ReturnError>>,
+        Ok: () => Future.value(value as unknown as Result<A | B, F>),
+        Error: (error) => func(error) as Future<Result<A | B, F>>,
       });
     }, propagateCancel);
   }
@@ -357,7 +348,7 @@ export class Future<A> {
    *
    * Converts the future into a promise (rejecting if in Error)
    */
-  resultToPromise<Ok, Error>(this: Future<Result<Ok, Error>>): Promise<Ok> {
+  resultToPromise<A, E>(this: Future<Result<A, E>>): Promise<A> {
     return new Promise((resolve, reject) => {
       this.get((value) => {
         value.match({
