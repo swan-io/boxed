@@ -13,10 +13,11 @@ That's how we think of the `Option`, `Result` and `AsyncData` types: little boxe
 
 We aim for a good compromise between **performance**, **developer experience** and ability to **leverage TypeScript**.
 
-How we achieve this is by "tweaking" how TypeScript sees our types. For most of them, the first thing we do is create a `class` that holds the utility methods.
+We settled on using classes, as it provides a familiar chaining API.
 
 ```ts
-class OptionClass<Value> {
+class Option<Value> {
+  value: { tag: "Some"; value: Value } | { tag: "None" };
   // ...
   map(f) {
     /* ... */
@@ -24,15 +25,7 @@ class OptionClass<Value> {
 }
 ```
 
-Then, we create a type on top of it with a **discriminating union**:
-
-```ts
-type Option<Value> =
-  | (OptionClass<Value> & { tag: "Some"; value: Value })
-  | (OptionClass<Value> & { tag: "None"; value: undefined });
-```
-
-This allows to **pattern-match** the values, while sharing the methods in memory.
+Having a union type within the `value` allows us **pattern-match** the values, while sharing the methods in memory.
 
 For performance, we make the prototype methods cleaner make rebuilding it from `Object.create(null)`:
 
@@ -47,9 +40,7 @@ We then use `Object.create(proto)` to create new instances, on which we set our 
 
 ```ts
 const option = Object.create(proto) as Option<Value>;
-option.tag = "Some";
-option.value = value;
-return option;
+option.value = { tag: "Some", value: value };
 ```
 
 ## Where's _{insert category theory terminology}_?
