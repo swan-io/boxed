@@ -1,3 +1,9 @@
+# 0.6.3
+
+Changes:
+
+- More concise generics on Result-related types (2f9465e)
+
 # 0.6.2
 
 Features:
