@@ -1,3 +1,13 @@
+# 0.6.1
+
+Features:
+
+- Add `Result.fromOption` (6e34a3f)
+
+Changes:
+
+- Make type annotations more compact in IDE (dc320ee)
+
 # 0.6.0
 
 Breaking changes:
