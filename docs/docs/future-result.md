@@ -1,6 +1,6 @@
 ---
 title: Future<Result<Ok, Error>>
-sidebar_label: Future<Result>
+sidebar_label: Future<Result> helpers
 ---
 
 A [Future](./future) can contain a `Result` (e.g. to represent an asynchronous value that can fail). We provide some utility functions to deal with that case without having to unwrap the Future result.
@@ -18,7 +18,7 @@ Future.value(Result.Ok(3)).mapResult((ok) => {
   if (ok % 2 === 0) {
     return Result.Ok(ok);
   } else {
-    Result.Error("Odd number");
+    return Result.Error("Odd number");
   }
 }); // Future<Error<"Odd number">>
 ```

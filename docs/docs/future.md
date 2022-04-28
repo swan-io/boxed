@@ -1,6 +1,6 @@
 ---
 title: Future<Value>
-sidebar_label: Future
+sidebar_label: Future<Value>
 ---
 
 The `Future` is a replacement for `Promise`.
