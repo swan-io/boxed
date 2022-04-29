@@ -27,6 +27,10 @@ The async data type provides a few manipulation functions:
 
 ## .map(f)
 
+```ts
+AsyncData<A>.map<B>(f: (value: A) => B): AsyncData<B>
+```
+
 If the asyncData is `Done(value)` returns `Done(f(value))`, otherwise returns the async data.
 
 ```ts
@@ -34,6 +38,10 @@ AsyncData.Done(2).map((x) => x * 2); // AsyncData.Done(4)
 ```
 
 ## .flatMap(f)
+
+```ts
+AsyncData<A>.flatMap<B>(f: (value: A) => AsyncData<B>): AsyncData<B>
+```
 
 If the asyncData is `Done(value)` returns `f(value)`, otherwise returns the async data.
 
@@ -49,6 +57,10 @@ AsyncData.Done(2).flatMap((x) => {
 
 ## .getWithDefault(defaultValue)
 
+```ts
+AsyncData<A>.getWithDefault(defaultValue: A): A
+```
+
 If the async data is `Done(value)` returns `value`, otherwise returns `defaultValue`.
 
 ```ts
@@ -58,6 +70,10 @@ AsyncData.NotAsked().getWithDefault(1); // 1
 ```
 
 ## .isDone()
+
+```ts
+AsyncData<A>.isDone(): boolean
+```
 
 Type guard. Checks if the option is `Done(value)`
 
@@ -73,6 +89,10 @@ if (asyncData.isDone()) {
 
 ## .isLoading()
 
+```ts
+AsyncData<A>.isLoading(): boolean
+```
+
 Type guard. Checks if the option is `Loading`
 
 ```ts
@@ -82,6 +102,10 @@ AsyncData.NotAsked().isLoading(); // false
 ```
 
 ## .isNotAsked()
+
+```ts
+AsyncData<A>.isNotAsked(): boolean
+```
 
 Type guard. Checks if the option is `NotAsked`
 
@@ -93,6 +117,10 @@ AsyncData.NotAsked().isNotAsked(); // true
 
 ## .toOption()
 
+```ts
+AsyncData<A>.toOption(): Option<A>
+```
+
 If the result is `Done(value)` returns `Some(value)`, otherwise returns `None`.
 
 ```ts
@@ -102,6 +130,14 @@ Result.NotAsked().toOption(); // None
 ```
 
 ## .match()
+
+```ts
+AsyncData<A>.match<B>(config: {
+  Done: (value: A) => B;
+  Loading: () => B;
+  NotAsked: () => B;
+}): B;
+```
 
 Match the async data state
 
@@ -115,6 +151,10 @@ const valueToDisplay = result.match({
 
 ## .tap(func)
 
+```ts
+AsyncData<A>.tap(func: (asyncData: AsyncData<A>) => unknown): AsyncData<A>
+```
+
 Executes `func` with `asyncData`, and returns `asyncData`. Useful for logging and debugging.
 
 ```ts
@@ -122,6 +162,10 @@ asyncData.tap(console.log).map((x) => x * 2);
 ```
 
 ## AsyncData.all(asyncDatas)
+
+```ts
+all(asyncDatas: Array<AsyncData<A>>): AsyncData<Array<A>>
+```
 
 Turns an "array of asyncDatas of value" into a "asyncData of array of value".
 

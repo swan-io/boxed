@@ -20,7 +20,11 @@ To create an option, use the `Some` and `None` constructors:
 import { Option } from "@swan-io/boxed";
 
 const aName = Option.Some("John");
-const bName = Option.None<string>();
+const bName = Option.None();
+
+// You can enforce the type using a type parameter
+Option.Some<string>("John");
+Option.None<string>();
 ```
 
 You get interop with `null` and `undefined`:
@@ -38,13 +42,23 @@ The option type provides a few manipulation functions:
 
 ## .map(f)
 
+```ts
+Option<A>.map<B>(f: (value: A) => B): Option<B>
+```
+
 If the option is `Some(value)` returns `Some(f(value))`, otherwise returns `None`.
 
 ```ts
 Option.Some(2).map((x) => x * 2); // Option.Some(4)
+
+Option.None().map((x) => x * 2); // Option.None()
 ```
 
 ## .flatMap(f)
+
+```ts
+Option<A>.flatMap<B>(f: (value: A) => Option<B>): Option<B>
+```
 
 If the option is `Some(value)` returns `f(value)`, otherwise returns `None`.
 
@@ -60,6 +74,10 @@ option.flatMap((value) => value.optionalProperty); // Option<optionalProperty>
 
 ## .getWithDefault(defaultValue)
 
+```ts
+Option<A>.getWithDefault(defaultValue: A): A
+```
+
 If the option is `Some(value)` returns `value`, otherwise returns `defaultValue`.
 
 ```ts
@@ -68,6 +86,10 @@ Option.None().getWithDefault(1); // 1
 ```
 
 ## .isSome()
+
+```ts
+Option<A>.isSome(): boolean
+```
 
 Type guard. Checks if the option is `Some(value)`
 
@@ -82,6 +104,10 @@ if (option.isSome()) {
 
 ## .isNone()
 
+```ts
+Option<A>.isNone(): boolean
+```
+
 Type guard. Checks if the option is `None`
 
 ```ts
@@ -90,6 +116,10 @@ Option.None().isNone(); // true
 ```
 
 ## .toNull()
+
+```ts
+Option<A>.toNull(): A | null
+```
 
 Returns `null` if the option is `None`, returns the value otherwise
 
@@ -100,6 +130,10 @@ Option.None().toNull(); // null
 
 ## .toUndefined()
 
+```ts
+Option<A>.toUndefined(): A | undefined
+```
+
 Returns `undefined` if the option is `None`, returns the value otherwise
 
 ```ts
@@ -109,6 +143,10 @@ Option.None().toUndefined(); // undefined
 
 ## .toResult(errorWhenNone)
 
+```ts
+Option<A>.toResult<Error>(valueWhenNone: Error): Result<A, Error>
+```
+
 Returns `undefined` if the option is `None`, returns the value otherwise
 
 ```ts
@@ -117,6 +155,13 @@ const b = Option.None().toResult("NotFound"); // Error<"NotFound">
 ```
 
 ## .match()
+
+```ts
+Option<A>.match<B>(config: {
+  Some: (value: A) => B;
+  None: () => B;
+}): B
+```
 
 Match the option state
 
@@ -129,6 +174,10 @@ const valueToDisplay = option.match({
 
 ## .tap(func)
 
+```ts
+Option<A>.tap(func: (option: Option<A>) => unknown): Option<A>
+```
+
 Executes `func` with `option`, and returns `option`. Useful for logging and debugging.
 
 ```ts
@@ -136,6 +185,10 @@ option.tap(console.log).map((x) => x * 2);
 ```
 
 ## Option.all(options)
+
+```ts
+all(options: Array<Option<A>>): Option<Array<A>>
+```
 
 Turns an "array of options of value" into a "option of array of value".
 

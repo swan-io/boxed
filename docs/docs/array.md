@@ -14,9 +14,7 @@ Returns an array containing the non nullish values return by `func` for each arr
 This function can be useful to refine the types of an array.
 
 ```ts
-Array.keepMap(array, (x) => {
-  return x % 2 === 0 ? x : null;
-});
+Array.keepMap([1, 2, 3], (x) => (isEven(x) === 0 ? x : null)); // [2]
 ```
 
 ## Array.getBy(array, predicate)

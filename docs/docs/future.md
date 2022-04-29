@@ -40,6 +40,10 @@ const otherFuture = Future.make((resolve) => {
 
 ## .get(f)
 
+```ts
+Future<A>.get(func: (value: A) => void): void
+```
+
 Runs `f` with the future value as argument when available.
 
 ```ts
@@ -47,6 +51,10 @@ Future.value(1).get(console.log); // logs 1
 ```
 
 ## .onCancel(f)
+
+```ts
+Future<A>.onCancel(func: () => void): void
+```
 
 Runs `f` with the future is cancelled.
 
@@ -58,6 +66,10 @@ future.onCancel(() => {
 
 ## .map(f)
 
+```ts
+Future<A>.map<B>(func: (value: A) => B, propagateCancel?: boolean): Future<B>
+```
+
 Takes a `Future<A>` and returns a new `Future<f<A>>`
 
 ```ts
@@ -65,6 +77,10 @@ Future.value(3).map((x) => x * 2); // Future<6>
 ```
 
 ## .flatMap(f)
+
+```ts
+Future<A>.flatMap<B>(func: (value: A) => Future<B>, propagateCancel?: boolean): Future<B>
+```
 
 Takes a `Future<A>`, and returns a new future taking the value of the future returned by `f(A)`
 
@@ -74,6 +90,10 @@ Future.value(3).flatMap((x) => Future.value(x * 2)); // Future<6>
 
 ## .tap(f)
 
+```ts
+Future<A>.tap(func: (value: A) => unknown): Future<A>
+```
+
 Runs `f` with the future value, and returns the original future. Useful for debugging.
 
 ```ts
@@ -81,6 +101,10 @@ Future.value(3).tap(console.log); // logs 3, returns Future<3>
 ```
 
 ## .isPending()
+
+```ts
+Future<A>.isPending(): boolean
+```
 
 Type guard. Returns wether the future is pending or not.
 
@@ -90,6 +114,10 @@ future.isPending();
 
 ## .isCancelled()
 
+```ts
+Future<A>.isCancelled(): boolean
+```
+
 Type guard. Returns wether the future is cancelled or not.
 
 ```ts
@@ -97,6 +125,10 @@ future.isCancelled();
 ```
 
 ## .isResolved()
+
+```ts
+Future<A>.isResolved(): boolean
+```
 
 Type guard. Returns wether the future is resolved or not.
 
@@ -107,6 +139,10 @@ future.isResolved();
 ## [Future<Result<Ok, Error>>](/future-result)
 
 ## Future.all(futures)
+
+```ts
+all(futures: Array<Future<A>>): Future<Array<A>>
+```
 
 Turns an "array of futures of values" into a "future of array of value".
 
@@ -119,6 +155,10 @@ Future.all([Future.value(1), Future.value(2), Future.value(3)]);
 
 ### Future.fromPromise(promise)
 
+```ts
+fromPromise<A>(promise: Promise<A>): Future<Result<A, unknown>>
+```
+
 Takes a `Promise<T>` and returns a `Future<Result<T, Error>>`
 
 ```ts
@@ -128,19 +168,14 @@ Future.fromPromise(Promise.reject(1)); // Future<Error<1>>
 
 ### .toPromise()
 
+```ts
+Future<A>.toPromise(): Promise<A>
+```
+
 Takes a `Future<T>` and returns a `Promise<T>`
 
 ```ts
 Future.value(1).toPromise(); // Promise<1>
-```
-
-### .resultToPromise()
-
-Takes a `Future<Result<Ok, Error>>` and returns a `Promise<Ok>`, rejecting the promise with `Error` in this state.
-
-```ts
-Future.value(Result.Ok(1)).resultToPromise(); // Promise<1>
-Future.value(Result.Reject(1)).resultToPromise(); // RejectedPromise<1>
 ```
 
 ## Cancellation

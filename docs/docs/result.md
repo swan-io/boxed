@@ -60,6 +60,10 @@ The result type provides a few manipulation functions:
 
 ## .map(f)
 
+```ts
+Result<A, E>.map<B>(f: (value: A) => B): Result<B, E>
+```
+
 If the result is `Ok(value)` returns `Ok(f(value))`, otherwise returns `Error(error)`.
 
 ```ts
@@ -68,6 +72,10 @@ Result.Ok(2).map((x) => x * 2); // Result.Ok(4)
 
 ## .mapError(f)
 
+```ts
+Result<A, E>.mapError<F>(f: (value: E) => F): Result<A, F>
+```
+
 If the result is `Error(error)` returns `Error(f(error))`, otherwise returns `Ok(value)`.
 
 ```ts
@@ -75,6 +83,10 @@ Result.Error(2).mapError((x) => x * 2); // Result.Error(4)
 ```
 
 ## .flatMap(f)
+
+```ts
+Result<A, E>.flatMap<B, F>(f: (value: A) => Result<B, F>): Result<B, F | E>
+```
 
 If the result is `Ok(value)` returns `f(value)`, otherwise returns `Error(error)`.
 
@@ -92,6 +104,10 @@ Result.Ok(2).flatMap((x) =>
 
 ## .flatMapError(f)
 
+```ts
+Result<A, E>.flatMapError<B, F>(f: (value: E) => Result<B, F>): Result<A | B, F>
+```
+
 If the result is `Error(error)` returns `f(error)`, otherwise returns `Ok(value)`.
 
 ```ts
@@ -106,6 +122,10 @@ Result.Error(2).flatMapError((x) => {
 
 ## .getWithDefault(defaultValue)
 
+```ts
+Result<A, E>.getWithDefault(defaultValue: A): A
+```
+
 If the result is `Ok(value)` returns `value`, otherwise returns `defaultValue`.
 
 ```ts
@@ -114,6 +134,10 @@ Result.Error(2).getWithDefault(1); // 1
 ```
 
 ## .isOk()
+
+```ts
+Result<A, E>.isOk(): boolean
+```
 
 Type guard. Checks if the result is `Ok(value)`
 
@@ -128,6 +152,10 @@ if (result.isOk()) {
 
 ## .isError()
 
+```ts
+Result<A, E>.isError(): boolean
+```
+
 Type guard. Checks if the result is `Error(error)`
 
 ```ts
@@ -141,6 +169,10 @@ if (result.isError()) {
 
 ## .toOption()
 
+```ts
+Result<A, E>.toOption(): Option<A>
+```
+
 If the result is `Ok(value)` returns `Some(value)`, otherwise returns `None`.
 
 ```ts
@@ -149,6 +181,13 @@ Result.Error(2).toOption(); // None
 ```
 
 ## .match()
+
+```ts
+Result<A, E>.match<B>(config: {
+  Ok: (value: A) => B;
+  Error: (error: E) => B;
+}): B
+```
 
 Match the result state
 
@@ -164,6 +203,10 @@ const valueToDisplay = result.match({
 
 ## .tap(func)
 
+```ts
+Result<A, E>.tap(func: (result: Result<A, E>) => unknown): Result<A, E>
+```
+
 Executes `func` with `result`, and returns `result`. Useful for logging and debugging.
 
 ```ts
@@ -171,6 +214,10 @@ result.tap(console.log).map((x) => x * 2);
 ```
 
 ## .tapOk(func)
+
+```ts
+Result<A, E>.tapOk(func: (value: A) => unknown): Result<A, E>
+```
 
 Executes `func` with `ok`, and returns `result`. Useful for logging and debugging. No-op if `result` is an error.
 
@@ -180,6 +227,10 @@ result.tapOk(console.log).map((x) => x * 2);
 
 ## .tapError(func)
 
+```ts
+Result<A, E>.tapError(func: (error: E) => unknown): Result<A, E>
+```
+
 Executes `func` with `error`, and returns `result`. Useful for logging and debugging. No-op if `result` is ok.
 
 ```ts
@@ -187,6 +238,10 @@ result.tapError(console.log).map((x) => x * 2);
 ```
 
 ## Result.all(results)
+
+```ts
+all(options: Array<Result<A, E>>): Result<Array<A>, E>
+```
 
 Turns an "array of results of value" into a "result of array of value".
 
@@ -201,6 +256,10 @@ Result.all([Result.Error("error"), Result.Ok(2), Result.Ok(3)]);
 
 ### Result.fromExecution(() => value)
 
+```ts
+fromExecution<A, E>(func: () => A) => Result<A, E>
+```
+
 Takes a function returning `Value` that can throw an `Error` and returns a `Result<Value, Error>`
 
 ```ts
@@ -212,6 +271,10 @@ Result.fromExecution(() => {
 
 ### Result.fromPromise(promise)
 
+```ts
+fromPromise<A, E>(promise: Promise<A>) => Result<A, E>
+```
+
 Takes a `Promise<Value>` that can fail with `Error` and returns a `Promise<Result<Value, Error>>`
 
 ```ts
@@ -220,6 +283,10 @@ await Result.fromPromise(Promise.reject(1)); // Future<Error<1>>
 ```
 
 ### Result.fromOption(option, valueIfNone)
+
+```ts
+fromPromise<A, E>(option: Option<A>, valueWhenNone: E): Result<A, E>
+```
 
 Takes a function returning `Value` that can throw an `Error` and returns a `Result<Value, Error>`
 
