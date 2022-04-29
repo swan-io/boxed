@@ -272,7 +272,7 @@ Result.fromExecution(() => {
 ### Result.fromPromise(promise)
 
 ```ts
-fromPromise<A, E>(promise: Promise<A>) => Result<A, E>
+fromPromise<A, E>(promise: Promise<A>) => Promise<Result<A, E>>
 ```
 
 Takes a `Promise<Value>` that can fail with `Error` and returns a `Promise<Result<Value, Error>>`
