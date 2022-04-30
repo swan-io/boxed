@@ -46,13 +46,16 @@ The `map` and `flatMap` functions allow you to transform data in a typesafe way:
 
 ```ts
 const some = Option.Some(1);
-// Some(1)
+// Option.Some<1>
+
 const none = Option.None();
-// None()
+// Option.None
+
 const doubledSome = some.map((x) => x * 2);
-// Some(2)
+// Option.Some<2>
+
 const doubledNone = none.map((x) => x * 2);
-// None() -> Nothing to transform!
+// Option.None -> Nothing to transform!
 ```
 
 The `flatMap` lets you return another option, which can be useful for nested optional values:

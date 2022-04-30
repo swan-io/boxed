@@ -53,9 +53,11 @@ Option<A>.map<B>(f: (value: A) => B): Option<B>
 If the option is `Some(value)` returns `Some(f(value))`, otherwise returns `None`.
 
 ```ts title="Examples"
-Option.Some(2).map((x) => x * 2); // Option.Some(4)
+Option.Some(2).map((x) => x * 2);
+// Option.Some<4>
 
-Option.None().map((x) => x * 2); // Option.None()
+Option.None().map((x) => x * 2);
+// Option.None
 ```
 
 ### .flatMap(f)
@@ -68,10 +70,10 @@ If the option is `Some(value)` returns `f(value)`, otherwise returns `None`.
 
 ```ts title="Examples"
 Option.Some(3).flatMap((x) => (x > 2 ? Option.None() : Option.Some(2)));
-// None()
+// Option.None
 
 Option.Some(1).flatMap((x) => (x > 2 ? Option.None() : Option.Some(2)));
-// Some(2)
+// Option.Some<2>
 
 option.flatMap((value) => value.optionalProperty);
 // Option<optionalProperty>
