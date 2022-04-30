@@ -1,3 +1,9 @@
+# 0.7.0
+
+Changes:
+
+- Improve type inference when returning newly constructed `Result`, `Option` or `AsyncData` from a `.match` function (ae74ba8)
+
 # 0.6.4
 
 Fixes:
