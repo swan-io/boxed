@@ -1,4 +1,6 @@
+import { keys, values } from "./Dict";
 import { Option } from "./OptionResult";
+import { zip } from "./ZipUnzip";
 
 export class AsyncData<A> {
   /**
@@ -56,6 +58,20 @@ export class AsyncData<A> {
       });
       index++;
     }
+  };
+
+  /**
+   * Turns an dict of asyncData into a asyncData of dict
+   */
+  static allFromDict = <Dict extends Record<string, AsyncData<any>>>(
+    dict: Dict,
+  ): AsyncData<{
+    -readonly [P in keyof Dict]: Dict[P] extends AsyncData<infer T> ? T : never;
+  }> => {
+    const dictKeys = keys(dict);
+    return AsyncData.all(values(dict)).map((values) =>
+      Object.fromEntries(zip(dictKeys, values)),
+    );
   };
 
   static equals = <A>(

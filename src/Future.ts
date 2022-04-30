@@ -1,4 +1,6 @@
+import { keys, values } from "./Dict";
 import { Result } from "./OptionResult";
+import { zip } from "./ZipUnzip";
 
 type PendingPayload<A> = {
   resolveCallbacks?: Array<(value: A) => void>;
@@ -90,6 +92,20 @@ export class Future<A> {
       }, propagateCancel);
       index++;
     }
+  };
+
+  /**
+   * Turns an dict of futures into a future of dict
+   */
+  static allFromDict = <Dict extends Record<string, Future<any>>>(
+    dict: Dict,
+  ): Future<{
+    -readonly [P in keyof Dict]: Dict[P] extends Future<infer T> ? T : never;
+  }> => {
+    const dictKeys = keys(dict);
+    return Future.all(values(dict)).map((values) =>
+      Object.fromEntries(zip(dictKeys, values)),
+    );
   };
 
   tag: "Pending" | "Cancelled" | "Resolved";

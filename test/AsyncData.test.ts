@@ -184,6 +184,45 @@ test("AsyncData.all", () => {
   ).toEqual(AsyncData.NotAsked());
 });
 
+test("AsyncData.allFromDict", () => {
+  expect(AsyncData.allFromDict({})).toEqual(AsyncData.Done({}));
+  expect(
+    AsyncData.allFromDict({
+      a: AsyncData.Done(1),
+      b: AsyncData.Done(2),
+      c: AsyncData.Done(3),
+    }),
+  ).toEqual(AsyncData.Done({ a: 1, b: 2, c: 3 }));
+  expect(
+    AsyncData.allFromDict({
+      a: AsyncData.NotAsked(),
+      b: AsyncData.Done(2),
+      c: AsyncData.Done(3),
+    }),
+  ).toEqual(AsyncData.NotAsked());
+  expect(
+    AsyncData.allFromDict({
+      a: AsyncData.Done(1),
+      b: AsyncData.Loading(),
+      c: AsyncData.Done(3),
+    }),
+  ).toEqual(AsyncData.Loading());
+  expect(
+    AsyncData.allFromDict({
+      a: AsyncData.Loading(),
+      b: AsyncData.NotAsked(),
+      c: AsyncData.Done(3),
+    }),
+  ).toEqual(AsyncData.Loading());
+  expect(
+    AsyncData.allFromDict({
+      a: AsyncData.NotAsked(),
+      b: AsyncData.Loading(),
+      c: AsyncData.Done(3),
+    }),
+  ).toEqual(AsyncData.NotAsked());
+});
+
 test("ts-pattern", () => {
   expect(
     match(AsyncData.Done(1))

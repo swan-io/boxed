@@ -252,6 +252,26 @@ Result.all([Result.Error("error"), Result.Ok(2), Result.Ok(3)]);
 // Error("error")
 ```
 
+## Result.allFromDict(results)
+
+```ts
+allFromDict(options: Dict<Result<A, E>>): Result<Dict<A>, E>
+```
+
+Turns a "dict of results of value" into a "result of dict of value".
+
+```ts
+Result.allFromDict({ a: Result.Ok(1), b: Result.Ok(2), c: Result.Ok(3) });
+// Ok({a: 1, b: 2, c: 3})
+
+Result.allFromDict({
+  a: Result.Error("error"),
+  b: Result.Ok(2),
+  c: Result.Ok(3),
+});
+// Error("error")
+```
+
 ## Interop
 
 ### Result.fromExecution(() => value)

@@ -151,6 +151,23 @@ Future.all([Future.value(1), Future.value(2), Future.value(3)]);
 // Future<[1, 2, 3]>
 ```
 
+## Future.allFromDict(futures)
+
+```ts
+allFromDict(futures: Dict<Future<A>>): Future<Dict<A>>
+```
+
+Turns a "dict of futures of values" into a "future of dict of value".
+
+```ts
+Future.allFromDict({
+  a: Future.value(1),
+  b: Future.value(2),
+  c: Future.value(3),
+});
+// Future<{a: 1, b: 2, c: 3}>
+```
+
 ## Interop
 
 ### Future.fromPromise(promise)

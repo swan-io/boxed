@@ -7,6 +7,8 @@ import {
   isArray,
   keepMap,
   of,
+  unzip,
+  zip,
 } from "../src/Array";
 import { Option } from "../src/OptionResult";
 
@@ -65,4 +67,33 @@ test("Array.of", () => {
 
   expect(isArray([])).toEqual(true);
   expect(isArray({ length: 0 })).toEqual(false);
+});
+
+test("Array.zip", () => {
+  expect(zip([1, 2, 3], ["one", "two", "three"])).toEqual([
+    [1, "one"],
+    [2, "two"],
+    [3, "three"],
+  ]);
+  expect(zip([1, 2], ["one", "two", "three"])).toEqual([
+    [1, "one"],
+    [2, "two"],
+  ]);
+  expect(zip([1, 2, 3], ["one", "two"])).toEqual([
+    [1, "one"],
+    [2, "two"],
+  ]);
+});
+
+test("Array.unzip", () => {
+  expect(
+    unzip([
+      [1, "one"],
+      [2, "two"],
+      [3, "three"],
+    ]),
+  ).toEqual([
+    [1, 2, 3],
+    ["one", "two", "three"],
+  ]);
 });

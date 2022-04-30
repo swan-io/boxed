@@ -51,6 +51,28 @@ Returns the index of the item if there's an exact match, return the index of the
 const index = Array.binarySearchBy(array, "my value");
 ```
 
+## Array.zip(arrayA, arrayB)
+
+Create an array of pairs from two arrays.
+
+```ts
+Array.zip([1, 2, 3], ["one", "two", "three"]);
+// [[1, "one"], [2, "two"], [3, "three"]]
+```
+
+## Array.unzip(arrayOfPairs)
+
+Turns an array of pairs into two arrays.
+
+```ts
+Array.zip([
+  [1, "one"],
+  [2, "two"],
+  [3, "three"],
+]);
+// [[1, 2, 3], ["one", "two", "three"]]
+```
+
 ## Array.from(arrayLike)
 
 [Array.from](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Array/from), reexported for convenience when Boxed `Array` shadows the `Array` constructor in scope.
