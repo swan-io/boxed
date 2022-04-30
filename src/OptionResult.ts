@@ -2,7 +2,7 @@ export class Option<A> {
   /**
    * Create an AsyncData.Some value
    */
-  static Some = <A>(value: A): Option<A> => {
+  static Some = <A = never>(value: A): Option<A> => {
     const option = Object.create(protoOption) as Option<A>;
     option.value = { tag: "Some", value };
     return option;
@@ -11,7 +11,7 @@ export class Option<A> {
   /**
    * Create an Option.None value
    */
-  static None = <A>(): Option<A> => {
+  static None = <A = never>(): Option<A> => {
     return NONE as Option<A>;
   };
 
@@ -225,7 +225,7 @@ export class Result<A, E> {
   /**
    * Create an Result.Ok value
    */
-  static Ok = <A, E>(ok: A): Result<A, E> => {
+  static Ok = <A = never, E = never>(ok: A): Result<A, E> => {
     const result = Object.create(protoResult) as Result<A, E>;
     result.value = { tag: "Ok", value: ok };
     return result;
@@ -234,7 +234,7 @@ export class Result<A, E> {
   /**
    * Create an Result.Error value
    */
-  static Error = <A, E>(error: E): Result<A, E> => {
+  static Error = <A = never, E = never>(error: E): Result<A, E> => {
     const result = Object.create(protoResult) as Result<A, E>;
     result.value = { tag: "Error", value: error };
     return result;

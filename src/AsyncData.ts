@@ -4,7 +4,7 @@ export class AsyncData<A> {
   /**
    * Create an AsyncData.Done value
    */
-  static Done = <A>(value: A): AsyncData<A> => {
+  static Done = <A = never>(value: A): AsyncData<A> => {
     const asyncData = Object.create(proto) as AsyncData<A>;
     asyncData.value = { tag: "Done", value };
     return asyncData;
@@ -13,14 +13,14 @@ export class AsyncData<A> {
   /**
    * Create an AsyncData.Loading value
    */
-  static Loading = <A>(): AsyncData<A> => {
+  static Loading = <A = never>(): AsyncData<A> => {
     return LOADING as AsyncData<A>;
   };
 
   /**
    * Create an AsyncData.NotAsked value
    */
-  static NotAsked = <A>(): AsyncData<A> => {
+  static NotAsked = <A = never>(): AsyncData<A> => {
     return NOT_ASKED as AsyncData<A>;
   };
 
