@@ -387,7 +387,7 @@ match(myResult)
 | [`mapError`](#maperrorf)         | `Ok(x)`    | _not provided_ | _not executed_  | `Ok(x)`        |
 | [`mapError`](#maperrorf)         | `Error(e)` | `e`            | `f`             | `Error(f)`     |
 | [`flatMap`](#flatmapf)           | `Ok(x)`    | `x`            | `Ok(y)`         | `Ok(y)`        |
-| [`flatMap`](#flatmapf)           | `Ok(x)`    | `x`            | `Error(f)`      | `Error(f))`    |
+| [`flatMap`](#flatmapf)           | `Ok(x)`    | `x`            | `Error(f)`      | `Error(f)`     |
 | [`flatMap`](#flatmapf)           | `Error(e)` | _not provided_ | _not executed_  | `Error(e)`     |
 | [`flatMapError`](#flatmaperrorf) | `Ok(x)`    | _not provided_ | _not executed_  | `Ok(x)`        |
 | [`flatMapError`](#flatmaperrorf) | `Error(e)` | `e`            | `Ok(y)`         | `Ok(y)`        |
