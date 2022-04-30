@@ -164,7 +164,7 @@ Option.None().toUndefined();
 ### .toResult(errorWhenNone)
 
 ```ts
-Option<A>.toResult<Error>(valueWhenNone: Error): Result<A, Error>
+Option<A>.toResult<E>(valueWhenNone: E): Result<A, E>
 ```
 
 Returns `undefined` if the option is `None`, returns the value otherwise

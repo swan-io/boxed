@@ -196,7 +196,7 @@ export class Option<A> {
   /**
    * Takes the option and turns it into Ok(value) is Some, or Error(valueWhenNone)
    */
-  toResult<Error>(valueWhenNone: Error): Result<A, Error> {
+  toResult<E>(valueWhenNone: E): Result<A, E> {
     return this.match({
       Some: (ok) => Result.Ok(ok),
       None: () => Result.Error(valueWhenNone),
