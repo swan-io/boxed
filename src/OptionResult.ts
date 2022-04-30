@@ -1,3 +1,6 @@
+import { keys, values } from "./Dict";
+import { zip } from "./ZipUnzip";
+
 export class Option<A> {
   /**
    * Create an AsyncData.Some value
@@ -80,6 +83,20 @@ export class Option<A> {
       });
       index++;
     }
+  };
+
+  /**
+   * Turns an dict of options into a options of dict
+   */
+  static allFromDict = <Dict extends Record<string, Option<any>>>(
+    dict: Dict,
+  ): Option<{
+    -readonly [P in keyof Dict]: Dict[P] extends Option<infer T> ? T : never;
+  }> => {
+    const dictKeys = keys(dict);
+    return Option.all(values(dict)).map((values) =>
+      Object.fromEntries(zip(dictKeys, values)),
+    );
   };
 
   static equals = <A>(
@@ -322,6 +339,29 @@ export class Result<A, E> {
       });
       index++;
     }
+  };
+
+  /**
+   * Turns an dict of results into a results of dict
+   */
+  static allFromDict = <Dict extends Record<string, Result<any, any>>>(
+    dict: Dict,
+  ): Result<
+    {
+      -readonly [P in keyof Dict]: Dict[P] extends Result<infer T, any>
+        ? T
+        : never;
+    },
+    {
+      -readonly [P in keyof Dict]: Dict[P] extends Result<any, infer E>
+        ? E
+        : never;
+    }[keyof Dict]
+  > => {
+    const dictKeys = keys(dict);
+    return Result.all(values(dict)).map((values) =>
+      Object.fromEntries(zip(dictKeys, values)),
+    );
   };
 
   static equals = <A, E>(

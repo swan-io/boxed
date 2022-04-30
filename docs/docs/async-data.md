@@ -178,6 +178,37 @@ AsyncData.all([Result.Loading(), AsyncData.Done(2), AsyncData.Done(3)]);
 // Result.Loading()
 ```
 
+## AsyncData.allFromDict(asyncDatas)
+
+```ts
+allFromDict(asyncDatas: Dict<AsyncData<A>>): AsyncData<Dict<A>>
+```
+
+Turns a "dict of asyncDatas of value" into a "asyncData of dict of value".
+
+```ts
+AsyncData.allFromDict({
+  a: AsyncData.Done(1),
+  b: AsyncData.Done(2),
+  c: AsyncData.Done(3),
+});
+// Done({a: 1, b: 2, c: 3})
+
+AsyncData.allFromDict({
+  a: Result.NotAsked(),
+  b: AsyncData.Done(2),
+  c: AsyncData.Done(3),
+});
+// Result.NotAsked()
+
+AsyncData.allFromDict({
+  a: Result.Loading(),
+  b: AsyncData.Done(2),
+  c: AsyncData.Done(3),
+});
+// Result.Loading()
+```
+
 ## TS Pattern interop
 
 ```ts

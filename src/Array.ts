@@ -85,3 +85,5 @@ export const binarySearchBy = <A>(
     }
   }
 };
+
+export { unzip, zip } from "./ZipUnzip";

@@ -181,6 +181,27 @@ test("Result.all", () => {
   );
 });
 
+test("Result.allFromDict", () => {
+  expect(Result.allFromDict({})).toEqual(Result.Ok({}));
+  expect(
+    Result.allFromDict({ a: Result.Ok(1), b: Result.Ok(2), c: Result.Ok(3) }),
+  ).toEqual(Result.Ok({ a: 1, b: 2, c: 3 }));
+  expect(
+    Result.allFromDict({
+      a: Result.Error(1),
+      b: Result.Ok(2),
+      c: Result.Ok(3),
+    }),
+  ).toEqual(Result.Error(1));
+  expect(
+    Result.allFromDict({
+      a: Result.Ok(1),
+      b: Result.Error(2),
+      c: Result.Ok(3),
+    }),
+  ).toEqual(Result.Error(2));
+});
+
 test("ts-pattern", () => {
   expect(
     match(Result.Ok(1))

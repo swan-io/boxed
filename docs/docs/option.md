@@ -199,6 +199,22 @@ Option.all([Option.None(), Option.Some(2), Option.Some(3)]);
 // None
 ```
 
+## Option.allFromDict(options)
+
+```ts
+allFromDict(options: Dict<Option<A>>): Option<Dict<A>>
+```
+
+Turns a "dict of options of value" into a "option of dict of value".
+
+```ts
+Option.allFromDict({ a: Option.Some(1), b: Option.Some(2), c: Option.Some(3) });
+// Some({a: 1, b: 2, c: 3})
+
+Option.allFromDict({ a: Option.None(), b: Option.Some(2), c: Option.Some(3) });
+// None
+```
+
 ## TS Pattern interop
 
 ```ts

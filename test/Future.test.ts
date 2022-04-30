@@ -69,6 +69,23 @@ test("Future all", async () => {
   expect(result).toEqual([1, 2, 3, 4]);
 });
 
+test("Future allFromDict", async () => {
+  const result = await Future.allFromDict({
+    a: Future.value(1),
+    b: Future.make((resolve) => {
+      setTimeout(() => resolve(2), 50);
+    }),
+    c: Future.make((resolve) => {
+      setTimeout(() => resolve(3), 25);
+    }),
+    d: Future.make((resolve) => {
+      setTimeout(() => resolve(undefined), 75);
+    }).map(() => 4),
+  });
+
+  expect(result).toEqual({ a: 1, b: 2, c: 3, d: 4 });
+});
+
 test("Future mapOk", async () => {
   const result = await Future.value(Result.Ok("one")).mapOk((x) => `${x}!`);
   expect(result).toEqual(Result.Ok("one!"));

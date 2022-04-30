@@ -129,6 +129,31 @@ test("Option.all", () => {
   );
 });
 
+test("Option.allFromDict", () => {
+  expect(Option.allFromDict({})).toEqual(Option.Some({}));
+  expect(
+    Option.allFromDict({
+      a: Option.Some(1),
+      b: Option.Some(2),
+      c: Option.Some(3),
+    }),
+  ).toEqual(Option.Some({ a: 1, b: 2, c: 3 }));
+  expect(
+    Option.allFromDict({
+      a: Option.None(),
+      b: Option.Some(2),
+      c: Option.Some(3),
+    }),
+  ).toEqual(Option.None());
+  expect(
+    Option.allFromDict({
+      a: Option.Some(1),
+      b: Option.None(),
+      c: Option.Some(3),
+    }),
+  ).toEqual(Option.None());
+});
+
 test("ts-pattern", () => {
   expect(
     match(Option.Some(1))
