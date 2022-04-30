@@ -1,3 +1,10 @@
+# 0.8.0
+
+Features:
+
+- Add `allFromDict` helpers (04a4662)
+- Add `Array.zip` & `Array.unzip` (04a4662)
+
 # 0.7.0
 
 Changes:
