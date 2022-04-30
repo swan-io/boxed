@@ -57,23 +57,23 @@ AsyncData<A>.flatMap<B>(f: (value: A) => AsyncData<B>): AsyncData<B>
 If the asyncData is `Done(value)` returns `f(value)`, otherwise returns the async data.
 
 ```ts title="Examples"
-AsyncData.Done(2).flatMap((x) =>
-  x > 1 ? AsyncData.NotAsked() : AsyncData.Done(2),
+AsyncData.Done(3).flatMap((x) =>
+  x > 2 ? AsyncData.NotAsked() : AsyncData.Done(2),
 );
 // AsyncData.NotAsked
 
 AsyncData.Done(1).flatMap((x) =>
-  x > 1 ? AsyncData.NotAsked() : AsyncData.Done(2),
+  x > 2 ? AsyncData.NotAsked() : AsyncData.Done(2),
 );
 // AsyncData.Done<2>
 
 AsyncData.NotAsked().flatMap((x) =>
-  x > 1 ? AsyncData.NotAsked() : AsyncData.Done(2),
+  x > 2 ? AsyncData.NotAsked() : AsyncData.Done(2),
 );
 // AsyncData.NotAsked
 
 AsyncData.Loading().flatMap((x) =>
-  x > 1 ? AsyncData.NotAsked() : AsyncData.Done(2),
+  x > 2 ? AsyncData.NotAsked() : AsyncData.Done(2),
 );
 // AsyncData.Loading
 ```

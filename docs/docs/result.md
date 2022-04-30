@@ -106,17 +106,17 @@ If the result is `Ok(value)` returns `f(value)`, otherwise returns `Error(error)
 
 ```ts title="Examples"
 Result.Ok(1).flatMap((x) =>
-  x > 1 ? Result.Error("some error") : Result.Ok(2),
+  x > 2 ? Result.Error("some error") : Result.Ok(2),
 );
 // Result.Ok<2>
 
-Result.Ok(2).flatMap((x) =>
-  x > 1 ? Result.Error("some error") : Result.Ok(2),
+Result.Ok(3).flatMap((x) =>
+  x > 2 ? Result.Error("some error") : Result.Ok(2),
 );
 // Result.Error<"some error">
 
 Result.Error("initial error").flatMap((x) =>
-  x > 1 ? Result.Error("some error") : Result.Ok(2),
+  x > 2 ? Result.Error("some error") : Result.Ok(2),
 );
 // Result.Error<"initial error">
 ```
@@ -130,18 +130,18 @@ Result<A, E>.flatMapError<B, F>(f: (value: E) => Result<B, F>): Result<A | B, F>
 If the result is `Error(error)` returns `f(error)`, otherwise returns `Ok(value)`.
 
 ```ts title="Examples"
-Result.Error(2).flatMapError((x) =>
-  x > 1 ? Result.Error("some error") : Result.Ok(2),
+Result.Error(3).flatMapError((x) =>
+  x > 2 ? Result.Error("some error") : Result.Ok(2),
 );
 // Result.Error<"some error">
 
 Result.Error(1).flatMapError((x) =>
-  x > 1 ? Result.Error("some error") : Result.Ok(2),
+  x > 2 ? Result.Error("some error") : Result.Ok(2),
 );
 // Result.Ok<2>
 
 Result.Ok("ok").flatMapError((x) =>
-  x > 1 ? Result.Error("some error") : Result.Ok(2),
+  x > 2 ? Result.Error("some error") : Result.Ok(2),
 );
 // Result.Ok<"ok">
 ```
