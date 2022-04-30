@@ -25,9 +25,11 @@ const loading = AsyncData.Loading();
 const done = AsyncData.Done(1);
 ```
 
+## Methods
+
 The async data type provides a few manipulation functions:
 
-## .map(f)
+### .map(f)
 
 ```ts
 AsyncData<A>.map<B>(f: (value: A) => B): AsyncData<B>
@@ -46,7 +48,7 @@ AsyncData.NotAsked().map((x) => x * 2);
 // AsyncData.NotAsked
 ```
 
-## .flatMap(f)
+### .flatMap(f)
 
 ```ts
 AsyncData<A>.flatMap<B>(f: (value: A) => AsyncData<B>): AsyncData<B>
@@ -76,7 +78,7 @@ AsyncData.Loading().flatMap((x) =>
 // AsyncData.Loading
 ```
 
-## .getWithDefault(defaultValue)
+### .getWithDefault(defaultValue)
 
 ```ts
 AsyncData<A>.getWithDefault(defaultValue: A): A
@@ -95,7 +97,7 @@ AsyncData.NotAsked().getWithDefault(1);
 // 1
 ```
 
-## .isDone()
+### .isDone()
 
 ```ts
 AsyncData<A>.isDone(): boolean
@@ -118,7 +120,7 @@ if (asyncData.isDone()) {
 }
 ```
 
-## .isLoading()
+### .isLoading()
 
 ```ts
 AsyncData<A>.isLoading(): boolean
@@ -137,7 +139,7 @@ AsyncData.NotAsked().isLoading();
 // false
 ```
 
-## .isNotAsked()
+### .isNotAsked()
 
 ```ts
 AsyncData<A>.isNotAsked(): boolean
@@ -156,7 +158,7 @@ AsyncData.NotAsked().isNotAsked();
 // true
 ```
 
-## .toOption()
+### .toOption()
 
 ```ts
 AsyncData<A>.toOption(): Option<A>
@@ -175,7 +177,7 @@ Result.NotAsked().toOption();
 // Option.None
 ```
 
-## .match()
+### .match()
 
 ```ts
 AsyncData<A>.match<B>(config: {
@@ -195,7 +197,7 @@ const valueToDisplay = result.match({
 });
 ```
 
-## .tap(func)
+### .tap(func)
 
 ```ts
 AsyncData<A>.tap(func: (asyncData: AsyncData<A>) => unknown): AsyncData<A>
@@ -207,7 +209,9 @@ Executes `func` with `asyncData`, and returns `asyncData`. Useful for logging an
 asyncData.tap(console.log).map((x) => x * 2);
 ```
 
-## AsyncData.all(asyncDatas)
+## Statics
+
+### AsyncData.all(asyncDatas)
 
 ```ts
 all(asyncDatas: Array<AsyncData<A>>): AsyncData<Array<A>>
@@ -226,7 +230,7 @@ AsyncData.all([Result.Loading(), AsyncData.Done(2), AsyncData.Done(3)]);
 // AsyncData.Loading
 ```
 
-## AsyncData.allFromDict(asyncDatas)
+### AsyncData.allFromDict(asyncDatas)
 
 ```ts
 allFromDict(asyncDatas: Dict<AsyncData<A>>): AsyncData<Dict<A>>

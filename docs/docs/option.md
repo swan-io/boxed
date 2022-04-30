@@ -40,9 +40,11 @@ const b = Option.fromNull(value);
 const c = Option.fromUndefined(value);
 ```
 
+## Methods
+
 The option type provides a few manipulation functions:
 
-## .map(f)
+### .map(f)
 
 ```ts
 Option<A>.map<B>(f: (value: A) => B): Option<B>
@@ -56,7 +58,7 @@ Option.Some(2).map((x) => x * 2); // Option.Some(4)
 Option.None().map((x) => x * 2); // Option.None()
 ```
 
-## .flatMap(f)
+### .flatMap(f)
 
 ```ts
 Option<A>.flatMap<B>(f: (value: A) => Option<B>): Option<B>
@@ -75,7 +77,7 @@ option.flatMap((value) => value.optionalProperty);
 // Option<optionalProperty>
 ```
 
-## .getWithDefault(defaultValue)
+### .getWithDefault(defaultValue)
 
 ```ts
 Option<A>.getWithDefault(defaultValue: A): A
@@ -91,7 +93,7 @@ Option.None().getWithDefault(1);
 // 1
 ```
 
-## .isSome()
+### .isSome()
 
 ```ts
 Option<A>.isSome(): boolean
@@ -111,7 +113,7 @@ if (option.isSome()) {
 }
 ```
 
-## .isNone()
+### .isNone()
 
 ```ts
 Option<A>.isNone(): boolean
@@ -127,7 +129,7 @@ Option.None().isNone();
 // true
 ```
 
-## .toNull()
+### .toNull()
 
 ```ts
 Option<A>.toNull(): A | null
@@ -143,7 +145,7 @@ Option.None().toNull();
 // null
 ```
 
-## .toUndefined()
+### .toUndefined()
 
 ```ts
 Option<A>.toUndefined(): A | undefined
@@ -159,7 +161,7 @@ Option.None().toUndefined();
 // undefined
 ```
 
-## .toResult(errorWhenNone)
+### .toResult(errorWhenNone)
 
 ```ts
 Option<A>.toResult<Error>(valueWhenNone: Error): Result<A, Error>
@@ -175,7 +177,7 @@ const b = Option.None().toResult("NotFound");
 // Error<"NotFound">
 ```
 
-## .match()
+### .match()
 
 ```ts
 Option<A>.match<B>(config: {
@@ -194,7 +196,7 @@ const valueToDisplay = option.match({
 // value | "No value"
 ```
 
-## .tap(func)
+### .tap(func)
 
 ```ts
 Option<A>.tap(func: (option: Option<A>) => unknown): Option<A>
@@ -206,7 +208,9 @@ Executes `func` with `option`, and returns `option`. Useful for logging and debu
 option.tap(console.log).map((x) => x * 2);
 ```
 
-## Option.all(options)
+## Statics
+
+### Option.all(options)
 
 ```ts
 all(options: Array<Option<A>>): Option<Array<A>>
@@ -222,7 +226,7 @@ Option.all([Option.None(), Option.Some(2), Option.Some(3)]);
 // None
 ```
 
-## Option.allFromDict(options)
+### Option.allFromDict(options)
 
 ```ts
 allFromDict(options: Dict<Option<A>>): Option<Dict<A>>

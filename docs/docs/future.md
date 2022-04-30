@@ -38,7 +38,9 @@ const otherFuture = Future.make((resolve) => {
 });
 ```
 
-## .get(f)
+## Methods
+
+### .get(f)
 
 ```ts
 Future<A>.get(func: (value: A) => void): void
@@ -51,7 +53,7 @@ Future.value(1).get(console.log);
 // Log: 1
 ```
 
-## .onCancel(f)
+### .onCancel(f)
 
 ```ts
 Future<A>.onCancel(func: () => void): void
@@ -65,7 +67,7 @@ future.onCancel(() => {
 });
 ```
 
-## .map(f)
+### .map(f)
 
 ```ts
 Future<A>.map<B>(func: (value: A) => B, propagateCancel?: boolean): Future<B>
@@ -78,7 +80,7 @@ Future.value(3).map((x) => x * 2);
 // Future<6>
 ```
 
-## .flatMap(f)
+### .flatMap(f)
 
 ```ts
 Future<A>.flatMap<B>(func: (value: A) => Future<B>, propagateCancel?: boolean): Future<B>
@@ -91,7 +93,7 @@ Future.value(3).flatMap((x) => Future.value(x * 2));
 // Future<6>
 ```
 
-## .tap(f)
+### .tap(f)
 
 ```ts
 Future<A>.tap(func: (value: A) => unknown): Future<A>
@@ -105,7 +107,7 @@ Future.value(3).tap(console.log);
 // Future<3>
 ```
 
-## .isPending()
+### .isPending()
 
 ```ts
 Future<A>.isPending(): boolean
@@ -117,7 +119,7 @@ Type guard. Returns wether the future is pending or not.
 future.isPending();
 ```
 
-## .isCancelled()
+### .isCancelled()
 
 ```ts
 Future<A>.isCancelled(): boolean
@@ -129,7 +131,7 @@ Type guard. Returns wether the future is cancelled or not.
 future.isCancelled();
 ```
 
-## .isResolved()
+### .isResolved()
 
 ```ts
 Future<A>.isResolved(): boolean
@@ -141,9 +143,26 @@ Type guard. Returns wether the future is resolved or not.
 future.isResolved();
 ```
 
+### .toPromise()
+
+```ts
+Future<A>.toPromise(): Promise<A>
+```
+
+Takes a `Future<T>` and returns a `Promise<T>`
+
+```ts title="Examples"
+Future.value(1).toPromise();
+// Promise<1>
+```
+
 ## [Future<Result<Ok, Error>>](/future-result)
 
-## Future.all(futures)
+We provide [some special helpers](/future-result) for `Future`s containing a `Result`.
+
+## Statics
+
+### Future.all(futures)
 
 ```ts
 all(futures: Array<Future<A>>): Future<Array<A>>
@@ -156,7 +175,7 @@ Future.all([Future.value(1), Future.value(2), Future.value(3)]);
 // Future<[1, 2, 3]>
 ```
 
-## Future.allFromDict(futures)
+### Future.allFromDict(futures)
 
 ```ts
 allFromDict(futures: Dict<Future<A>>): Future<Dict<A>>
@@ -173,8 +192,6 @@ Future.allFromDict({
 // Future<{a: 1, b: 2, c: 3}>
 ```
 
-## Interop
-
 ### Future.fromPromise(promise)
 
 ```ts
@@ -189,19 +206,6 @@ Future.fromPromise(Promise.resolve(1));
 
 Future.fromPromise(Promise.reject(1));
 // Future<Result.Error<1>>
-```
-
-### .toPromise()
-
-```ts
-Future<A>.toPromise(): Promise<A>
-```
-
-Takes a `Future<T>` and returns a `Promise<T>`
-
-```ts title="Examples"
-Future.value(1).toPromise();
-// Promise<1>
 ```
 
 ## Cancellation

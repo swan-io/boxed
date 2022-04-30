@@ -60,9 +60,11 @@ const value = await Result.fromPromise(() => fetch("/api"));
 // - Error(error)
 ```
 
+## Methods
+
 The result type provides a few manipulation functions:
 
-## .map(f)
+### .map(f)
 
 ```ts
 Result<A, E>.map<B>(f: (value: A) => B): Result<B, E>
@@ -78,7 +80,7 @@ Result.Ok(2).map((x) => Result.Ok(x * 2));
 // Result.Ok<Result.Ok<4>>
 ```
 
-## .mapError(f)
+### .mapError(f)
 
 ```ts
 Result<A, E>.mapError<F>(f: (value: E) => F): Result<A, F>
@@ -94,7 +96,7 @@ Result.Error(2).mapError((x) => Result.Ok(x * 2));
 // Result.Error<Result.Ok<4>>
 ```
 
-## .flatMap(f)
+### .flatMap(f)
 
 ```ts
 Result<A, E>.flatMap<B, F>(f: (value: A) => Result<B, F>): Result<B, F | E>
@@ -119,7 +121,7 @@ Result.Error("initial error").flatMap((x) =>
 // Result.Error<"initial error">
 ```
 
-## .flatMapError(f)
+### .flatMapError(f)
 
 ```ts
 Result<A, E>.flatMapError<B, F>(f: (value: E) => Result<B, F>): Result<A | B, F>
@@ -144,7 +146,7 @@ Result.Ok("ok").flatMapError((x) =>
 // Result.Ok<"ok">
 ```
 
-## .getWithDefault(defaultValue)
+### .getWithDefault(defaultValue)
 
 ```ts
 Result<A, E>.getWithDefault(defaultValue: A): A
@@ -160,7 +162,7 @@ Result.Error(2).getWithDefault(1);
 // 1
 ```
 
-## .isOk()
+### .isOk()
 
 ```ts
 Result<A, E>.isOk(): boolean
@@ -180,7 +182,7 @@ if (result.isOk()) {
 }
 ```
 
-## .isError()
+### .isError()
 
 ```ts
 Result<A, E>.isError(): boolean
@@ -200,7 +202,7 @@ if (result.isError()) {
 }
 ```
 
-## .toOption()
+### .toOption()
 
 ```ts
 Result<A, E>.toOption(): Option<A>
@@ -216,7 +218,7 @@ Result.Error(2).toOption();
 // Option.None
 ```
 
-## .match()
+### .match()
 
 ```ts
 Result<A, E>.match<B>(config: {
@@ -237,7 +239,7 @@ const valueToDisplay = result.match({
 });
 ```
 
-## .tap(func)
+### .tap(func)
 
 ```ts
 Result<A, E>.tap(func: (result: Result<A, E>) => unknown): Result<A, E>
@@ -249,7 +251,7 @@ Executes `func` with `result`, and returns `result`. Useful for logging and debu
 result.tap(console.log).map((x) => x * 2);
 ```
 
-## .tapOk(func)
+### .tapOk(func)
 
 ```ts
 Result<A, E>.tapOk(func: (value: A) => unknown): Result<A, E>
@@ -261,7 +263,7 @@ Executes `func` with `ok`, and returns `result`. Useful for logging and debuggin
 result.tapOk(console.log).map((x) => x * 2);
 ```
 
-## .tapError(func)
+### .tapError(func)
 
 ```ts
 Result<A, E>.tapError(func: (error: E) => unknown): Result<A, E>
@@ -273,7 +275,9 @@ Executes `func` with `error`, and returns `result`. Useful for logging and debug
 result.tapError(console.log).map((x) => x * 2);
 ```
 
-## Result.all(results)
+## Statics
+
+### Result.all(results)
 
 ```ts
 all(options: Array<Result<A, E>>): Result<Array<A>, E>
@@ -289,7 +293,7 @@ Result.all([Result.Error("error"), Result.Ok(2), Result.Ok(3)]);
 // Result.Error<"error">
 ```
 
-## Result.allFromDict(results)
+### Result.allFromDict(results)
 
 ```ts
 allFromDict(options: Dict<Result<A, E>>): Result<Dict<A>, E>
@@ -308,8 +312,6 @@ Result.allFromDict({
 });
 // Result.Error<"error">
 ```
-
-## Interop
 
 ### Result.fromExecution(() => value)
 

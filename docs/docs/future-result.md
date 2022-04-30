@@ -9,7 +9,9 @@ A [Future](./future) can contain a `Result` (e.g. to represent an asynchronous v
 You can still use all the regular [Future](./future) methods. The following helpers simply removes the need to unwrap the contained result.
 :::
 
-## .mapResult(f)
+## Methods
+
+### .mapResult(f)
 
 ```ts
 Future<Result<A, E>>.mapResult<B, F>(
@@ -32,7 +34,7 @@ Future.value(Result.Ok(3)).mapResult((ok) =>
 // Future<Result.Error<"Odd number">>
 ```
 
-## .mapOk(f)
+### .mapOk(f)
 
 ```ts
 Future<Result<A, E>>.mapOk<B>(
@@ -55,7 +57,7 @@ Future.value(Result.Error("something")).mapOk((ok) => {
 // Future<Result.Error<"something">>
 ```
 
-## .mapError(f)
+### .mapError(f)
 
 ```ts
 Future<Result<A, E>>.mapError<F>(
@@ -78,7 +80,7 @@ Future.value(Result.Ok("something")).mapError((ok) => {
 // Future<Result.Ok<"something">>
 ```
 
-## .flatMapOk(f)
+### .flatMapOk(f)
 
 ```ts
 Future<Result<A, E>>.mapError<B, F>(
@@ -104,7 +106,7 @@ Future.value(Result.Error("Error")).flatMapOk((ok) =>
 // Future<Result.Error<"Error">>
 ```
 
-## .flatMapError(f)
+### .flatMapError(f)
 
 ```ts
 Future<Result<A, E>>.mapError<B, F>(
@@ -132,7 +134,7 @@ Future.value(Result.Error("Error")).flatMapError((error) =>
 // Future<Result.Ok<1>>
 ```
 
-## .tapOk(f)
+### .tapOk(f)
 
 ```ts
 Future<Result<A, E>>.tapOk(func: (value: A) => unknown): Future<Result<A, E>>
@@ -144,7 +146,7 @@ Runs `f` if value is `Ok` with the future value, and returns the original future
 future.tapOk(console.log);
 ```
 
-## .tapError(f)
+### .tapError(f)
 
 ```ts
 Future<Result<A, E>>.tapError(func: (value: E) => unknown): Future<Result<A, E>>
@@ -172,7 +174,9 @@ Future.value(Result.Reject(1)).resultToPromise();
 // Promise (rejected with 1)
 ```
 
-## Future.all(resultFutures)
+## Statics
+
+### Future.all(resultFutures)
 
 You can combine the `all` helpers from `Future` and `Result`:
 
@@ -207,7 +211,7 @@ const step1 = Future.all(input);
 const step2 = f.map(Result.all);
 ```
 
-## Future.allFromDict(resultFutures)
+### Future.allFromDict(resultFutures)
 
 Like as `all`, you can combine the `allFromDict`:
 
