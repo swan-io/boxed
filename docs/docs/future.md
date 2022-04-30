@@ -18,7 +18,7 @@ Even though we're diverging from `Promise`, you can `await` a `Future`.
 
 ## Create a Future
 
-```ts
+```ts title="Examples"
 import { Future } from "@swan-io/boxed";
 
 // Value
@@ -46,8 +46,9 @@ Future<A>.get(func: (value: A) => void): void
 
 Runs `f` with the future value as argument when available.
 
-```ts
-Future.value(1).get(console.log); // logs 1
+```ts title="Examples"
+Future.value(1).get(console.log);
+// Log: 1
 ```
 
 ## .onCancel(f)
@@ -58,7 +59,7 @@ Future<A>.onCancel(func: () => void): void
 
 Runs `f` with the future is cancelled.
 
-```ts
+```ts title="Examples"
 future.onCancel(() => {
   // do something
 });
@@ -72,8 +73,9 @@ Future<A>.map<B>(func: (value: A) => B, propagateCancel?: boolean): Future<B>
 
 Takes a `Future<A>` and returns a new `Future<f<A>>`
 
-```ts
-Future.value(3).map((x) => x * 2); // Future<6>
+```ts title="Examples"
+Future.value(3).map((x) => x * 2);
+// Future<6>
 ```
 
 ## .flatMap(f)
@@ -84,8 +86,9 @@ Future<A>.flatMap<B>(func: (value: A) => Future<B>, propagateCancel?: boolean): 
 
 Takes a `Future<A>`, and returns a new future taking the value of the future returned by `f(A)`
 
-```ts
-Future.value(3).flatMap((x) => Future.value(x * 2)); // Future<6>
+```ts title="Examples"
+Future.value(3).flatMap((x) => Future.value(x * 2));
+// Future<6>
 ```
 
 ## .tap(f)
@@ -96,8 +99,10 @@ Future<A>.tap(func: (value: A) => unknown): Future<A>
 
 Runs `f` with the future value, and returns the original future. Useful for debugging.
 
-```ts
-Future.value(3).tap(console.log); // logs 3, returns Future<3>
+```ts title="Examples"
+Future.value(3).tap(console.log);
+// Log: 3
+// Future<3>
 ```
 
 ## .isPending()
@@ -108,7 +113,7 @@ Future<A>.isPending(): boolean
 
 Type guard. Returns wether the future is pending or not.
 
-```ts
+```ts title="Examples"
 future.isPending();
 ```
 
@@ -120,7 +125,7 @@ Future<A>.isCancelled(): boolean
 
 Type guard. Returns wether the future is cancelled or not.
 
-```ts
+```ts title="Examples"
 future.isCancelled();
 ```
 
@@ -132,7 +137,7 @@ Future<A>.isResolved(): boolean
 
 Type guard. Returns wether the future is resolved or not.
 
-```ts
+```ts title="Examples"
 future.isResolved();
 ```
 
@@ -146,7 +151,7 @@ all(futures: Array<Future<A>>): Future<Array<A>>
 
 Turns an "array of futures of values" into a "future of array of value".
 
-```ts
+```ts title="Examples"
 Future.all([Future.value(1), Future.value(2), Future.value(3)]);
 // Future<[1, 2, 3]>
 ```
@@ -159,7 +164,7 @@ allFromDict(futures: Dict<Future<A>>): Future<Dict<A>>
 
 Turns a "dict of futures of values" into a "future of dict of value".
 
-```ts
+```ts title="Examples"
 Future.allFromDict({
   a: Future.value(1),
   b: Future.value(2),
@@ -176,11 +181,14 @@ Future.allFromDict({
 fromPromise<A>(promise: Promise<A>): Future<Result<A, unknown>>
 ```
 
-Takes a `Promise<T>` and returns a `Future<Result<T, Error>>`
+Takes a `Promise<T>` and returns a [`Future<Result<T, Error>>`](/future-result)
 
-```ts
-Future.fromPromise(Promise.resolve(1)); // Future(Ok(1))
-Future.fromPromise(Promise.reject(1)); // Future<Error<1>>
+```ts title="Examples"
+Future.fromPromise(Promise.resolve(1));
+// Future<Result.Ok<1>>
+
+Future.fromPromise(Promise.reject(1));
+// Future<Result.Error<1>>
 ```
 
 ### .toPromise()
@@ -191,8 +199,9 @@ Future<A>.toPromise(): Promise<A>
 
 Takes a `Future<T>` and returns a `Promise<T>`
 
-```ts
-Future.value(1).toPromise(); // Promise<1>
+```ts title="Examples"
+Future.value(1).toPromise();
+// Promise<1>
 ```
 
 ## Cancellation
@@ -262,3 +271,10 @@ const request = apiCall().map(parse, true);
 
 request.cancel(); // will run the cleanup effect in `apiCall`
 ```
+
+## Cheatsheet
+
+| Method                 | Input       | Function input | Function output | Returned value |
+| ---------------------- | ----------- | -------------- | --------------- | -------------- |
+| [`map`](#mapf)         | `Future(x)` | `x`            | `y`             | `Future(y)`    |
+| [`flatMap`](#flatmapf) | `Future(x)` | `x`            | `Future(y)`     | `Future(y)`    |

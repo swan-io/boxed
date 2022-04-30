@@ -15,11 +15,13 @@ The `AsyncData` type enables representing asynchronous flows (e.g. requests). Th
 
 To create an async data, use the `NotAsked`, `Loading` and `Done` constructors:
 
-```ts
+```ts title="Examples"
 import { AsyncData } from "@swan-io/boxed";
 
 const notAsked = AsyncData.NotAsked();
+
 const loading = AsyncData.Loading();
+
 const done = AsyncData.Done(1);
 ```
 
@@ -33,8 +35,15 @@ AsyncData<A>.map<B>(f: (value: A) => B): AsyncData<B>
 
 If the asyncData is `Done(value)` returns `Done(f(value))`, otherwise returns the async data.
 
-```ts
-AsyncData.Done(2).map((x) => x * 2); // AsyncData.Done(4)
+```ts title="Examples"
+AsyncData.Done(2).map((x) => x * 2);
+// AsyncData.Done<4>
+
+AsyncData.Loading().map((x) => x * 2);
+// AsyncData.Loading
+
+AsyncData.NotAsked().map((x) => x * 2);
+// AsyncData.NotAsked
 ```
 
 ## .flatMap(f)
@@ -45,14 +54,26 @@ AsyncData<A>.flatMap<B>(f: (value: A) => AsyncData<B>): AsyncData<B>
 
 If the asyncData is `Done(value)` returns `f(value)`, otherwise returns the async data.
 
-```ts
-AsyncData.Done(2).flatMap((x) => {
-  if (x > 1) {
-    return AsyncData.NotAsked("some error");
-  } else {
-    return AsyncData.Done(2);
-  }
-});
+```ts title="Examples"
+AsyncData.Done(2).flatMap((x) =>
+  x > 1 ? AsyncData.NotAsked() : AsyncData.Done(2),
+);
+// AsyncData.NotAsked
+
+AsyncData.Done(1).flatMap((x) =>
+  x > 1 ? AsyncData.NotAsked() : AsyncData.Done(2),
+);
+// AsyncData.Done<2>
+
+AsyncData.NotAsked().flatMap((x) =>
+  x > 1 ? AsyncData.NotAsked() : AsyncData.Done(2),
+);
+// AsyncData.NotAsked
+
+AsyncData.Loading().flatMap((x) =>
+  x > 1 ? AsyncData.NotAsked() : AsyncData.Done(2),
+);
+// AsyncData.Loading
 ```
 
 ## .getWithDefault(defaultValue)
@@ -63,10 +84,15 @@ AsyncData<A>.getWithDefault(defaultValue: A): A
 
 If the async data is `Done(value)` returns `value`, otherwise returns `defaultValue`.
 
-```ts
-AsyncData.Done(2).getWithDefault(1); // 2
-AsyncData.Loading().getWithDefault(1); // 1
-AsyncData.NotAsked().getWithDefault(1); // 1
+```ts title="Examples"
+AsyncData.Done(2).getWithDefault(1);
+// 2
+
+AsyncData.Loading().getWithDefault(1);
+// 1
+
+AsyncData.NotAsked().getWithDefault(1);
+// 1
 ```
 
 ## .isDone()
@@ -77,10 +103,15 @@ AsyncData<A>.isDone(): boolean
 
 Type guard. Checks if the option is `Done(value)`
 
-```ts
-AsyncData.Done(2).isDone(); // true
-AsyncData.Loading().isDone(); // false
-AsyncData.NotAsked().isDone(); // false
+```ts title="Examples"
+AsyncData.Done(2).isDone();
+// true
+
+AsyncData.Loading().isDone();
+// false
+
+AsyncData.NotAsked().isDone();
+// false
 
 if (asyncData.isDone()) {
   const value = asyncData.get();
@@ -95,10 +126,15 @@ AsyncData<A>.isLoading(): boolean
 
 Type guard. Checks if the option is `Loading`
 
-```ts
-AsyncData.Done(2).isLoading(); // false
-AsyncData.Loading().isLoading(); // true
-AsyncData.NotAsked().isLoading(); // false
+```ts title="Examples"
+AsyncData.Done(2).isLoading();
+// false
+
+AsyncData.Loading().isLoading();
+// true
+
+AsyncData.NotAsked().isLoading();
+// false
 ```
 
 ## .isNotAsked()
@@ -109,10 +145,15 @@ AsyncData<A>.isNotAsked(): boolean
 
 Type guard. Checks if the option is `NotAsked`
 
-```ts
-AsyncData.Done(2).isNotAsked(); // false
-AsyncData.Loading().isNotAsked(); // false
-AsyncData.NotAsked().isNotAsked(); // true
+```ts title="Examples"
+AsyncData.Done(2).isNotAsked();
+// false
+
+AsyncData.Loading().isNotAsked();
+// false
+
+AsyncData.NotAsked().isNotAsked();
+// true
 ```
 
 ## .toOption()
@@ -123,10 +164,15 @@ AsyncData<A>.toOption(): Option<A>
 
 If the result is `Done(value)` returns `Some(value)`, otherwise returns `None`.
 
-```ts
-Result.Done(2).toOption(); // Some(2)
-Result.Loading().toOption(); // None
-Result.NotAsked().toOption(); // None
+```ts title="Examples"
+Result.Done(2).toOption();
+// Option.Some<2>
+
+Result.Loading().toOption();
+// Option.None
+
+Result.NotAsked().toOption();
+// Option.None
 ```
 
 ## .match()
@@ -141,7 +187,7 @@ AsyncData<A>.match<B>(config: {
 
 Match the async data state
 
-```ts
+```ts title="Examples"
 const valueToDisplay = result.match({
   Done: (value) => value,
   Loading: () => "Loading ...",
@@ -157,7 +203,7 @@ AsyncData<A>.tap(func: (asyncData: AsyncData<A>) => unknown): AsyncData<A>
 
 Executes `func` with `asyncData`, and returns `asyncData`. Useful for logging and debugging.
 
-```ts
+```ts title="Examples"
 asyncData.tap(console.log).map((x) => x * 2);
 ```
 
@@ -169,13 +215,15 @@ all(asyncDatas: Array<AsyncData<A>>): AsyncData<Array<A>>
 
 Turns an "array of asyncDatas of value" into a "asyncData of array of value".
 
-```ts
+```ts title="Examples"
 AsyncData.all([AsyncData.Done(1), AsyncData.Done(2), AsyncData.Done(3)]);
-// Done([1, 2, 3])
+// AsyncData.Done<[1, 2, 3]>
+
 AsyncData.all([Result.NotAsked(), AsyncData.Done(2), AsyncData.Done(3)]);
-// Result.NotAsked()
+// AsyncData.NotAsked
+
 AsyncData.all([Result.Loading(), AsyncData.Done(2), AsyncData.Done(3)]);
-// Result.Loading()
+// AsyncData.Loading
 ```
 
 ## AsyncData.allFromDict(asyncDatas)
@@ -186,32 +234,32 @@ allFromDict(asyncDatas: Dict<AsyncData<A>>): AsyncData<Dict<A>>
 
 Turns a "dict of asyncDatas of value" into a "asyncData of dict of value".
 
-```ts
+```ts title="Examples"
 AsyncData.allFromDict({
   a: AsyncData.Done(1),
   b: AsyncData.Done(2),
   c: AsyncData.Done(3),
 });
-// Done({a: 1, b: 2, c: 3})
+// AsyncData.Done<{a: 1, b: 2, c: 3}>
 
 AsyncData.allFromDict({
   a: Result.NotAsked(),
   b: AsyncData.Done(2),
   c: AsyncData.Done(3),
 });
-// Result.NotAsked()
+// AsyncData.NotAsked
 
 AsyncData.allFromDict({
   a: Result.Loading(),
   b: AsyncData.Done(2),
   c: AsyncData.Done(3),
 });
-// Result.Loading()
+// AsyncData.Loading
 ```
 
 ## TS Pattern interop
 
-```ts
+```ts title="Examples"
 import { match, select } from "ts-pattern";
 import { AsyncData } from "@swan-io/boxed";
 
@@ -221,3 +269,16 @@ match(asyncData)
   .with(AsyncData.pattern.NotAsked), () => "")
   .exhaustive();
 ```
+
+## Cheatsheet
+
+| Method                 | Input        | Function input | Function output | Returned value |
+| ---------------------- | ------------ | -------------- | --------------- | -------------- |
+| [`map`](#mapf)         | `Done(x)`    | `x`            | `y`             | `Done(y)`      |
+| [`map`](#mapf)         | `Loading()`  | _not provided_ | _not executed_  | `Loading()`    |
+| [`map`](#mapf)         | `NotAsked()` | _not provided_ | _not executed_  | `NotAsked()`   |
+| [`flatMap`](#flatmapf) | `Done(x)`    | `x`            | `Done(y)`       | `Done(y)`      |
+| [`flatMap`](#flatmapf) | `Done(x)`    | `x`            | `Loading()`     | `Loading()`    |
+| [`flatMap`](#flatmapf) | `Done(x)`    | `x`            | `NotAsked()`    | `NotAsked()`   |
+| [`flatMap`](#flatmapf) | `Loading()`  | _not provided_ | _not executed_  | `Loading()`    |
+| [`flatMap`](#flatmapf) | `NotAsked()` | _not provided_ | _not executed_  | `NotAsked()`   |

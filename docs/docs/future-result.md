@@ -5,6 +5,10 @@ sidebar_label: Future<Result> helpers
 
 A [Future](./future) can contain a `Result` (e.g. to represent an asynchronous value that can fail). We provide some utility functions to deal with that case without having to unwrap the Future result.
 
+:::note
+You can still use all the regular [Future](./future) methods. The following helpers simply removes the need to unwrap the contained result.
+:::
+
 ## .mapResult(f)
 
 ```ts
@@ -16,18 +20,16 @@ Future<Result<A, E>>.mapResult<B, F>(
 
 Takes a `Future<Result<Ok, Error>>` and a `f` function taking `Ok` and returning `Result<ReturnValue, Error>` and returns a new `Future<Result<ReturnValue, Error>>`
 
-```ts
+```ts title="Examples"
 Future.value(Result.Ok(3)).mapResult((ok) => {
   return Result.Ok(ok * 2);
-}); // Future<Ok<6>>
+});
+// Future<Result.Ok<6>>
 
-Future.value(Result.Ok(3)).mapResult((ok) => {
-  if (ok % 2 === 0) {
-    return Result.Ok(ok);
-  } else {
-    return Result.Error("Odd number");
-  }
-}); // Future<Error<"Odd number">>
+Future.value(Result.Ok(3)).mapResult((ok) =>
+  isEven(ok) ? Result.Ok(ok) : Result.Error("Odd number");
+);
+// Future<Result.Error<"Odd number">>
 ```
 
 ## .mapOk(f)
@@ -41,14 +43,16 @@ Future<Result<A, E>>.mapOk<B>(
 
 Takes a `Future<Result<Ok, Error>>` and a `f` function taking `Ok` and returning `ReturnValue` and returns a new `Future<Result<ReturnValue, Error>>`
 
-```ts
+```ts title="Examples"
 Future.value(Result.Ok(3)).mapOk((ok) => {
   return ok * 2;
-}); // Future<Ok<6>>
+});
+// Future<Result.Ok<6>>
 
 Future.value(Result.Error("something")).mapOk((ok) => {
   return ok * 2;
-}); // Future<Error<"something">>
+});
+// Future<Result.Error<"something">>
 ```
 
 ## .mapError(f)
@@ -62,14 +66,16 @@ Future<Result<A, E>>.mapError<F>(
 
 Takes a `Future<Result<Ok, Error>>` and a `f` function taking `Error` and returning `ReturnValue` and returns a new `Future<Result<Ok, ReturnValue>>`
 
-```ts
+```ts title="Examples"
 Future.value(Result.Error(3)).mapError((error) => {
   return error * 2;
-}); // Future<Error<6>>
+});
+// Future<Result.Error<6>>
 
 Future.value(Result.Ok("something")).mapError((ok) => {
   return ok * 2;
-}); // Future<Ok<"something">>
+});
+// Future<Result.Ok<"something">>
 ```
 
 ## .flatMapOk(f)
@@ -83,16 +89,19 @@ Future<Result<A, E>>.mapError<B, F>(
 
 Takes a `Future<Result<Ok, Error>>` and a `f` function taking `Ok` returning a `Future<Result<ReturnValue, Error>>`
 
-```ts
-Future.value(Result.Ok(3)).flatMapOk((ok) => Future.value(Result.Ok(ok * 2))); // Future<Ok<6>>
+```ts title="Examples"
+Future.value(Result.Ok(3)).flatMapOk((ok) => Future.value(Result.Ok(ok * 2)));
+// Future<Result.Ok<6>>
 
 Future.value(Result.Ok(3)).flatMapOk((ok) =>
   Future.value(Result.Error("Nope")),
-); // Future<Error<"Nope">>
+);
+// Future<Result.Error<"Nope">>
 
 Future.value(Result.Error("Error")).flatMapOk((ok) =>
   Future.value(Result.Ok(ok * 2)),
-); // Future<Error<"Error">>
+);
+// Future<Result.Error<"Error">>
 ```
 
 ## .flatMapError(f)
@@ -106,18 +115,21 @@ Future<Result<A, E>>.mapError<B, F>(
 
 Takes a `Future<Result<Ok, Error>>` and a `f` function taking `Error` returning a `Future<Result<Ok, ReturnValue>>`
 
-```ts
+```ts title="Examples"
 Future.value(Result.Ok(3)).flatMapError((error) =>
   Future.value(Result.Ok(ok * 2)),
-); // Future<Ok<3>>
+);
+// Future<Result.Ok<3>>
 
 Future.value(Result.Error("Error")).flatMapError((error) =>
   Future.value(Result.Error("Nope")),
-); // Future<Error<"Nope">>
+);
+// Future<Result.Error<"Nope">>
 
 Future.value(Result.Error("Error")).flatMapError((error) =>
   Future.value(Result.Ok(1)),
-); // Future<Ok<1>>
+);
+// Future<Result.Ok<1>>
 ```
 
 ## .tapOk(f)
@@ -128,7 +140,7 @@ Future<Result<A, E>>.tapOk(func: (value: A) => unknown): Future<Result<A, E>>
 
 Runs `f` if value is `Ok` with the future value, and returns the original future. Useful for debugging.
 
-```ts
+```ts title="Examples"
 future.tapOk(console.log);
 ```
 
@@ -140,7 +152,7 @@ Future<Result<A, E>>.tapError(func: (value: E) => unknown): Future<Result<A, E>>
 
 Runs `f` if value is `Error` with the future value, and returns the original future. Useful for debugging.
 
-```ts
+```ts title="Examples"
 future.tapError(console.log);
 ```
 
@@ -152,7 +164,98 @@ Future<Result<A, E>>.resultToPromise(): Promise<A>
 
 Takes a `Future<Result<Ok, Error>>` and returns a `Promise<Ok>`, rejecting the promise with `Error` in this state.
 
-```ts
-Future.value(Result.Ok(1)).resultToPromise(); // Promise<1>
-Future.value(Result.Reject(1)).resultToPromise(); // RejectedPromise<1>
+```ts title="Examples"
+Future.value(Result.Ok(1)).resultToPromise();
+// Promise<1>
+
+Future.value(Result.Reject(1)).resultToPromise();
+// Promise (rejected with 1)
 ```
+
+## Future.all(resultFutures)
+
+You can combine the `all` helpers from `Future` and `Result`:
+
+```ts title="Examples"
+const futures = [
+  Future.value(Result.Ok(1)),
+  Future.value(Result.Ok(2)),
+  Future.value(Result.Ok(3)),
+];
+
+Future.all(futures).map(Result.all);
+// Future<Result.Ok<[1, 2, 3]>>
+```
+
+Let's see the types at each step:
+
+```ts title="Examples"
+// Array<Future<Result<number, never>>>
+// -> [Future<Result.Ok<1>>, Future<Result.Ok<2>>, Future<Result.Ok<3>>]
+const input = [
+  Future.value(Result.Ok(1)),
+  Future.value(Result.Ok(2)),
+  Future.value(Result.Ok(3)),
+];
+
+// Future<Array<Result<number, never>>>
+// -> Future<[Result.Ok<1>>, Result.Ok<2>>, Result.Ok<3>]>
+const step1 = Future.all(input);
+
+// Future<Result<Array<number>, never>>
+// -> Future<[Result.Ok<[1, 2, 3]>>
+const step2 = f.map(Result.all);
+```
+
+## Future.allFromDict(resultFutures)
+
+Like as `all`, you can combine the `allFromDict`:
+
+```ts title="Examples"
+const futures = {
+  a: Future.value(Result.Ok(1)),
+  b: Future.value(Result.Ok(2)),
+  c: Future.value(Result.Ok(3)),
+};
+
+Future.allFromDict(futures).map(Result.allFromDict);
+// Future<[Result.Ok<{a: 1, b: 2, c: 3}>>
+```
+
+Let's see the types at each step:
+
+```ts title="Examples"
+// Dict<Future<Result<number, never>>>
+// -> {a: Future<Result.Ok<1>>, b: Future<Result.Ok<2>>, c: Future<Result.Ok<3>>—
+const input = {
+  a: Future.value(Result.Ok(1)),
+  b: Future.value(Result.Ok(2)),
+  c: Future.value(Result.Ok(3)),
+};
+
+// Future<Dict<Result<number, never>>>
+// -> Future<{a: Result.Ok<1>>, b: Result.Ok<2>>, c: Result.Ok<3>}>
+const step1 = Future.all(input);
+
+// Future<Result<Array<number>, never>>
+// -> Future<[Result.Ok<{a: 1, b: 2, c: 3}>>
+const step2 = f.map(Result.all);
+```
+
+## Cheatsheet
+
+| Method                           | Input              | Function input | Function output    | Returned value     |
+| -------------------------------- | ------------------ | -------------- | ------------------ | ------------------ |
+| [`mapResult`](#mapresultf)       | `Future(Ok(x))`    | `x`            | `Ok(y)`            | `Future(Ok(y))`    |
+| [`mapResult`](#mapresultf)       | `Future(Ok(x))`    | `x`            | `Error(f)`         | `Future(Error(f))` |
+| [`mapResult`](#mapresultf)       | `Future(Error(e))` | _not provided_ | _not executed_     | `Future(Error(e))` |
+| [`mapOk`](#mapokf)               | `Future(Ok(x))`    | `x`            | `y`                | `Future(Ok(y))`    |
+| [`mapOk`](#mapokf)               | `Future(Error(e))` | _not provided_ | _not executed_     | `Future(Error(e))` |
+| [`mapError`](#maperrorf)         | `Future(Ok(x))`    | _not provided_ | _not executed_     | `Future(Ok(x))`    |
+| [`mapError`](#maperrorf)         | `Future(Error(e))` | `e`            | `f`                | `Future(Error(f))` |
+| [`flatMapOk`](#flatmapokf)       | `Future(Ok(x))`    | `x`            | `Future(Ok(y))`    | `Future(Ok(y))`    |
+| [`flatMapOk`](#flatmapokf)       | `Future(Ok(x))`    | `x`            | `Future(Error(f))` | `Future(Error(f))` |
+| [`flatMapOk`](#flatmapokf)       | `Future(Error(e))` | _not provided_ | _not executed_     | `Future(Error(e))` |
+| [`flatMapError`](#flatmaperrorf) | `Future(Ok(x))`    | _not provided_ | _not executed_     | `Future(Ok(x))`    |
+| [`flatMapError`](#flatmaperrorf) | `Future(Error(e))` | `e`            | `Future(Ok(y))`    | `Future(Ok(y))`    |
+| [`flatMapError`](#flatmaperrorf) | `Future(Error(e))` | `e`            | `Future(Error(f))` | `Future(Error(f))` |

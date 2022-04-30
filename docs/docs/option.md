@@ -32,8 +32,10 @@ You get interop with `null` and `undefined`:
 ```ts
 // `value` being `null` or `undefined` makes a `None`
 const a = Option.fromNullable(value);
+
 // `value` being `null` makes a `None`
 const b = Option.fromNull(value);
+
 // `value` being `undefined` makes a `None`
 const c = Option.fromUndefined(value);
 ```
@@ -48,7 +50,7 @@ Option<A>.map<B>(f: (value: A) => B): Option<B>
 
 If the option is `Some(value)` returns `Some(f(value))`, otherwise returns `None`.
 
-```ts
+```ts title="Examples"
 Option.Some(2).map((x) => x * 2); // Option.Some(4)
 
 Option.None().map((x) => x * 2); // Option.None()
@@ -62,14 +64,15 @@ Option<A>.flatMap<B>(f: (value: A) => Option<B>): Option<B>
 
 If the option is `Some(value)` returns `f(value)`, otherwise returns `None`.
 
-```ts
+```ts title="Examples"
 Option.Some(2).flatMap((x) => (x > 1 ? Option.None() : Option.Some(2)));
 // None()
 
 Option.Some(1).flatMap((x) => (x > 1 ? Option.None() : Option.Some(2)));
 // Some(2)
 
-option.flatMap((value) => value.optionalProperty); // Option<optionalProperty>
+option.flatMap((value) => value.optionalProperty);
+// Option<optionalProperty>
 ```
 
 ## .getWithDefault(defaultValue)
@@ -80,9 +83,12 @@ Option<A>.getWithDefault(defaultValue: A): A
 
 If the option is `Some(value)` returns `value`, otherwise returns `defaultValue`.
 
-```ts
-Option.Some(2).getWithDefault(1); // 2
-Option.None().getWithDefault(1); // 1
+```ts title="Examples"
+Option.Some(2).getWithDefault(1);
+// 2
+
+Option.None().getWithDefault(1);
+// 1
 ```
 
 ## .isSome()
@@ -93,9 +99,12 @@ Option<A>.isSome(): boolean
 
 Type guard. Checks if the option is `Some(value)`
 
-```ts
-Option.Some(2).isSome(); // true
-Option.None().isSome(); // false
+```ts title="Examples"
+Option.Some(2).isSome();
+// true
+
+Option.None().isSome();
+// false
 
 if (option.isSome()) {
   const value = option.get();
@@ -110,9 +119,12 @@ Option<A>.isNone(): boolean
 
 Type guard. Checks if the option is `None`
 
-```ts
-Option.Some(2).isNone(); // false
-Option.None().isNone(); // true
+```ts title="Examples"
+Option.Some(2).isNone();
+// false
+
+Option.None().isNone();
+// true
 ```
 
 ## .toNull()
@@ -123,9 +135,12 @@ Option<A>.toNull(): A | null
 
 Returns `null` if the option is `None`, returns the value otherwise
 
-```ts
-Option.Some(2).toNull(); // 2
-Option.None().toNull(); // null
+```ts title="Examples"
+Option.Some(2).toNull();
+// 2
+
+Option.None().toNull();
+// null
 ```
 
 ## .toUndefined()
@@ -136,9 +151,12 @@ Option<A>.toUndefined(): A | undefined
 
 Returns `undefined` if the option is `None`, returns the value otherwise
 
-```ts
-Option.Some(2).toUndefined(); // 2
-Option.None().toUndefined(); // undefined
+```ts title="Examples"
+Option.Some(2).toUndefined();
+// 2
+
+Option.None().toUndefined();
+// undefined
 ```
 
 ## .toResult(errorWhenNone)
@@ -149,9 +167,12 @@ Option<A>.toResult<Error>(valueWhenNone: Error): Result<A, Error>
 
 Returns `undefined` if the option is `None`, returns the value otherwise
 
-```ts
-const a = Option.Some(1).toResult("NotFound"); // Ok<1>
-const b = Option.None().toResult("NotFound"); // Error<"NotFound">
+```ts title="Examples"
+const a = Option.Some(1).toResult("NotFound");
+// Ok<1>
+
+const b = Option.None().toResult("NotFound");
+// Error<"NotFound">
 ```
 
 ## .match()
@@ -165,11 +186,12 @@ Option<A>.match<B>(config: {
 
 Match the option state
 
-```ts
+```ts title="Examples"
 const valueToDisplay = option.match({
   Some: (value) => value,
   None: () => "No value",
 });
+// value | "No value"
 ```
 
 ## .tap(func)
@@ -180,7 +202,7 @@ Option<A>.tap(func: (option: Option<A>) => unknown): Option<A>
 
 Executes `func` with `option`, and returns `option`. Useful for logging and debugging.
 
-```ts
+```ts title="Examples"
 option.tap(console.log).map((x) => x * 2);
 ```
 
@@ -192,9 +214,10 @@ all(options: Array<Option<A>>): Option<Array<A>>
 
 Turns an "array of options of value" into a "option of array of value".
 
-```ts
+```ts title="Examples"
 Option.all([Option.Some(1), Option.Some(2), Option.Some(3)]);
 // Some([1, 2, 3])
+
 Option.all([Option.None(), Option.Some(2), Option.Some(3)]);
 // None
 ```
@@ -207,7 +230,7 @@ allFromDict(options: Dict<Option<A>>): Option<Dict<A>>
 
 Turns a "dict of options of value" into a "option of dict of value".
 
-```ts
+```ts title="Examples"
 Option.allFromDict({ a: Option.Some(1), b: Option.Some(2), c: Option.Some(3) });
 // Some({a: 1, b: 2, c: 3})
 
@@ -217,7 +240,7 @@ Option.allFromDict({ a: Option.None(), b: Option.Some(2), c: Option.Some(3) });
 
 ## TS Pattern interop
 
-```ts
+```ts title="Examples"
 import { match, select } from "ts-pattern";
 import { Option } from "@swan-io/boxed";
 
@@ -226,3 +249,13 @@ match(myOption)
   .with(Option.pattern.None, () => "No value")
   .exhaustive();
 ```
+
+## Cheatsheet
+
+| Method                 | Input     | Function input | Function output | Returned value |
+| ---------------------- | --------- | -------------- | --------------- | -------------- |
+| [`map`](#mapf)         | `Some(x)` | `x`            | `y`             | `Some(y)`      |
+| [`map`](#mapf)         | `None()`  | _not provided_ | _not executed_  | `None()`       |
+| [`flatMap`](#flatmapf) | `Some(x)` | `x`            | `Some(y)`       | `Some(y)`      |
+| [`flatMap`](#flatmapf) | `Some(x)` | `x`            | `None()`        | `None()`       |
+| [`flatMap`](#flatmapf) | `None()`  | _not provided_ | _not executed_  | `None()`       |

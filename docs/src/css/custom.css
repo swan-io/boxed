@@ -4,9 +4,8 @@
  * bundles Infima by default. Infima is a CSS framework designed to
  * work well for content-centric websites.
  */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
 
-/* You can override the default Infima variables here. */
+ /* You can override the default Infima variables here. */
 :root {
   --ifm-color-primary: #6240b5;
   --ifm-navbar-link-hover-color: #8166c4;
@@ -16,11 +15,7 @@
   --ifm-color-primary-light: #a18cd3;
   --ifm-color-primary-lighter: #c0b3e1;
   --ifm-color-primary-lightest: #e0d9f0;
-  --ifm-code-font-size: 95%;
-  --ifm-font-family-base: Inter, system-ui, -apple-system, Segoe UI, Roboto,
-    Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI",
-    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
+  --ifm-code-font-size: 90%;
 }
 
 html[data-theme="dark"] {
@@ -36,4 +31,8 @@ html[data-theme="dark"] {
 
 html[data-theme="dark"] .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.3);
+}
+
+pre {
+  line-height: 1.7;
 }

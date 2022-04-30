@@ -20,6 +20,7 @@ To create a result, use the `Ok` and `Error` constructors:
 import { Result } from "@swan-io/boxed";
 
 const ok = Result.Ok(1);
+
 const notOk = Result.Error("something happened");
 ```
 
@@ -28,8 +29,11 @@ You can convert an option to a `Result`:
 ```ts
 import { Result, Option } from "@swan-io/boxed";
 
-const a = Result.fromOption(Option.Some(1), "NotFound"); // Ok<1>
-const b = Result.fromOption(Option.None(), "NotFound"); // Error<"NotFound">
+const a = Result.fromOption(Option.Some(1), "NotFound");
+// Ok<1>
+
+const b = Result.fromOption(Option.None(), "NotFound");
+// Error<"NotFound">
 ```
 
 You get interop with exceptions and promises:
@@ -66,8 +70,12 @@ Result<A, E>.map<B>(f: (value: A) => B): Result<B, E>
 
 If the result is `Ok(value)` returns `Ok(f(value))`, otherwise returns `Error(error)`.
 
-```ts
-Result.Ok(2).map((x) => x * 2); // Result.Ok(4)
+```ts title="Examples"
+Result.Ok(2).map((x) => x * 2);
+// Result.Ok<4>
+
+Result.Ok(2).map((x) => Result.Ok(x * 2));
+// Result.Ok<Result.Ok<4>>
 ```
 
 ## .mapError(f)
@@ -78,8 +86,12 @@ Result<A, E>.mapError<F>(f: (value: E) => F): Result<A, F>
 
 If the result is `Error(error)` returns `Error(f(error))`, otherwise returns `Ok(value)`.
 
-```ts
-Result.Error(2).mapError((x) => x * 2); // Result.Error(4)
+```ts title="Examples"
+Result.Error(2).mapError((x) => x * 2);
+// Result.Error<4>
+
+Result.Error(2).mapError((x) => Result.Ok(x * 2));
+// Result.Error<Result.Ok<4>>
 ```
 
 ## .flatMap(f)
@@ -90,16 +102,21 @@ Result<A, E>.flatMap<B, F>(f: (value: A) => Result<B, F>): Result<B, F | E>
 
 If the result is `Ok(value)` returns `f(value)`, otherwise returns `Error(error)`.
 
-```ts
+```ts title="Examples"
 Result.Ok(1).flatMap((x) =>
   x > 1 ? Result.Error("some error") : Result.Ok(2),
 );
-// Ok(2)
+// Result.Ok<2>
 
 Result.Ok(2).flatMap((x) =>
   x > 1 ? Result.Error("some error") : Result.Ok(2),
 );
-// Error("some error")
+// Result.Error<"some error">
+
+Result.Error("initial error").flatMap((x) =>
+  x > 1 ? Result.Error("some error") : Result.Ok(2),
+);
+// Result.Error<"initial error">
 ```
 
 ## .flatMapError(f)
@@ -110,14 +127,21 @@ Result<A, E>.flatMapError<B, F>(f: (value: E) => Result<B, F>): Result<A | B, F>
 
 If the result is `Error(error)` returns `f(error)`, otherwise returns `Ok(value)`.
 
-```ts
-Result.Error(2).flatMapError((x) => {
-  if (x > 1) {
-    return Result.Error("some error");
-  } else {
-    return Result.Ok(2);
-  }
-});
+```ts title="Examples"
+Result.Error(2).flatMapError((x) =>
+  x > 1 ? Result.Error("some error") : Result.Ok(2),
+);
+// Result.Error<"some error">
+
+Result.Error(1).flatMapError((x) =>
+  x > 1 ? Result.Error("some error") : Result.Ok(2),
+);
+// Result.Ok<2>
+
+Result.Ok("ok").flatMapError((x) =>
+  x > 1 ? Result.Error("some error") : Result.Ok(2),
+);
+// Result.Ok<"ok">
 ```
 
 ## .getWithDefault(defaultValue)
@@ -128,9 +152,12 @@ Result<A, E>.getWithDefault(defaultValue: A): A
 
 If the result is `Ok(value)` returns `value`, otherwise returns `defaultValue`.
 
-```ts
-Result.Ok(2).getWithDefault(1); // 2
-Result.Error(2).getWithDefault(1); // 1
+```ts title="Examples"
+Result.Ok(2).getWithDefault(1);
+// 2
+
+Result.Error(2).getWithDefault(1);
+// 1
 ```
 
 ## .isOk()
@@ -141,9 +168,12 @@ Result<A, E>.isOk(): boolean
 
 Type guard. Checks if the result is `Ok(value)`
 
-```ts
-Result.Ok(2).isOk(); // true
-Result.Error(2).isOk(); // false
+```ts title="Examples"
+Result.Ok(2).isOk();
+// true
+
+Result.Error(2).isOk();
+// false
 
 if (result.isOk()) {
   const value = result.get();
@@ -158,9 +188,12 @@ Result<A, E>.isError(): boolean
 
 Type guard. Checks if the result is `Error(error)`
 
-```ts
-Result.Ok(2).isError(); // false
-Result.Error().isError(); // true
+```ts title="Examples"
+Result.Ok(2).isError();
+// false
+
+Result.Error().isError();
+// true
 
 if (result.isError()) {
   const value = result.getError();
@@ -175,9 +208,12 @@ Result<A, E>.toOption(): Option<A>
 
 If the result is `Ok(value)` returns `Some(value)`, otherwise returns `None`.
 
-```ts
-Result.Ok(2).toOption(); // Some(2)
-Result.Error(2).toOption(); // None
+```ts title="Examples"
+Result.Ok(2).toOption();
+// Option.Some<2>
+
+Result.Error(2).toOption();
+// Option.None
 ```
 
 ## .match()
@@ -191,7 +227,7 @@ Result<A, E>.match<B>(config: {
 
 Match the result state
 
-```ts
+```ts title="Examples"
 const valueToDisplay = result.match({
   Ok: (value) => value,
   Error: (error) => {
@@ -209,7 +245,7 @@ Result<A, E>.tap(func: (result: Result<A, E>) => unknown): Result<A, E>
 
 Executes `func` with `result`, and returns `result`. Useful for logging and debugging.
 
-```ts
+```ts title="Examples"
 result.tap(console.log).map((x) => x * 2);
 ```
 
@@ -221,7 +257,7 @@ Result<A, E>.tapOk(func: (value: A) => unknown): Result<A, E>
 
 Executes `func` with `ok`, and returns `result`. Useful for logging and debugging. No-op if `result` is an error.
 
-```ts
+```ts title="Examples"
 result.tapOk(console.log).map((x) => x * 2);
 ```
 
@@ -233,7 +269,7 @@ Result<A, E>.tapError(func: (error: E) => unknown): Result<A, E>
 
 Executes `func` with `error`, and returns `result`. Useful for logging and debugging. No-op if `result` is ok.
 
-```ts
+```ts title="Examples"
 result.tapError(console.log).map((x) => x * 2);
 ```
 
@@ -245,11 +281,12 @@ all(options: Array<Result<A, E>>): Result<Array<A>, E>
 
 Turns an "array of results of value" into a "result of array of value".
 
-```ts
+```ts title="Examples"
 Result.all([Result.Ok(1), Result.Ok(2), Result.Ok(3)]);
-// Ok([1, 2, 3])
+// Result.Ok<[1, 2, 3]>
+
 Result.all([Result.Error("error"), Result.Ok(2), Result.Ok(3)]);
-// Error("error")
+// Result.Error<"error">
 ```
 
 ## Result.allFromDict(results)
@@ -260,16 +297,16 @@ allFromDict(options: Dict<Result<A, E>>): Result<Dict<A>, E>
 
 Turns a "dict of results of value" into a "result of dict of value".
 
-```ts
+```ts title="Examples"
 Result.allFromDict({ a: Result.Ok(1), b: Result.Ok(2), c: Result.Ok(3) });
-// Ok({a: 1, b: 2, c: 3})
+// Result.Ok<{a: 1, b: 2, c: 3}>
 
 Result.allFromDict({
   a: Result.Error("error"),
   b: Result.Ok(2),
   c: Result.Ok(3),
 });
-// Error("error")
+// Result.Error<"error">
 ```
 
 ## Interop
@@ -282,11 +319,14 @@ fromExecution<A, E>(func: () => A) => Result<A, E>
 
 Takes a function returning `Value` that can throw an `Error` and returns a `Result<Value, Error>`
 
-```ts
-Result.fromExecution(() => 1); // Future(Ok(1))
+```ts title="Examples"
+Result.fromExecution(() => 1);
+// Result.Ok<1>
+
 Result.fromExecution(() => {
   throw "Something went wrong";
-}); // Future<Error<"Something went wrong">>
+});
+// Result.Error<"Something went wrong">
 ```
 
 ### Result.fromPromise(promise)
@@ -297,22 +337,28 @@ fromPromise<A, E>(promise: Promise<A>) => Promise<Result<A, E>>
 
 Takes a `Promise<Value>` that can fail with `Error` and returns a `Promise<Result<Value, Error>>`
 
-```ts
-await Result.fromPromise(Promise.resolve(1)); // Future(Ok(1))
-await Result.fromPromise(Promise.reject(1)); // Future<Error<1>>
+```ts title="Examples"
+await Result.fromPromise(Promise.resolve(1));
+// Result.Ok<1>
+
+await Result.fromPromise(Promise.reject(1));
+// Result.Error<1>
 ```
 
 ### Result.fromOption(option, valueIfNone)
 
 ```ts
-fromPromise<A, E>(option: Option<A>, valueWhenNone: E): Result<A, E>
+fromOption<A, E>(option: Option<A>, valueWhenNone: E): Result<A, E>
 ```
 
 Takes a function returning `Value` that can throw an `Error` and returns a `Result<Value, Error>`
 
-```ts
-const a = Result.fromOption(Option.Some(1), "NotFound"); // Ok<1>
-const b = Result.fromOption(Option.None(), "NotFound"); // Error<"NotFound">
+```ts title="Examples"
+const a = Result.fromOption(Option.Some(1), "NotFound");
+// Result.Ok<1>
+
+const b = Result.fromOption(Option.None(), "NotFound");
+// Result.Error<"NotFound">
 ```
 
 ## TS Pattern interop
@@ -329,3 +375,18 @@ match(myResult)
   })
   .exhaustive();
 ```
+
+## Cheatsheet
+
+| Method                           | Input      | Function input | Function output | Returned value |
+| -------------------------------- | ---------- | -------------- | --------------- | -------------- |
+| [`map`](#mapf)                   | `Ok(x)`    | `x`            | `y`             | `Ok(y)`        |
+| [`map`](#mapf)                   | `Error(e)` | _not provided_ | _not executed_  | `Error(e)`     |
+| [`mapError`](#maperrorf)         | `Ok(x)`    | _not provided_ | _not executed_  | `Ok(x)`        |
+| [`mapError`](#maperrorf)         | `Error(e)` | `e`            | `f`             | `Error(f)`     |
+| [`flatMap`](#flatmapf)           | `Ok(x)`    | `x`            | `Ok(y)`         | `Ok(y)`        |
+| [`flatMap`](#flatmapf)           | `Ok(x)`    | `x`            | `Error(f)`      | `Error(f))`    |
+| [`flatMap`](#flatmapf)           | `Error(e)` | _not provided_ | _not executed_  | `Error(e)`     |
+| [`flatMapError`](#flatmaperrorf) | `Ok(x)`    | _not provided_ | _not executed_  | `Ok(x)`        |
+| [`flatMapError`](#flatmaperrorf) | `Error(e)` | `e`            | `Ok(y)`         | `Ok(y)`        |
+| [`flatMapError`](#flatmaperrorf) | `Error(e)` | `e`            | `Error(f)`      | `Error(f)`     |
