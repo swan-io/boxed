@@ -36,6 +36,11 @@ module.exports = {
           position: "left",
         },
         {
+          href: "https://codesandbox.io/s/boxed-playground-m79x9k?file=/src/index.ts",
+          label: "Playground",
+          position: "left",
+        },
+        {
           href: "https://github.com/swan-io/boxed",
           label: "GitHub",
           position: "right",
