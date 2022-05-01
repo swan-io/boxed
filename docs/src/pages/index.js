@@ -122,6 +122,8 @@ const Home = () => {
                 muted
                 loop
                 src="/boxed/video/ide.mov"
+                playsInline
+                controls={false}
               />
             }
           />
