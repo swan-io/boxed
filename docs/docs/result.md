@@ -162,6 +162,42 @@ Result.Error(2).getWithDefault(1);
 // 1
 ```
 
+### .get()
+
+```ts
+Result<A, E>.get(): A
+```
+
+Returns the value contained in `Ok(value)`. Only usable within a `isOk()` check.
+
+```ts title="Examples"
+const value = result.get();
+// does not compile
+
+if (result.isOk()) {
+  const value = result.get();
+  // value
+}
+```
+
+### .getError()
+
+```ts
+Result<A, E>.getError(): E
+```
+
+Returns the error contained in `Error(error)`. Only usable within a `isError()` check.
+
+```ts title="Examples"
+const error = result.getError();
+// does not compile
+
+if (result.isError()) {
+  const error = result.getError();
+  // error
+}
+```
+
 ### .isOk()
 
 ```ts

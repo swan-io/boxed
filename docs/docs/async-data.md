@@ -97,6 +97,24 @@ AsyncData.NotAsked().getWithDefault(1);
 // 1
 ```
 
+### .get()
+
+```ts
+AsyncData<A>.get(): A
+```
+
+Returns the value contained in `Done(value)`. Only usable within a `isDone()` check.
+
+```ts title="Examples"
+const value = asyncData.get();
+// does not compile
+
+if (asyncData.isDone()) {
+  const value = asyncData.get();
+  // value
+}
+```
+
 ### .isDone()
 
 ```ts

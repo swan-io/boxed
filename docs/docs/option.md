@@ -95,6 +95,24 @@ Option.None().getWithDefault(1);
 // 1
 ```
 
+### .get()
+
+```ts
+Option<A>.get(): A
+```
+
+Returns the value contained in `Some(value)`. Only usable within a `isSome()` check.
+
+```ts title="Examples"
+const value = option.get();
+// does not compile
+
+if (option.isSome()) {
+  const value = option.get();
+  // value
+}
+```
+
 ### .isSome()
 
 ```ts
