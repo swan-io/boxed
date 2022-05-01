@@ -91,6 +91,9 @@ const Home = () => {
                 <strong>safer</strong>,and{" "}
                 <strong>easier to reason about</strong> than with regular
                 null-checks, exception flows and manual value tracking.
+                <br />
+                <br />
+                All of that for <strong>less that 3KBs when gzipped</strong>!
               </>
             }
           />
