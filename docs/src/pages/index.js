@@ -44,14 +44,10 @@ const UserCard = ({user}: {user: AsyncData<User>}) => {
   );
 }
 
-const Block = ({ reversed = false, code, title, description }) => {
+const Block = ({ children, reversed = false, title, description }) => {
   return (
     <div className={reversed ? styles.blockReversed : styles.block}>
-      <div className={styles.blockSide}>
-        <CodeBlock className={styles.codeBlock} language={"typescript"}>
-          {code}
-        </CodeBlock>
-      </div>
+      <div className={styles.blockSide}>{children}</div>
       <div className={styles.blockSide}>
         <h2>{title}</h2>
         <p>{description}</p>
@@ -73,66 +69,82 @@ const Home = () => {
         <HomepageFeatures />
         <div className="container">
           <Block
-            code={`
-// Future<Result<User, DBError>>
-getUserById(id)
-  // Future<Result<User, Unsubcribed | DBError>>
-  .mapResult(validateSubcription)
-  // Future<Result<string, Unsubcribed | DBError>>
-  .mapOk(getName)
-  .get(user => {
-    user.match({
-      // string
-      Ok: name => res.send(\`Hello \${name}\`),
-      // Unsubcribed | DBError
-      Error: error => res.status(400).send(error),
-    })
-  })
-`}
-            title={"Type-safe building blocks"}
+            children={
+              <img
+                style={{ width: "100%", borderRadius: "1rem" }}
+                loading="lazy"
+                src="/boxed/img/react.jpg"
+                alt="Example of a request lifecycle management in a React component using Boxed.AsyncData"
+              />
+            }
+            title={"Build with the right tools"}
             description={
               <>
-                Use <strong>functional type-safe constructs</strong> like{" "}
+                By using <strong>functional type-safe constructs</strong> like{" "}
                 <a href="./option">Option</a>, <a href="./result">Result</a> and{" "}
-                <a href="./asyncdata">AsyncData</a>. Those types will help you
-                to get rid of any kind of impossible state:{" "}
-                <strong>eliminating bugs right from the modeling</strong>
+                <a href="./asyncdata">AsyncData</a>, you can{" "}
+                <strong>eliminate bugs right from the modeling</strong>
                 .
                 <br />
                 <br />
-                Thanks to the tight integration with TypeScript, you'll{" "}
-                <strong>get the most of the compiler</strong>.
+                Your code will be <strong>simpler</strong>,{" "}
+                <strong>safer</strong>,and{" "}
+                <strong>easier to reason about</strong> than with regular
+                null-checks, exception flows and manual value tracking.
               </>
             }
           />
 
           <Block
             reversed
-            code={`myOption.flatMap
-// (method) Option<number>.flatMap<B>(f: (value: number) => Option<B>): Option<B>
-// Returns the Option containing the value from the callback
-// (Option<A>, A => Option<B>) => Option<B>
-
-myOption.map
-// (method) Option<number>.map<B>(f: (value: number) => B): Option<B>
-// Returns the Option containing the value from the callback
-// (Option<A>, A => B) => Option<B>
-`}
             title={"Taylored for your IDE"}
             description={
               <>
                 Thanks to our <strong>chaining API</strong>, you get a nice{" "}
-                <strong>autocomplete</strong> right from the value.
+                <strong>autocomplete</strong> right from the value and can
+                easily name intermediate variables.
                 <br />
                 <br />
                 Boxed leverages the JavaScript class API so that you don't need
                 to import any module to work with a Boxed value:{" "}
-                <strong>it's all available as a method</strong>.
-                <br />
-                <br />
-                On top of that, the Boxed API is minimal, so that your tooling
-                doesn't feel overwhelming.
+                <strong>it's all available as a method</strong>. On top of that,
+                the Boxed API is minimal, so that your tooling doesn't feel
+                overwhelming.
               </>
+            }
+            children={
+              <video
+                style={{ width: "100%", borderRadius: "1rem" }}
+                autoPlay
+                muted
+                loop
+                src="/boxed/video/ide.mov"
+              />
+            }
+          />
+
+          <Block
+            title={"Get productive immediately"}
+            description={
+              <>
+                Boxed gives you the tools you need without requiring loads of
+                theoretical knowledge.
+                <br />
+                <br />
+                We provide <strong>simple naming</strong>,{" "}
+                <strong>documentation</strong> and{" "}
+                <strong>escape hatches</strong> so that you don't get stuck. You
+                get to <strong>learn as you use the library</strong> instead of
+                getting frustrated over complex concepts.
+              </>
+            }
+            children={
+              <img
+                style={{ width: "100%", borderRadius: "1rem" }}
+                loading="lazy"
+                src="/boxed/img/cheatsheet.jpg"
+                alt="Cheatsheet table for the types of the map and flatMap functions"
+              />
             }
           />
         </div>
