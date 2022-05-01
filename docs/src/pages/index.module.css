@@ -92,11 +92,22 @@
   background-color: rgba(246, 248, 250, 0.2);
   border-radius: 1rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-
 }
 
 .blockSide {
   flex-grow: 1;
   padding: 2rem;
   width: 50%;
+}
+
+
+@media (max-width: 920px) {
+  .block,
+  .blockReversed {
+    flex-direction: column;
+  }
+
+  .blockSide {
+    width: 100%;
+  }
 }
