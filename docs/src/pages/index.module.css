@@ -73,3 +73,30 @@
     display: block;
   }
 }
+
+.block {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 2rem 0;
+  background-color: rgba(246, 248, 250, 0.2);
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.blockReversed {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  margin: 2rem 0;
+  background-color: rgba(246, 248, 250, 0.2);
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+}
+
+.blockSide {
+  flex-grow: 1;
+  padding: 2rem;
+  width: 50%;
+}
