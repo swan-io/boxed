@@ -58,6 +58,30 @@ const Block = ({ children, reversed = false, title, description }) => {
 
 const Home = () => {
   const { siteConfig } = useDocusaurusContext();
+  const videoContainer = React.useRef(null);
+
+  React.useEffect(() => {
+    const element = videoContainer.current;
+    if (element) {
+      const intersectionObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const video = element.querySelector("video");
+              if (video) {
+                video.play();
+              }
+            }
+          });
+        },
+        {
+          rootMargin: "100px",
+        },
+      );
+      intersectionObserver.observe(element);
+      return () => intersectionObserver.unobserve(element);
+    }
+  }, []);
 
   return (
     <Layout
@@ -116,15 +140,29 @@ const Home = () => {
               </>
             }
             children={
-              <video
-                style={{ width: "100%", borderRadius: "1rem" }}
-                autoPlay
-                muted
-                loop
-                src="/boxed/video/ide.mov"
-                playsInline
-                controls={false}
-              />
+              <div
+                style={{
+                  paddingBottom: "70.26737967914438%",
+                  position: "relative",
+                }}
+                ref={videoContainer}
+              >
+                <video
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    borderRadius: "1rem",
+                  }}
+                  muted
+                  loop
+                  src="/boxed/video/ide.mov"
+                  playsInline
+                  controls={false}
+                  preload="metadata"
+                />
+              </div>
             }
           />
 
