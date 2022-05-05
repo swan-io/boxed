@@ -14,15 +14,21 @@ import { Option } from "../src/OptionResult";
 
 test("Array.keepMap", () => {
   expect(
-    keepMap([1, 2, 3, 4], (a: number) => (a % 2 === 0 ? a * 2 : null)),
+    keepMap([1, 2, 3, 4], (a: number) =>
+      Option.fromNullable(a % 2 === 0 ? a * 2 : null),
+    ),
   ).toEqual([4, 8]);
 
   expect(
-    keepMap([1, 2, 3, 4], (a: number) => (a % 2 === 0 ? a * 2 : undefined)),
+    keepMap([1, 2, 3, 4], (a: number) =>
+      Option.fromNullable(a % 2 === 0 ? a * 2 : undefined),
+    ),
   ).toEqual([4, 8]);
 
   expect(
-    keepMap([1, 2, 3, 4, undefined, null], (a) => (a != null ? a : null)),
+    keepMap([1, 2, 3, 4, undefined, null], (a) =>
+      Option.fromNullable(a != null ? a : null),
+    ),
   ).toEqual([1, 2, 3, 4]);
 });
 
