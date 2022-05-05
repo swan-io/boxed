@@ -1,3 +1,9 @@
+# 0.9.0
+
+Breaking changes:
+
+- Make `Array.keepMap` callback return an option instead of a nullable (ff967f9)
+
 # 0.8.0
 
 Features:
