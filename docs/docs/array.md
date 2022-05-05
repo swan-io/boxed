@@ -9,12 +9,14 @@ import { Array } from "@swan-io/boxed";
 
 ## Array.keepMap(array, func)
 
-Returns an array containing the non nullish values return by `func` for each array item.
+Returns an array containing the `Option.Some` values return by `func` for each array item.
 
 This function can be useful to refine the types of an array.
 
 ```ts title="Examples"
-Array.keepMap([1, 2, 3], (x) => (isEven(x) === 0 ? x : null)); // [2]
+Array.keepMap([1, 2, 3], (x) =>
+  isEven(x) === 0 ? Option.Some(x) : Option.None(),
+); // [2]
 ```
 
 ## Array.getBy(array, predicate)

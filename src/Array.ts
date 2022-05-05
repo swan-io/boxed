@@ -8,13 +8,13 @@ export const isArray = Array.isArray;
 
 export const keepMap = <A, B>(
   array: Array<A>,
-  func: (item: A) => NonNullable<B> | undefined | null,
-): Array<NonNullable<B>> => {
-  const result: Array<NonNullable<B>> = [];
+  func: (item: A) => Option<B>,
+): Array<B> => {
+  const result: Array<B> = [];
   array.forEach((item) => {
     const mapped = func(item);
-    if (mapped != null) {
-      result.push(mapped);
+    if (mapped.isSome()) {
+      result.push(mapped.get());
     }
   });
   return result;
