@@ -3,7 +3,7 @@ import { zip } from "./ZipUnzip";
 
 export class Option<A> {
   /**
-   * Create an AsyncData.Some value
+   * Create an Option.Some value
    */
   static Some = <A = never>(value: A): Option<A> => {
     const option = Object.create(protoOption) as Option<A>;
