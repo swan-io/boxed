@@ -59,7 +59,7 @@ Future.value(1).get(console.log);
 Future<A>.onCancel(func: () => void): void
 ```
 
-Runs `f` with the future is cancelled.
+Runs `f` when the future is cancelled.
 
 ```ts title="Examples"
 future.onCancel(() => {
