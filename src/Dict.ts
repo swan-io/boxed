@@ -1,21 +1,12 @@
-export function entries<T>(value: T) {
-  return Object.entries(value) as NonNullable<
-    {
-      [K in keyof T]: K extends string ? [K, T[K]] : never;
-    }[keyof T]
-  >[];
-}
+type GenericRecord = Record<string | number | symbol, unknown>;
 
-export function keys<T>(value: T) {
-  return Object.keys(value) as NonNullable<
-    {
-      [K in keyof T]: K extends string ? K : never;
-    }[keyof T]
-  >[];
-}
-
-export function values<T>(value: T) {
-  return Object.values(value) as {
-    [K in keyof T]: K extends string ? T[K] : never;
+export const entries = <T extends GenericRecord>(value: T) =>
+  Object.entries(value) as {
+    [K in keyof T]: [K, T[K]];
   }[keyof T][];
-}
+
+export const keys = <T extends GenericRecord>(value: T) =>
+  Object.keys(value) as (keyof T)[];
+
+export const values = <T extends GenericRecord>(value: T) =>
+  Object.values(value) as T[keyof T][];
