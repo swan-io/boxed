@@ -190,7 +190,7 @@ export const Option = {
   /**
    * Turns an array of options into an option of array
    */
-  all<A, Options extends Option<A>[] | []>(options: Options) {
+  all<Options extends Option<any>[] | []>(options: Options) {
     const length = options.length;
     let acc = Option.Some<Array<unknown>>([]);
     let index = 0;
@@ -205,12 +205,12 @@ export const Option = {
       const item = options[index];
 
       if (item != null) {
-        acc = acc.flatMap((array) =>
-          item.map((value) => {
+        acc = acc.flatMap((array) => {
+          return item.map((value) => {
             array.push(value);
             return array;
-          }),
-        );
+          });
+        });
       }
 
       index++;
@@ -220,7 +220,7 @@ export const Option = {
   /**
    * Turns an dict of options into a options of dict
    */
-  allFromDict<A, Dict extends LooseRecord<Option<A>>>(
+  allFromDict<Dict extends LooseRecord<Option<any>>>(
     dict: Dict,
   ): Option<{
     [K in keyof Dict]: Dict[K] extends Option<infer T> ? T : never;
@@ -503,7 +503,7 @@ export const Result = {
   /**
    * Turns an array of results into an result of array
    */
-  all<A, E, Results extends Result<A, E>[] | []>(results: Results) {
+  all<Results extends Result<any, any>[] | []>(results: Results) {
     const length = results.length;
     let acc = Result.Ok<Array<unknown>, unknown>([]);
     let index = 0;
@@ -527,12 +527,12 @@ export const Result = {
       const item = results[index];
 
       if (item != null) {
-        acc = acc.flatMap((array) =>
-          item.map((value) => {
+        acc = acc.flatMap((array) => {
+          return item.map((value) => {
             array.push(value);
             return array;
-          }),
-        );
+          });
+        });
       }
 
       index++;
@@ -542,7 +542,7 @@ export const Result = {
   /**
    * Turns an dict of results into a results of dict
    */
-  allFromDict<A, E, Dict extends LooseRecord<Result<A, E>>>(
+  allFromDict<Dict extends LooseRecord<Result<any, any>>>(
     dict: Dict,
   ): Result<
     {

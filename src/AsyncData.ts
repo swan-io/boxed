@@ -197,7 +197,7 @@ export const AsyncData = {
   /**
    * Turns an array of asyncData into an asyncData of array
    */
-  all<A, AsyncDatas extends AsyncData<A>[] | []>(asyncDatas: AsyncDatas) {
+  all<AsyncDatas extends AsyncData<any>[] | []>(asyncDatas: AsyncDatas) {
     const length = asyncDatas.length;
     let acc = AsyncData.Done<Array<unknown>>([]);
     let index = 0;
@@ -214,12 +214,12 @@ export const AsyncData = {
       const item = asyncDatas[index];
 
       if (item != null) {
-        acc = acc.flatMap((array) =>
-          item.map((value) => {
+        acc = acc.flatMap((array) => {
+          return item.map((value) => {
             array.push(value);
             return array;
-          }),
-        );
+          });
+        });
       }
 
       index++;
@@ -229,7 +229,7 @@ export const AsyncData = {
   /**
    * Turns an dict of asyncData into a asyncData of dict
    */
-  allFromDict<A, Dict extends LooseRecord<AsyncData<A>>>(
+  allFromDict<Dict extends LooseRecord<AsyncData<any>>>(
     dict: Dict,
   ): AsyncData<{
     [K in keyof Dict]: Dict[K] extends AsyncData<infer T> ? T : never;
