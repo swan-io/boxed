@@ -184,7 +184,7 @@ export const Option = {
   /**
    * Turns an array of options into an option of array
    */
-  all<T extends unknown, Options extends Option<T>[] | []>(options: Options) {
+  all<T, Options extends Option<T>[] | []>(options: Options) {
     const length = options.length;
     let acc = Option.Some<Array<unknown>>([]);
     let index = 0;
@@ -214,7 +214,7 @@ export const Option = {
   /**
    * Turns an dict of options into a options of dict
    */
-  allFromDict<T extends unknown, Dict extends LooseRecord<Option<T>>>(
+  allFromDict<T, Dict extends LooseRecord<Option<T>>>(
     dict: Dict,
   ): Option<{
     [K in keyof Dict]: Dict[K] extends Option<infer V> ? V : never;
