@@ -11,15 +11,15 @@ export const encode = (value: any, indent?: number | undefined) => {
       if (value.__boxed_type__ === "Option") {
         return {
           __boxed_type__: "Option",
-          tag: value.value.tag,
-          value: value.value.value,
+          tag: value.tag,
+          value: value.value,
         };
       }
       if (value.__boxed_type__ === "Result") {
         return {
           __boxed_type__: "Result",
-          tag: value.value.tag,
-          value: value.value.value,
+          tag: value.tag,
+          value: value.value,
         };
       }
       if (value.__boxed_type__ === "AsyncData") {
