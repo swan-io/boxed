@@ -25,7 +25,7 @@ export class Future<A> {
   static make = <A>(
     init: (resolver: (value: A) => void) => (() => void) | void,
   ): Future<A> => {
-    const future = Object.create(proto);
+    const future = Object.create(futureProto);
     FutureInit.call(future, init);
     return future as Future<A>;
   };
@@ -34,8 +34,8 @@ export class Future<A> {
    * Creates a future resolved to the passed value
    */
   static value = <A>(value: A): Future<A> => {
-    const future = Object.create(proto);
-    FutureInit.call(future, (resolve) => resolve(value));
+    const future = Object.create(futureProto);
+    future.step = { tag: "Resolved", value };
     return future as Future<A>;
   };
 
@@ -374,7 +374,7 @@ export class Future<A> {
   }
 }
 
-const proto = Object.create(
+const futureProto = Object.create(
   null,
   Object.getOwnPropertyDescriptors(Future.prototype),
 );
