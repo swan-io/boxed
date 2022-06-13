@@ -16,7 +16,7 @@ module.exports = {
     algolia: {
       appId: "LI6T7CQ5U8",
       apiKey: "c78a649315c0b39c2d8752c61e24da6f",
-      indexName: "docs",
+      indexName: "boxed",
       contextualSearch: true,
       searchParameters: {},
       searchPagePath: "search",
