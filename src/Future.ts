@@ -142,11 +142,16 @@ export class Future<A> {
    */
   cancel() {
     if (this.step.tag === "Pending") {
-      this.step.cancel?.();
-      this.step.cancelCallbacks?.forEach((func) => func());
+      const { cancel, cancelCallbacks } = this.step;
+
+      // We have to set the future as cancelled first to avoid an infinite loop
       this.step = { tag: "Cancelled" };
+
+      cancel?.();
+      cancelCallbacks?.forEach((func) => func());
     }
   }
+
   /**
    * Returns the Future containing the value from the callback
    *
