@@ -416,7 +416,7 @@ const resultProto = (<A, E>(): IResult<A, E> => ({
   },
 
   toOption(this: Result<A, E>) {
-    return this.tag === "Ok" ? Some<A>(this.value) : None<A>();
+    return this.tag === "Ok" ? Some(this.value) : None();
   },
 
   isOk(this: Result<A, E>): boolean {
