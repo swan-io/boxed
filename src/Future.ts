@@ -8,14 +8,14 @@ function FutureInit<A>(
   init: (resolver: (value: A) => void) => (() => void) | void,
 ) {
   const resolver = (value: A) => {
-    if (this.step.tag === "Pending") {
-      this.step.resolveCallbacks?.forEach((func) => func(value));
-      this.step = { tag: "Resolved", value };
+    if (this._state.tag === "Pending") {
+      this._state.resolveCallbacks?.forEach((func) => func(value));
+      this._state = { tag: "Resolved", value };
     }
   };
 
-  this.step = { tag: "Pending" };
-  this.step.cancel = init(resolver);
+  this._state = { tag: "Pending" };
+  this._state.cancel = init(resolver);
 }
 
 export class Future<A> {
@@ -35,7 +35,7 @@ export class Future<A> {
    */
   static value = <A>(value: A): Future<A> => {
     const future = Object.create(futureProto);
-    future.step = { tag: "Resolved", value };
+    future._state = { tag: "Resolved", value };
     return future as Future<A>;
   };
 
@@ -99,7 +99,7 @@ export class Future<A> {
     );
   };
 
-  step:
+  _state:
     | {
         tag: "Pending";
         resolveCallbacks?: Array<(value: A) => void>;
@@ -110,18 +110,18 @@ export class Future<A> {
     | { tag: "Resolved"; value: A };
 
   constructor(_init: (resolver: (value: A) => void) => (() => void) | void) {
-    this.step = { tag: "Pending" };
+    this._state = { tag: "Pending" };
   }
 
   /**
    * Runs the callback with the future value when resolved
    */
   get(func: (value: A) => void) {
-    if (this.step.tag === "Pending") {
-      this.step.resolveCallbacks = this.step.resolveCallbacks ?? [];
-      this.step.resolveCallbacks.push(func);
-    } else if (this.step.tag === "Resolved") {
-      func(this.step.value);
+    if (this._state.tag === "Pending") {
+      this._state.resolveCallbacks = this._state.resolveCallbacks ?? [];
+      this._state.resolveCallbacks.push(func);
+    } else if (this._state.tag === "Resolved") {
+      func(this._state.value);
     }
   }
 
@@ -129,10 +129,10 @@ export class Future<A> {
    * Runs the callback if and when the future is cancelled
    */
   onCancel(func: () => void) {
-    if (this.step.tag === "Pending") {
-      this.step.cancelCallbacks = this.step.cancelCallbacks ?? [];
-      this.step.cancelCallbacks.push(func);
-    } else if (this.step.tag === "Cancelled") {
+    if (this._state.tag === "Pending") {
+      this._state.cancelCallbacks = this._state.cancelCallbacks ?? [];
+      this._state.cancelCallbacks.push(func);
+    } else if (this._state.tag === "Cancelled") {
       func();
     }
   }
@@ -141,12 +141,10 @@ export class Future<A> {
    * Cancels the future
    */
   cancel() {
-    if (this.step.tag === "Pending") {
-      const { cancel, cancelCallbacks } = this.step;
-
+    if (this._state.tag === "Pending") {
+      const { cancel, cancelCallbacks } = this._state;
       // We have to set the future as cancelled first to avoid an infinite loop
-      this.step = { tag: "Cancelled" };
-
+      this._state = { tag: "Cancelled" };
       cancel?.();
       cancelCallbacks?.forEach((func) => func());
     }
