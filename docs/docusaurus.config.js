@@ -13,6 +13,14 @@ module.exports = {
   organizationName: "swan-io", // Usually your GitHub org/user name.
   projectName: "boxed", // Usually your repo name.
   themeConfig: {
+    algolia: {
+      appId: "LI6T7CQ5U8",
+      apiKey: "c78a649315c0b39c2d8752c61e24da6f",
+      indexName: "docs",
+      contextualSearch: true,
+      searchParameters: {},
+      searchPagePath: "search",
+    },
     navbar: {
       title: "Boxed",
       logo: {
