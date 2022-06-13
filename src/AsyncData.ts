@@ -156,14 +156,6 @@ const doneProto = (<A>(): Omit<Done<A>, "tag" | "value"> => ({
   },
 }))();
 
-const loadingProto = (<A>(): Omit<Loading<A>, "tag" | "value"> => ({
-  ...(asyncDataProto as IAsyncData<A>),
-}))();
-
-const notAskedProto = (<A>(): Omit<NotAsked<A>, "tag" | "value"> => ({
-  ...(asyncDataProto as IAsyncData<A>),
-}))();
-
 const Done = <A = never>(value: A): AsyncData<A> => {
   const asyncData = Object.create(doneProto) as Done<A>;
   asyncData.tag = "Done";
@@ -172,13 +164,13 @@ const Done = <A = never>(value: A): AsyncData<A> => {
 };
 
 const LOADING = (() => {
-  const asyncData = Object.create(loadingProto) as Loading<unknown>;
+  const asyncData = Object.create(asyncDataProto) as Loading<unknown>;
   asyncData.tag = "Loading";
   return asyncData;
 })();
 
 const NOT_ASKED = (() => {
-  const asyncData = Object.create(notAskedProto) as NotAsked<unknown>;
+  const asyncData = Object.create(asyncDataProto) as NotAsked<unknown>;
   asyncData.tag = "NotAsked";
   return asyncData;
 })();

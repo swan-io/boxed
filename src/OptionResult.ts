@@ -140,10 +140,6 @@ const someProto = (<A>(): Omit<Some<A>, "tag" | "value"> => ({
   },
 }))();
 
-const noneProto = (<A>(): Omit<None<A>, "tag" | "value"> => ({
-  ...(optionProto as IOption<A>),
-}))();
-
 const Some = <A = never>(value: A): Option<A> => {
   const option = Object.create(someProto) as Some<A>;
   option.tag = "Some";
@@ -152,7 +148,7 @@ const Some = <A = never>(value: A): Option<A> => {
 };
 
 const NONE = (() => {
-  const option = Object.create(noneProto) as None<unknown>;
+  const option = Object.create(optionProto) as None<unknown>;
   option.tag = "None";
   return option;
 })();
