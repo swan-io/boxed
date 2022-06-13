@@ -242,7 +242,7 @@ export const AsyncData = {
   },
 
   equals<A>(a: AsyncData<A>, b: AsyncData<A>, equals: (a: A, b: A) => boolean) {
-    return a.isDone() && b.isDone()
+    return a.tag === "Done" && b.tag === "Done"
       ? equals(a.value, b.value)
       : a.tag === b.tag;
   },

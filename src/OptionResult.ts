@@ -237,7 +237,7 @@ export const Option = {
     b: Option<A>,
     equals: (a: A, b: A) => boolean,
   ): boolean {
-    return a.isSome() && b.isSome()
+    return a.tag === "Some" && b.tag === "Some"
       ? equals(a.value, b.value)
       : a.tag === b.tag;
   },
@@ -567,7 +567,7 @@ export const Result = {
     if (a.tag !== b.tag) {
       return false;
     }
-    if (a.isError() && b.isError()) {
+    if (a.tag === "Error" && b.tag === "Error") {
       return true;
     }
     return equals(a.value as unknown as A, b.value as unknown as A);
