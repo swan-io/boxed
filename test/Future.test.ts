@@ -208,7 +208,7 @@ test("Future cancels and runs cancel effect", async () => {
     };
   });
   future.cancel();
-  expect(future.isCancelled()).toBe(true);
+  expect(future.step.tag === "Cancelled").toBe(true);
   expect(counter).toBe(0);
   expect(effect).toBe(1);
 });
@@ -226,8 +226,8 @@ test("Future cancels", async () => {
   });
   const future2 = future.map((item) => item + 1);
   future2.cancel();
-  expect(future.isCancelled()).toBe(false);
-  expect(future2.isCancelled()).toBe(true);
+  expect(future.step.tag === "Cancelled").toBe(false);
+  expect(future2.step.tag === "Cancelled").toBe(true);
   await future;
   expect(counter).toBe(1);
 });
@@ -257,10 +257,10 @@ test("Future doesn't cancel futures returned by flatMap", async () => {
   const future4 = future.map((item) => item + 1);
 
   future4.cancel();
-  expect(future.isCancelled()).toBe(false);
-  expect(future2.isCancelled()).toBe(false);
-  expect(future3.isCancelled()).toBe(false);
-  expect(future4.isCancelled()).toBe(true);
+  expect(future.step.tag === "Cancelled").toBe(false);
+  expect(future2.step.tag === "Cancelled").toBe(false);
+  expect(future3.step.tag === "Cancelled").toBe(false);
+  expect(future4.step.tag === "Cancelled").toBe(true);
   await Future.all([future, future2]);
   expect(counter).toBe(1);
   expect(secondCounter).toBe(1);
@@ -293,10 +293,10 @@ test("Future cancels to the top if specified", async () => {
   const future4 = future.map((item) => item + 1, true);
 
   future4.cancel();
-  expect(future.isCancelled()).toBe(true);
-  expect(future2.isCancelled()).toBe(false);
-  expect(future3.isCancelled()).toBe(true);
-  expect(future4.isCancelled()).toBe(true);
+  expect(future.step.tag === "Cancelled").toBe(true);
+  expect(future2.step.tag === "Cancelled").toBe(false);
+  expect(future3.step.tag === "Cancelled").toBe(true);
+  expect(future4.step.tag === "Cancelled").toBe(true);
   await future2;
   expect(counter).toBe(0);
   expect(effect).toBe(1);
@@ -318,8 +318,8 @@ test("Future cancels promise and runs cancel effect up the dependents", async ()
   const future2 = future.map((item) => item + 1);
 
   future.cancel();
-  expect(future.isCancelled()).toBe(true);
-  expect(future2.isCancelled()).toBe(true);
+  expect(future.step.tag === "Cancelled").toBe(true);
+  expect(future2.step.tag === "Cancelled").toBe(true);
 
   expect(counter).toBe(0);
 });
@@ -351,10 +351,10 @@ test("Future doesn't consider flatMap returned as dependents", async () => {
   const future4 = future.map((item) => item + 1);
 
   future.cancel();
-  expect(future.isCancelled()).toBe(true);
-  expect(future2.isCancelled()).toBe(false);
-  expect(future3.isCancelled()).toBe(true);
-  expect(future4.isCancelled()).toBe(true);
+  expect(future.step.tag === "Cancelled").toBe(true);
+  expect(future2.step.tag === "Cancelled").toBe(false);
+  expect(future3.step.tag === "Cancelled").toBe(true);
+  expect(future4.step.tag === "Cancelled").toBe(true);
 
   await future2;
   expect(counter).toBe(0);
