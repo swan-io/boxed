@@ -99,6 +99,9 @@ export class Future<A> {
     );
   };
 
+  /**
+   * For internal usage, do not use it directly
+   */
   _state:
     | {
         tag: "Pending";
