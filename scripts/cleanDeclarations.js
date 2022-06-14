@@ -8,7 +8,7 @@ const cleanDeclaration = (filename, updater) => {
   fs.writeFileSync(file, updater(content), "utf-8");
 };
 
-// Delete _state property declaration (only internal usage)
+// Delete _state property declaration (internal usage only)
 cleanDeclaration("Future", (content) => {
   return content.replace(/ *_state: {.*[^};]};/gs, "");
 });
