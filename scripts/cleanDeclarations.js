@@ -1,14 +1,14 @@
 const path = require("path");
 const fs = require("fs");
 
-/** @type {(name: string, updater: (file: string) => string) => void} */
+/** @type {(filename: string, updater: (content: string) => string) => void} */
 const cleanDeclaration = (filename, updater) => {
-  const filePath = path.resolve(__dirname, "..", "dist", `${filename}.d.ts`);
-  const content = fs.readFileSync(filePath, "utf-8");
-  fs.writeFileSync(filePath, updater(content), "utf-8");
+  const file = path.resolve(__dirname, "..", "dist", `${filename}.d.ts`);
+  const content = fs.readFileSync(file, "utf-8");
+  fs.writeFileSync(file, updater(content), "utf-8");
 };
 
-// Delete _state property declaration (internal usage)
+// Delete _state property declaration (only internal usage)
 cleanDeclaration("Future", (content) => {
-  return content.replace(/ *_state: .+;/g, "");
+  return content.replace(/ *_state: {.*[^};]};/gs, "");
 });

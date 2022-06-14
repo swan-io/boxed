@@ -3,15 +3,7 @@ import { Result } from "./OptionResult";
 import { LooseRecord } from "./types";
 import { zip } from "./ZipUnzip";
 
-type FutureInternalState<A> =
-  | {
-      tag: "Pending";
-      resolveCallbacks?: Array<(value: A) => void>;
-      cancel?: void | (() => void);
-      cancelCallbacks?: Array<() => void>;
-    }
-  | { tag: "Cancelled" }
-  | { tag: "Resolved"; value: A };
+const foo = (reg: RegExp) => {};
 
 function FutureInit<A>(
   this: Future<A>,
@@ -109,7 +101,16 @@ export class Future<A> {
     );
   };
 
-  _state: FutureInternalState<A>; // Will be stripped from type declaration
+  // Will be stripped from type declarations
+  _state:
+    | {
+        tag: "Pending";
+        resolveCallbacks?: Array<(value: A) => void>;
+        cancel?: void | (() => void);
+        cancelCallbacks?: Array<() => void>;
+      }
+    | { tag: "Cancelled" }
+    | { tag: "Resolved"; value: A };
 
   constructor(_init: (resolver: (value: A) => void) => (() => void) | void) {
     this._state = { tag: "Pending" };
