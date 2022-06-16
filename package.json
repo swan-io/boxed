@@ -30,7 +30,7 @@
     "trailingComma": "all"
   },
   "scripts": {
-    "build": "yarn clean && microbundle -f cjs,es && node scripts/cleanDeclarations.js",
+    "build": "yarn clean && microbundle -f cjs,es",
     "clean": "rm -rf dist",
     "format": "prettier '**/*' -u -w",
     "prepare": "yarn test && yarn build",

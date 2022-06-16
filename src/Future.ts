@@ -101,8 +101,8 @@ export class Future<A> {
     );
   };
 
-  // Will be stripped from type declarations
-  _state:
+  // Not accessible from the outside
+  protected _state:
     | {
         tag: "Pending";
         resolveCallbacks?: Array<(value: A) => void>;
