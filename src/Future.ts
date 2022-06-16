@@ -3,8 +3,6 @@ import { Result } from "./OptionResult";
 import { LooseRecord } from "./types";
 import { zip } from "./ZipUnzip";
 
-const foo = (reg: RegExp) => {};
-
 function FutureInit<A>(
   this: Future<A>,
   init: (resolver: (value: A) => void) => (() => void) | void,
@@ -112,7 +110,9 @@ export class Future<A> {
     | { tag: "Cancelled" }
     | { tag: "Resolved"; value: A };
 
-  constructor(_init: (resolver: (value: A) => void) => (() => void) | void) {
+  protected constructor(
+    _init: (resolver: (value: A) => void) => (() => void) | void,
+  ) {
     this._state = { tag: "Pending" };
   }
 
