@@ -4,7 +4,7 @@ import { Deferred } from "../src/Deferred";
 test("Deferred", async () => {
   const [future, resolve] = Deferred.make();
 
-  future.get((n) => {
+  future.onResolve((n) => {
     expect(n).toEqual(1);
   });
 

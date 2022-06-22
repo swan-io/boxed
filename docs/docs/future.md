@@ -40,16 +40,16 @@ const otherFuture = Future.make((resolve) => {
 
 ## Methods
 
-### .get(f)
+### .onResolve(f)
 
 ```ts
-Future<A>.get(func: (value: A) => void): void
+Future<A>.onResolve(func: (value: A) => void): void
 ```
 
 Runs `f` with the future value as argument when available.
 
 ```ts title="Examples"
-Future.value(1).get(console.log);
+Future.value(1).onResolve(console.log);
 // Log: 1
 ```
 

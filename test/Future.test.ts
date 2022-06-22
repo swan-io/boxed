@@ -41,7 +41,7 @@ test("Future flatMap", async () => {
   expect(result).toBe(60);
 });
 
-test("Future multiple get", async () => {
+test("Future multiple onResolve", async () => {
   let count = 0;
   const future = Future.make<number>((resolve) => {
     count++;
@@ -50,8 +50,8 @@ test("Future multiple get", async () => {
 
   const result = await future;
 
-  future.get(() => {});
-  future.get(() => {});
+  future.onResolve(() => {});
+  future.onResolve(() => {});
 
   expect(result).toBe(1);
 });

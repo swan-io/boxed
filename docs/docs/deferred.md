@@ -13,7 +13,7 @@ import { Deferred } from "@swan-io/boxed";
 const [future, resolve] = Deferred.make<string>();
 
 // subscribe to the promise
-future.get(console.log);
+future.onResolve(console.log);
 
 // resolve from elsewhere
 resolve("Hello!");
