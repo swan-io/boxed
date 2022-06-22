@@ -171,7 +171,10 @@ export class Future<A> {
       }
     });
 
-    this.onCancel(future.cancel);
+    this.onCancel(() => {
+      future.cancel();
+    });
+
     return future;
   }
 
@@ -193,7 +196,7 @@ export class Future<A> {
       this.onResolve((value) => {
         const returnedFuture = func(value);
         returnedFuture.onResolve(resolve);
-        returnedFuture.onCancel(future.cancel);
+        returnedFuture.onCancel(() => future.cancel());
       });
 
       if (propagateCancel) {
@@ -203,7 +206,10 @@ export class Future<A> {
       }
     });
 
-    this.onCancel(future.cancel);
+    this.onCancel(() => {
+      future.cancel();
+    });
+
     return future;
   }
 
