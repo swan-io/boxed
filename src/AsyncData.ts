@@ -1,223 +1,255 @@
 import { keys, values } from "./Dict";
 import { Option } from "./OptionResult";
+import { LooseRecord, Remap } from "./types";
 import { zip } from "./ZipUnzip";
 
-export class AsyncData<A> {
-  /**
-   * Create an AsyncData.Done value
-   */
-  static Done = <A = never>(value: A): AsyncData<A> => {
-    const asyncData = Object.create(proto) as AsyncData<A>;
-    asyncData.value = { tag: "Done", value };
-    return asyncData;
-  };
-
-  /**
-   * Create an AsyncData.Loading value
-   */
-  static Loading = <A = never>(): AsyncData<A> => {
-    return LOADING as AsyncData<A>;
-  };
-
-  /**
-   * Create an AsyncData.NotAsked value
-   */
-  static NotAsked = <A = never>(): AsyncData<A> => {
-    return NOT_ASKED as AsyncData<A>;
-  };
-
-  /**
-   * Turns an array of asyncData into an asyncData of array
-   */
-  static all = <AsyncDatas extends readonly AsyncData<any>[] | []>(
-    asyncDatas: AsyncDatas,
-  ): AsyncData<{
-    -readonly [P in keyof AsyncDatas]: AsyncDatas[P] extends AsyncData<infer V>
-      ? V
-      : never;
-  }> => {
-    const length = asyncDatas.length;
-    let acc = AsyncData.Done<Array<unknown>>([]);
-    let index = 0;
-    while (true) {
-      if (index >= length) {
-        return acc as unknown as AsyncData<{
-          -readonly [P in keyof AsyncDatas]: AsyncDatas[P] extends AsyncData<
-            infer V
-          >
-            ? V
-            : never;
-        }>;
-      }
-      const item = asyncDatas[index] as AsyncData<unknown>;
-      acc = acc.flatMap((array) => {
-        return item.map((value) => {
-          array.push(value);
-          return array;
-        });
-      });
-      index++;
-    }
-  };
-
-  /**
-   * Turns an dict of asyncData into a asyncData of dict
-   */
-  static allFromDict = <Dict extends Record<string, AsyncData<any>>>(
-    dict: Dict,
-  ): AsyncData<{
-    -readonly [P in keyof Dict]: Dict[P] extends AsyncData<infer T> ? T : never;
-  }> => {
-    const dictKeys = keys(dict);
-    return AsyncData.all(values(dict)).map((values) =>
-      Object.fromEntries(zip(dictKeys, values)),
-    );
-  };
-
-  static equals = <A>(
-    a: AsyncData<A>,
-    b: AsyncData<A>,
-    equals: (a: A, b: A) => boolean,
-  ) => {
-    if (a.isDone() && b.isDone()) {
-      return equals(a.value.value, b.value.value);
-    }
-    return a.value.tag === b.value.tag;
-  };
-
-  static pattern = {
-    Done: <T>(x: T) => ({ value: { tag: "Done", value: x } } as const),
-    NotAsked: { value: { tag: "NotAsked" } } as const,
-    Loading: { value: { tag: "Loading" } } as const,
-  };
-
-  value: { tag: "NotAsked" } | { tag: "Loading" } | { tag: "Done"; value: A };
-
-  constructor() {
-    this.value = { tag: "NotAsked" };
-  }
+interface IAsyncData<A> {
   /**
    * Returns the AsyncData containing the value from the callback
    *
    * (AsyncData\<A>, A => B) => AsyncData\<B>
    */
-  map<B>(f: (value: A) => B): AsyncData<B> {
-    if (this.value.tag === "Done") {
-      return AsyncData.Done(f(this.value.value as A));
-    } else {
-      return this as unknown as AsyncData<B>;
-    }
-  }
+  map<B>(this: AsyncData<A>, func: (value: A) => B): AsyncData<B>;
+
   /**
    * Returns the AsyncData containing the value from the callback
    *
    * (AsyncData\<A>, A => AsyncData\<B>) => AsyncData\<B>
    */
-  flatMap<B>(f: (value: A) => AsyncData<B>): AsyncData<B> {
-    if (this.value.tag === "Done") {
-      return f(this.value.value as A);
-    } else {
-      return this as unknown as AsyncData<B>;
-    }
-  }
+  flatMap<B>(
+    this: AsyncData<A>,
+    func: (value: A) => AsyncData<B>,
+  ): AsyncData<B>;
+
   /**
    * Return the value if present, and the fallback otherwise
    *
    * (AsyncData\<A>, A) => A
    */
-  getWithDefault(defaultValue: A): A {
-    if (this.value.tag === "Done") {
-      return this.value.value as A;
-    } else {
-      return defaultValue;
-    }
-  }
+  getWithDefault(this: AsyncData<A>, defaultValue: A): A;
+
   /**
    * Explodes the AsyncData given its case
    */
-  match<B>(config: {
-    Done: (value: A) => B;
-    Loading: () => B;
-    NotAsked: () => B;
-  }): B {
-    if (this.value.tag === "Done") {
-      return config.Done(this.value.value as A);
-    } else {
-      if (this.value.tag === "Loading") {
-        return config.Loading();
-      } else {
-        return config.NotAsked();
-      }
-    }
-  }
+  match<B>(
+    this: AsyncData<A>,
+    config: {
+      Done: (value: A) => B;
+      Loading: () => B;
+      NotAsked: () => B;
+    },
+  ): B;
+
   /**
    * Runs the callback and returns `this`
    */
-  tap(func: (asyncData: AsyncData<A>) => unknown): AsyncData<A> {
-    func(this);
-    return this;
-  }
-  /**
-   * Typeguard
-   */
-  isDone(): this is AsyncData<A> & {
-    value: { tag: "Done"; value: A };
-  } {
-    return this.value.tag === "Done";
-  }
-  /**
-   * Typeguard
-   */
-  isLoading(): this is AsyncData<A> & {
-    value: { tag: "Loading" };
-  } {
-    return this.value.tag === "Loading";
-  }
-  /**
-   * Typeguard
-   */
-  isNotAsked(): this is AsyncData<A> & {
-    value: { tag: "NotAsked" };
-  } {
-    return this.value.tag === "NotAsked";
-  }
+  tap(
+    this: AsyncData<A>,
+    func: (asyncData: AsyncData<A>) => unknown,
+  ): AsyncData<A>;
+
   /**
    * Return an option of the value
    *
    * (AsyncData\<A>) => Option\<A>
    */
-  toOption(): Option<A> {
-    if (this.value.tag === "Done") {
-      return Option.Some(this.value.value) as Option<A>;
-    } else {
-      return Option.None() as Option<A>;
-    }
-  }
+  toOption(this: AsyncData<A>): Option<A>;
+
+  /**
+   * Typeguard
+   */
+  isDone(this: AsyncData<A>): this is Done<A>;
+
+  /**
+   * Typeguard
+   */
+  isLoading(this: AsyncData<A>): this is Loading<A>;
+
+  /**
+   * Typeguard
+   */
+  isNotAsked(this: AsyncData<A>): this is NotAsked<A>;
+}
+
+type Done<A> = Remap<IAsyncData<A>> & {
+  tag: "Done";
+  value: A;
 
   /**
    * Returns the value. Use within `if (asyncData.isDone()) { ... }`
    */
-  get(this: AsyncData<A> & { value: { tag: "Done"; value: A } }): A {
-    return this.value.value;
-  }
-}
+  get(this: Done<A>): A;
+};
+
+type Loading<A> = Remap<IAsyncData<A>> & {
+  tag: "Loading";
+};
+
+type NotAsked<A> = Remap<IAsyncData<A>> & {
+  tag: "NotAsked";
+};
+
+export type AsyncData<A> = Done<A> | Loading<A> | NotAsked<A>;
+
+const asyncDataProto = (<A>(): IAsyncData<A> => ({
+  map<B>(this: AsyncData<A>, func: (value: A) => B) {
+    return this.tag === "Done"
+      ? Done(func(this.value))
+      : (this as unknown as AsyncData<B>);
+  },
+
+  flatMap<B>(this: AsyncData<A>, func: (value: A) => AsyncData<B>) {
+    return this.tag === "Done"
+      ? func(this.value)
+      : (this as unknown as AsyncData<B>);
+  },
+
+  getWithDefault(this: AsyncData<A>, defaultValue: A) {
+    return this.tag === "Done" ? this.value : defaultValue;
+  },
+
+  match<B>(
+    this: AsyncData<A>,
+    config: {
+      Done: (value: A) => B;
+      Loading: () => B;
+      NotAsked: () => B;
+    },
+  ) {
+    return this.tag === "Done"
+      ? config.Done(this.value)
+      : this.tag === "Loading"
+      ? config.Loading()
+      : config.NotAsked();
+  },
+
+  tap(this: AsyncData<A>, func: (asyncData: AsyncData<A>) => unknown) {
+    func(this);
+    return this;
+  },
+
+  toOption(this: AsyncData<A>) {
+    return this.tag === "Done" ? Option.Some(this.value) : Option.None();
+  },
+
+  isDone(this: AsyncData<A>): boolean {
+    return this.tag === "Done";
+  },
+
+  isLoading(this: AsyncData<A>): boolean {
+    return this.tag === "Loading";
+  },
+
+  isNotAsked(this: AsyncData<A>): boolean {
+    return this.tag === "NotAsked";
+  },
+}))();
 
 // @ts-expect-error
-AsyncData.prototype.__boxed_type__ = "AsyncData";
+asyncDataProto.__boxed_type__ = "AsyncData";
 
-const proto = Object.create(
-  null,
-  Object.getOwnPropertyDescriptors(AsyncData.prototype),
-);
+const doneProto = (<A>(): Omit<Done<A>, "tag" | "value"> => ({
+  ...(asyncDataProto as IAsyncData<A>),
+
+  get() {
+    return this.value;
+  },
+}))();
+
+const Done = <A = never>(value: A): AsyncData<A> => {
+  const asyncData = Object.create(doneProto) as Done<A>;
+  asyncData.tag = "Done";
+  asyncData.value = value;
+  return asyncData;
+};
 
 const LOADING = (() => {
-  const asyncData = Object.create(proto);
-  asyncData.value = { tag: "Loading" };
+  const asyncData = Object.create(asyncDataProto) as Loading<unknown>;
+  asyncData.tag = "Loading";
   return asyncData;
 })();
 
 const NOT_ASKED = (() => {
-  const asyncData = Object.create(proto);
-  asyncData.value = { tag: "NotAsked" };
+  const asyncData = Object.create(asyncDataProto) as NotAsked<unknown>;
+  asyncData.tag = "NotAsked";
   return asyncData;
 })();
+
+const Loading = <A = never>(): AsyncData<A> => LOADING as Loading<A>;
+const NotAsked = <A = never>(): AsyncData<A> => NOT_ASKED as NotAsked<A>;
+
+export const AsyncData = {
+  /**
+   * Create an AsyncData.Done value
+   */
+  Done,
+
+  /**
+   * Create an AsyncData.Loading value
+   */
+  Loading,
+
+  /**
+   * Create an AsyncData.NotAsked value
+   */
+  NotAsked,
+
+  /**
+   * Turns an array of asyncData into an asyncData of array
+   */
+  all<AsyncDatas extends AsyncData<any>[] | []>(asyncDatas: AsyncDatas) {
+    const length = asyncDatas.length;
+    let acc = AsyncData.Done<Array<unknown>>([]);
+    let index = 0;
+
+    while (true) {
+      if (index >= length) {
+        return acc as AsyncData<{
+          [K in keyof AsyncDatas]: AsyncDatas[K] extends AsyncData<infer T>
+            ? T
+            : never;
+        }>;
+      }
+
+      const item = asyncDatas[index];
+
+      if (item != null) {
+        acc = acc.flatMap((array) => {
+          return item.map((value) => {
+            array.push(value);
+            return array;
+          });
+        });
+      }
+
+      index++;
+    }
+  },
+
+  /**
+   * Turns an dict of asyncData into a asyncData of dict
+   */
+  allFromDict<Dict extends LooseRecord<AsyncData<any>>>(
+    dict: Dict,
+  ): AsyncData<{
+    [K in keyof Dict]: Dict[K] extends AsyncData<infer T> ? T : never;
+  }> {
+    const dictKeys = keys(dict);
+
+    return AsyncData.all(values(dict)).map((values) =>
+      Object.fromEntries(zip(dictKeys, values)),
+    );
+  },
+
+  equals<A>(a: AsyncData<A>, b: AsyncData<A>, equals: (a: A, b: A) => boolean) {
+    return a.tag === "Done" && b.tag === "Done"
+      ? equals(a.value, b.value)
+      : a.tag === b.tag;
+  },
+
+  pattern: {
+    Done: <T>(x: T) => ({ tag: "Done", value: x } as const),
+    NotAsked: { tag: "NotAsked" } as const,
+    Loading: { tag: "Loading" } as const,
+  },
+};

@@ -100,10 +100,11 @@ test("Option.equals", () => {
 
 test("Option serialize", () => {
   expect(JSON.parse(JSON.stringify(Option.None()))).toEqual({
-    value: { tag: "None" },
+    tag: "None",
   });
   expect(JSON.parse(JSON.stringify(Option.Some(1)))).toEqual({
-    value: { tag: "Some", value: 1 },
+    tag: "Some",
+    value: 1,
   });
 });
 

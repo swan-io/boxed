@@ -1,6 +1,6 @@
 type Ref<T> = { contents: T };
 
-const NOT_COMPUTED = Symbol.for("NOT_COMPUTED");
+const NOT_COMPUTED = Symbol("NOT_COMPUTED");
 
 export const Lazy = <Value>(func: () => Value): { get: () => Value } => {
   const value: Ref<Value | typeof NOT_COMPUTED> = { contents: NOT_COMPUTED };

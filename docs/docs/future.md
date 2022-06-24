@@ -107,42 +107,6 @@ Future.value(3).tap(console.log);
 // Future<3>
 ```
 
-### .isPending()
-
-```ts
-Future<A>.isPending(): boolean
-```
-
-Type guard. Returns wether the future is pending or not.
-
-```ts title="Examples"
-future.isPending();
-```
-
-### .isCancelled()
-
-```ts
-Future<A>.isCancelled(): boolean
-```
-
-Type guard. Returns wether the future is cancelled or not.
-
-```ts title="Examples"
-future.isCancelled();
-```
-
-### .isResolved()
-
-```ts
-Future<A>.isResolved(): boolean
-```
-
-Type guard. Returns wether the future is resolved or not.
-
-```ts title="Examples"
-future.isResolved();
-```
-
 ### .toPromise()
 
 ```ts

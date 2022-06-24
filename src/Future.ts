@@ -1,31 +1,21 @@
 import { keys, values } from "./Dict";
 import { Result } from "./OptionResult";
+import { LooseRecord } from "./types";
 import { zip } from "./ZipUnzip";
-
-type PendingPayload<A> = {
-  resolveCallbacks?: Array<(value: A) => void>;
-  cancelCallbacks?: Array<() => void>;
-  cancel?: void | (() => void);
-};
 
 function FutureInit<A>(
   this: Future<A>,
   init: (resolver: (value: A) => void) => (() => void) | void,
 ) {
   const resolver = (value: A) => {
-    if (this.tag === "Pending") {
-      const pending = this.pending as PendingPayload<A>;
-      const resolveCallbacks = pending.resolveCallbacks;
-      resolveCallbacks?.forEach((func) => func(value));
-      this.tag = "Resolved";
-      this.value = value;
-      this.pending = undefined;
+    if (this._state.tag === "Pending") {
+      this._state.resolveCallbacks?.forEach((func) => func(value));
+      this._state = { tag: "Resolved", value };
     }
   };
-  const pendingPayload: PendingPayload<A> = {};
-  this.tag = "Pending";
-  this.pending = pendingPayload;
-  pendingPayload.cancel = init(resolver);
+
+  this._state = { tag: "Pending" };
+  this._state.cancel = init(resolver);
 }
 
 export class Future<A> {
@@ -35,7 +25,7 @@ export class Future<A> {
   static make = <A>(
     init: (resolver: (value: A) => void) => (() => void) | void,
   ): Future<A> => {
-    const future = Object.create(proto);
+    const future = Object.create(futureProto);
     FutureInit.call(future, init);
     return future as Future<A>;
   };
@@ -44,8 +34,8 @@ export class Future<A> {
    * Creates a future resolved to the passed value
    */
   static value = <A>(value: A): Future<A> => {
-    const future = Object.create(proto);
-    FutureInit.call(future, (resolve) => resolve(value));
+    const future = Object.create(futureProto);
+    future._state = { tag: "Resolved", value };
     return future as Future<A>;
   };
 
@@ -67,29 +57,29 @@ export class Future<A> {
   static all = <Futures extends readonly Future<any>[] | []>(
     futures: Futures,
     propagateCancel = false,
-  ): Future<{
-    -readonly [P in keyof Futures]: Futures[P] extends Future<infer T>
-      ? T
-      : never;
-  }> => {
+  ) => {
     const length = futures.length;
     let acc = Future.value<Array<unknown>>([]);
     let index = 0;
+
     while (true) {
       if (index >= length) {
         return acc as unknown as Future<{
-          -readonly [P in keyof Futures]: Futures[P] extends Future<infer T>
-            ? T
-            : never;
+          [K in keyof Futures]: Futures[K] extends Future<infer T> ? T : never;
         }>;
       }
-      const item = futures[index] as Future<unknown>;
-      acc = acc.flatMap((array) => {
-        return item.map((value) => {
-          array.push(value);
-          return array;
+
+      const item = futures[index];
+
+      if (item != null) {
+        acc = acc.flatMap((array) => {
+          return item.map((value) => {
+            array.push(value);
+            return array;
+          }, propagateCancel);
         }, propagateCancel);
-      }, propagateCancel);
+      }
+
       index++;
     }
   };
@@ -97,83 +87,72 @@ export class Future<A> {
   /**
    * Turns an dict of futures into a future of dict
    */
-  static allFromDict = <Dict extends Record<string, Future<any>>>(
+  static allFromDict = <Dict extends LooseRecord<Future<any>>>(
     dict: Dict,
   ): Future<{
-    -readonly [P in keyof Dict]: Dict[P] extends Future<infer T> ? T : never;
+    [K in keyof Dict]: Dict[K] extends Future<infer T> ? T : never;
   }> => {
     const dictKeys = keys(dict);
+
     return Future.all(values(dict)).map((values) =>
       Object.fromEntries(zip(dictKeys, values)),
     );
   };
 
-  tag: "Pending" | "Cancelled" | "Resolved";
-  value?: A;
-  pending?: PendingPayload<A>;
-  constructor(_init: (resolver: (value: A) => void) => (() => void) | void) {
-    const pendingPayload: PendingPayload<A> = {};
-    this.tag = "Pending";
-    this.pending = pendingPayload;
+  // Not accessible from the outside
+  protected _state:
+    | {
+        tag: "Pending";
+        resolveCallbacks?: Array<(value: A) => void>;
+        cancel?: void | (() => void);
+        cancelCallbacks?: Array<() => void>;
+      }
+    | { tag: "Cancelled" }
+    | { tag: "Resolved"; value: A };
+
+  protected constructor(
+    _init: (resolver: (value: A) => void) => (() => void) | void,
+  ) {
+    this._state = { tag: "Pending" };
   }
-  isPending(): this is Future<A> & {
-    tag: "Pending";
-    value: PendingPayload<A>;
-  } {
-    return this.tag === "Pending";
-  }
-  isCancelled(): this is Future<A> & {
-    tag: "Cancelled";
-    value: undefined;
-  } {
-    return this.tag === "Cancelled";
-  }
-  isResolved(): this is Future<A> & {
-    tag: "Resolved";
-    value: A;
-  } {
-    return this.tag === "Resolved";
-  }
+
   /**
    * Runs the callback with the future value when resolved
    */
   get(func: (value: A) => void) {
-    if (this.isPending()) {
-      const pending = this.pending as PendingPayload<A>;
-      pending.resolveCallbacks = pending.resolveCallbacks ?? [];
-      pending.resolveCallbacks.push(func);
-    }
-    if (this.isResolved()) {
-      func(this.value);
+    if (this._state.tag === "Pending") {
+      this._state.resolveCallbacks = this._state.resolveCallbacks ?? [];
+      this._state.resolveCallbacks.push(func);
+    } else if (this._state.tag === "Resolved") {
+      func(this._state.value);
     }
   }
+
   /**
    * Runs the callback if and when the future is cancelled
    */
   onCancel(func: () => void) {
-    if (this.isPending()) {
-      const pending = this.pending as PendingPayload<A>;
-      pending.cancelCallbacks = pending.cancelCallbacks ?? [];
-      pending.cancelCallbacks.push(func);
-    }
-    if (this.isCancelled()) {
+    if (this._state.tag === "Pending") {
+      this._state.cancelCallbacks = this._state.cancelCallbacks ?? [];
+      this._state.cancelCallbacks.push(func);
+    } else if (this._state.tag === "Cancelled") {
       func();
     }
   }
+
   /**
    * Cancels the future
    */
   cancel() {
-    if (this.tag === "Pending") {
-      this.tag = "Cancelled";
-      this.value = undefined;
-      const pending = this.pending as PendingPayload<A>;
-      const cancelCallbacks = pending.cancelCallbacks;
-      pending.cancel?.();
+    if (this._state.tag === "Pending") {
+      const { cancel, cancelCallbacks } = this._state;
+      // We have to set the future as cancelled first to avoid an infinite loop
+      this._state = { tag: "Cancelled" };
+      cancel?.();
       cancelCallbacks?.forEach((func) => func());
-      this.pending = undefined;
     }
   }
+
   /**
    * Returns the Future containing the value from the callback
    *
@@ -184,21 +163,26 @@ export class Future<A> {
       this.get((value) => {
         resolve(func(value));
       });
+
       if (propagateCancel) {
         return () => {
           this.cancel();
         };
       }
     });
+
     this.onCancel(() => {
       future.cancel();
     });
-    return future as Future<B>;
+
+    return future;
   }
+
   then(func: (value: A) => void) {
     this.get(func);
     return this;
   }
+
   /**
    * Returns the Future containing the value from the callback
    *
@@ -214,24 +198,29 @@ export class Future<A> {
         returnedFuture.get(resolve);
         returnedFuture.onCancel(() => future.cancel());
       });
+
       if (propagateCancel) {
         return () => {
           this.cancel();
         };
       }
     });
+
     this.onCancel(() => {
       future.cancel();
     });
-    return future as Future<B>;
+
+    return future;
   }
+
   /**
    * Runs the callback and returns `this`
    */
-  tap(func: (value: A) => unknown): Future<A> {
+  tap(this: Future<A>, func: (value: A) => unknown): Future<A> {
     this.get(func);
-    return this as Future<A>;
+    return this;
   }
+
   /**
    * For Future<Result<*>>:
    *
@@ -247,8 +236,10 @@ export class Future<A> {
         Error: () => {},
       });
     });
-    return this as Future<Result<A, E>>;
+
+    return this;
   }
+
   /**
    * For Future<Result<*>>:
    *
@@ -264,8 +255,10 @@ export class Future<A> {
         Error: (error) => func(error),
       });
     });
-    return this as Future<Result<A, E>>;
+
+    return this;
   }
+
   /**
    * For Future<Result<*>>:
    *
@@ -283,6 +276,7 @@ export class Future<A> {
       });
     }, propagateCancel);
   }
+
   /**
    * For Future<Result<*>>:
    *
@@ -300,6 +294,7 @@ export class Future<A> {
       });
     }, propagateCancel);
   }
+
   /**
    * For Future<Result<*>>:
    *
@@ -317,6 +312,7 @@ export class Future<A> {
       });
     }, propagateCancel);
   }
+
   /**
    * For Future<Result<*>>:
    *
@@ -334,6 +330,7 @@ export class Future<A> {
       });
     }, propagateCancel);
   }
+
   /**
    * For Future<Result<*>>:
    *
@@ -351,6 +348,7 @@ export class Future<A> {
       });
     }, propagateCancel);
   }
+
   /**
    * Converts the future into a promise
    */
@@ -359,6 +357,7 @@ export class Future<A> {
       this.get(resolve);
     });
   }
+
   /**
    * For Future<Result<*>>:
    *
@@ -376,7 +375,7 @@ export class Future<A> {
   }
 }
 
-const proto = Object.create(
+const futureProto = Object.create(
   null,
   Object.getOwnPropertyDescriptors(Future.prototype),
 );
