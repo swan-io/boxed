@@ -5,19 +5,19 @@ Tested on a M1 Pro MacBook Pro.
 ## Option
 
 ```
-fp-ts Option none x 134,113,171 ops/sec ±0.14% (98 runs sampled)
-fp-ts Option some x 94,271,428 ops/sec ±0.23% (101 runs sampled)
-fp-ts Option some chain x 117,119,987 ops/sec ±1.33% (96 runs sampled)
-Boxed Option none x 156,484,244 ops/sec ±0.18% (100 runs sampled)
-Boxed Option some x 117,831,281 ops/sec ±0.26% (96 runs sampled)
-Boxed Option some flatMap x 116,963,368 ops/sec ±0.37% (98 runs sampled)
+fp-ts Option none x 134,775,969 ops/sec ±0.70% (99 runs sampled)
+fp-ts Option some x 95,087,860 ops/sec ±0.26% (97 runs sampled)
+fp-ts Option some chain x 121,914,020 ops/sec ±0.19% (98 runs sampled)
+Boxed Option none x 157,293,978 ops/sec ±0.11% (98 runs sampled)
+Boxed Option some x 204,144,235 ops/sec ±0.27% (94 runs sampled)
+Boxed Option some flatMap x 204,023,130 ops/sec ±0.65% (97 runs sampled)
 ```
 
 ## Result
 
 ```
-fp-ts Result x 109,746,377 ops/sec ±0.83% (96 runs sampled)
-Boxed Result x 112,607,103 ops/sec ±0.74% (95 runs sampled)
+fp-ts Result x 114,543,587 ops/sec ±0.15% (99 runs sampled)
+Boxed Result x 202,457,204 ops/sec ±0.27% (100 runs sampled)
 ```
 
 ## Future
@@ -25,6 +25,6 @@ Boxed Result x 112,607,103 ops/sec ±0.74% (95 runs sampled)
 Careful on the interpretation of the following, as Future doesn't use microtasks and calls its listeners synchronously.
 
 ```
-Future x 34,402,291 ops/sec ±0.89% (96 runs sampled)
-Promise x 12,175,014 ops/sec ±2.13% (88 runs sampled)
+Future x 36,365,914 ops/sec ±0.81% (92 runs sampled)
+Promise x 12,402,743 ops/sec ±0.94% (90 runs sampled)
 ```
