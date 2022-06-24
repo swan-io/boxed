@@ -10,7 +10,9 @@
     "url": "https://github.com/swan-io/boxed.git"
   },
   "main": "dist/Boxed.js",
+  "module": "dist/Boxed.mjs",
   "source": "src/Boxed.ts",
+  "types": "dist/Boxed.d.ts",
   "files": [
     "LICENSE",
     "dist",
@@ -41,12 +43,12 @@
   "devDependencies": {
     "@types/benchmark": "^2.1.1",
     "benchmark": "^2.1.4",
-    "fp-ts": "^2.11.9",
-    "microbundle": "^0.14.2",
-    "prettier": "^2.6.0",
-    "prettier-plugin-organize-imports": "^2.3.4",
-    "ts-pattern": "^4.0.0",
-    "typescript": "^4.6.2",
-    "vitest": "^0.7.4"
+    "fp-ts": "^2.12.1",
+    "microbundle": "^0.15.0",
+    "prettier": "^2.7.1",
+    "prettier-plugin-organize-imports": "^3.0.0",
+    "ts-pattern": "^4.0.3",
+    "typescript": "^4.7.4",
+    "vitest": "^0.15.2"
   }
 }
