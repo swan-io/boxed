@@ -119,7 +119,7 @@ export class Future<A> {
   /**
    * Runs the callback with the future value when resolved
    */
-  get(func: (value: A) => void) {
+  onResolve(func: (value: A) => void) {
     if (this._state.tag === "Pending") {
       this._state.resolveCallbacks = this._state.resolveCallbacks ?? [];
       this._state.resolveCallbacks.push(func);
@@ -160,7 +160,7 @@ export class Future<A> {
    */
   map<B>(func: (value: A) => B, propagateCancel = false): Future<B> {
     const future = Future.make<B>((resolve) => {
-      this.get((value) => {
+      this.onResolve((value) => {
         resolve(func(value));
       });
 
@@ -179,7 +179,7 @@ export class Future<A> {
   }
 
   then(func: (value: A) => void) {
-    this.get(func);
+    this.onResolve(func);
     return this;
   }
 
@@ -193,9 +193,9 @@ export class Future<A> {
     propagateCancel = false,
   ): Future<B> {
     const future = Future.make<B>((resolve) => {
-      this.get((value) => {
+      this.onResolve((value) => {
         const returnedFuture = func(value);
-        returnedFuture.get(resolve);
+        returnedFuture.onResolve(resolve);
         returnedFuture.onCancel(() => future.cancel());
       });
 
@@ -217,7 +217,7 @@ export class Future<A> {
    * Runs the callback and returns `this`
    */
   tap(this: Future<A>, func: (value: A) => unknown): Future<A> {
-    this.get(func);
+    this.onResolve(func);
     return this;
   }
 
@@ -230,7 +230,7 @@ export class Future<A> {
     this: Future<Result<A, E>>,
     func: (value: A) => unknown,
   ): Future<Result<A, E>> {
-    this.get((value) => {
+    this.onResolve((value) => {
       value.match({
         Ok: (value) => func(value),
         Error: () => {},
@@ -249,7 +249,7 @@ export class Future<A> {
     this: Future<Result<A, E>>,
     func: (value: E) => unknown,
   ): Future<Result<A, E>> {
-    this.get((value) => {
+    this.onResolve((value) => {
       value.match({
         Ok: () => {},
         Error: (error) => func(error),
@@ -354,7 +354,7 @@ export class Future<A> {
    */
   toPromise(): Promise<A> {
     return new Promise((resolve) => {
-      this.get(resolve);
+      this.onResolve(resolve);
     });
   }
 
@@ -365,7 +365,7 @@ export class Future<A> {
    */
   resultToPromise<A, E>(this: Future<Result<A, E>>): Promise<A> {
     return new Promise((resolve, reject) => {
-      this.get((value) => {
+      this.onResolve((value) => {
         value.match({
           Ok: resolve,
           Error: reject,

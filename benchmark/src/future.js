@@ -6,7 +6,7 @@ const suite = new Benchmark.Suite();
 suite.add("Future", () => {
   Future.value(1)
     .map((x) => x + 1)
-    .get((v) => {});
+    .onResolve((v) => {});
 });
 
 suite.add("Promise", {
