@@ -1,3 +1,14 @@
+# 0.10.0
+
+Breaking changes:
+
+- Renamed `future.get` to `future.onResolve` (7fd9442)
+- Remove `isPending`, `isCancelled` and `isResolved` from Future (d759e66)
+
+Features:
+
+- Improve discrimiting unions (d759e66)
+
 # 0.9.0
 
 Breaking changes:
