@@ -1,6 +1,6 @@
 {
   "name": "@swan-io/boxed",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "license": "MIT",
   "description": "Utility types for functional TypeScript",
   "author": "Matthias Le Brun <bloodyowl@swan.io>",
