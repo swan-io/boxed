@@ -7,7 +7,7 @@ Breaking changes:
 
 Features:
 
-- Improve discrimiting unions (d759e66)
+- Improve discriminating unions (d759e66)
 
 # 0.9.0
 
