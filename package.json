@@ -35,7 +35,7 @@
     "build": "yarn clean && microbundle -f cjs,es",
     "clean": "rm -rf dist",
     "format": "prettier '**/*' -u -w",
-    "prepare": "yarn test && yarn build",
+    "prepack": "yarn test && yarn build",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "benchmark": "node benchmark/src/option && node benchmark/src/result && node benchmark/src/future"
