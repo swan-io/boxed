@@ -1,3 +1,9 @@
+# 0.11.0
+
+Fixes:
+
+- Fixed a typing issue with optional keys in `Dict.entries` (bc73bd8)
+
 # 0.10.0
 
 Breaking changes:
