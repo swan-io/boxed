@@ -1,3 +1,9 @@
+# 0.11.1
+
+Fixes:
+
+- Fixed a formatting issue causing an incorrec type (b9af1ee)
+
 # 0.11.0
 
 Fixes:
