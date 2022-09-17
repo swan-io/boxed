@@ -35,7 +35,7 @@ interface IOption<A> {
   /**
    * Runs the callback and returns `this`
    */
-  tap(this: Option<A>, func: (option: Option<A>) => unknown): Option<A>;
+  tap(this: Option<A>, func: (option: Option<A>) => void): Option<A>;
 
   /**
    * Converts the Option\<A> to a `A | undefined`
@@ -100,7 +100,7 @@ const optionProto = (<A>(): IOption<A> => ({
     return this.tag === "Some" ? config.Some(this.value) : config.None();
   },
 
-  tap(this: Option<A>, func: (option: Option<A>) => unknown) {
+  tap(this: Option<A>, func: (option: Option<A>) => void) {
     func(this);
     return this;
   },
@@ -303,18 +303,18 @@ interface IResult<A, E> {
    */
   tap(
     this: Result<A, E>,
-    func: (result: Result<A, E>) => unknown,
+    func: (result: Result<A, E>) => void,
   ): Result<A, E>;
 
   /**
    * Runs the callback if ok and returns `this`
    */
-  tapOk(this: Result<A, E>, func: (value: A) => unknown): Result<A, E>;
+  tapOk(this: Result<A, E>, func: (value: A) => void): Result<A, E>;
 
   /**
    * Runs the callback if error and returns `this`
    */
-  tapError(this: Result<A, E>, func: (error: E) => unknown): Result<A, E>;
+  tapError(this: Result<A, E>, func: (error: E) => void): Result<A, E>;
 
   /**
    * Return an option of the value
@@ -392,19 +392,19 @@ const resultProto = (<A, E>(): IResult<A, E> => ({
     return this.tag === "Ok" ? config.Ok(this.value) : config.Error(this.value);
   },
 
-  tap(this: Result<A, E>, func: (result: Result<A, E>) => unknown) {
+  tap(this: Result<A, E>, func: (result: Result<A, E>) => void) {
     func(this);
     return this;
   },
 
-  tapOk(this: Result<A, E>, func: (value: A) => unknown) {
+  tapOk(this: Result<A, E>, func: (value: A) => void) {
     if (this.tag === "Ok") {
       func(this.value);
     }
     return this;
   },
 
-  tapError(this: Result<A, E>, func: (error: E) => unknown) {
+  tapError(this: Result<A, E>, func: (error: E) => void) {
     if (this.tag === "Error") {
       func(this.value);
     }

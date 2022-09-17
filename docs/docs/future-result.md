@@ -137,7 +137,7 @@ Future.value(Result.Error("Error")).flatMapError((error) =>
 ### .tapOk(f)
 
 ```ts
-Future<Result<A, E>>.tapOk(func: (value: A) => unknown): Future<Result<A, E>>
+Future<Result<A, E>>.tapOk(func: (value: A) => void): Future<Result<A, E>>
 ```
 
 Runs `f` if value is `Ok` with the future value, and returns the original future. Useful for debugging.
@@ -149,7 +149,7 @@ future.tapOk(console.log);
 ### .tapError(f)
 
 ```ts
-Future<Result<A, E>>.tapError(func: (value: E) => unknown): Future<Result<A, E>>
+Future<Result<A, E>>.tapError(func: (value: E) => void): Future<Result<A, E>>
 ```
 
 Runs `f` if value is `Error` with the future value, and returns the original future. Useful for debugging.

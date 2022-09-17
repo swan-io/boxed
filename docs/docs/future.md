@@ -96,7 +96,7 @@ Future.value(3).flatMap((x) => Future.value(x * 2));
 ### .tap(f)
 
 ```ts
-Future<A>.tap(func: (value: A) => unknown): Future<A>
+Future<A>.tap(func: (value: A) => void): Future<A>
 ```
 
 Runs `f` with the future value, and returns the original future. Useful for debugging.

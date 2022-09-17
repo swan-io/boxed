@@ -45,7 +45,7 @@ interface IAsyncData<A> {
    */
   tap(
     this: AsyncData<A>,
-    func: (asyncData: AsyncData<A>) => unknown,
+    func: (asyncData: AsyncData<A>) => void,
   ): AsyncData<A>;
 
   /**
@@ -123,7 +123,7 @@ const asyncDataProto = (<A>(): IAsyncData<A> => ({
       : config.NotAsked();
   },
 
-  tap(this: AsyncData<A>, func: (asyncData: AsyncData<A>) => unknown) {
+  tap(this: AsyncData<A>, func: (asyncData: AsyncData<A>) => void) {
     func(this);
     return this;
   },

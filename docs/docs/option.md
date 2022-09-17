@@ -219,7 +219,7 @@ const valueToDisplay = option.match({
 ### .tap(func)
 
 ```ts
-Option<A>.tap(func: (option: Option<A>) => unknown): Option<A>
+Option<A>.tap(func: (option: Option<A>) => void): Option<A>
 ```
 
 Executes `func` with `option`, and returns `option`. Useful for logging and debugging.

@@ -216,7 +216,7 @@ export class Future<A> {
   /**
    * Runs the callback and returns `this`
    */
-  tap(this: Future<A>, func: (value: A) => unknown): Future<A> {
+  tap(this: Future<A>, func: (value: A) => void): Future<A> {
     this.onResolve(func);
     return this;
   }
@@ -228,7 +228,7 @@ export class Future<A> {
    */
   tapOk<A, E>(
     this: Future<Result<A, E>>,
-    func: (value: A) => unknown,
+    func: (value: A) => void,
   ): Future<Result<A, E>> {
     this.onResolve((value) => {
       value.match({
@@ -247,7 +247,7 @@ export class Future<A> {
    */
   tapError<A, E>(
     this: Future<Result<A, E>>,
-    func: (value: E) => unknown,
+    func: (value: E) => void,
   ): Future<Result<A, E>> {
     this.onResolve((value) => {
       value.match({

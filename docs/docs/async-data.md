@@ -218,7 +218,7 @@ const valueToDisplay = result.match({
 ### .tap(func)
 
 ```ts
-AsyncData<A>.tap(func: (asyncData: AsyncData<A>) => unknown): AsyncData<A>
+AsyncData<A>.tap(func: (asyncData: AsyncData<A>) => void): AsyncData<A>
 ```
 
 Executes `func` with `asyncData`, and returns `asyncData`. Useful for logging and debugging.

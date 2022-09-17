@@ -278,7 +278,7 @@ const valueToDisplay = result.match({
 ### .tap(func)
 
 ```ts
-Result<A, E>.tap(func: (result: Result<A, E>) => unknown): Result<A, E>
+Result<A, E>.tap(func: (result: Result<A, E>) => void): Result<A, E>
 ```
 
 Executes `func` with `result`, and returns `result`. Useful for logging and debugging.
@@ -290,7 +290,7 @@ result.tap(console.log).map((x) => x * 2);
 ### .tapOk(func)
 
 ```ts
-Result<A, E>.tapOk(func: (value: A) => unknown): Result<A, E>
+Result<A, E>.tapOk(func: (value: A) => void): Result<A, E>
 ```
 
 Executes `func` with `ok`, and returns `result`. Useful for logging and debugging. No-op if `result` is an error.
@@ -302,7 +302,7 @@ result.tapOk(console.log).map((x) => x * 2);
 ### .tapError(func)
 
 ```ts
-Result<A, E>.tapError(func: (error: E) => unknown): Result<A, E>
+Result<A, E>.tapError(func: (error: E) => void): Result<A, E>
 ```
 
 Executes `func` with `error`, and returns `result`. Useful for logging and debugging. No-op if `result` is ok.
