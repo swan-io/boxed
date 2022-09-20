@@ -187,7 +187,7 @@ Option.None().toUndefined();
 Option<A>.toResult<E>(valueWhenNone: E): Result<A, E>
 ```
 
-Returns `undefined` if the option is `None`, returns the value otherwise
+Returns `Ok` if the option is `Some`, returns `Error` otherwise
 
 ```ts title="Examples"
 const a = Option.Some(1).toResult("NotFound");
