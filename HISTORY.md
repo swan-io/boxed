@@ -1,3 +1,9 @@
+# 0.12.0
+
+Fatures:
+
+- Add helpers for `AsyncData<Result>` (6319ada)
+
 # 0.11.1
 
 Fixes:
