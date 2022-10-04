@@ -1,7 +1,7 @@
 import { match, P } from "ts-pattern";
 import { expect, test } from "vitest";
 import { AsyncData } from "../src/AsyncData";
-import { Option } from "../src/OptionResult";
+import { Option, Result } from "../src/OptionResult";
 
 test("AsyncData.is{Done|Loading|NotAsked}", () => {
   expect(AsyncData.Done(1).isDone()).toBeTruthy();
@@ -253,4 +253,87 @@ test("Option.get", () => {
   if (asyncData.isDone()) {
     expect(asyncData.get()).toEqual(1);
   }
+});
+
+test("Future mapOk", async () => {
+  const result = AsyncData.Done(Result.Ok("one")).mapOk((x) => `${x}!`);
+  expect(result).toEqual(AsyncData.Done(Result.Ok("one!")));
+});
+
+test("Future mapOk", async () => {
+  const result = AsyncData.Done(Result.Error("one")).mapOk((x) => `${x}!`);
+  expect(result).toEqual(AsyncData.Done(Result.Error("one")));
+});
+
+test("Future mapError", async () => {
+  const result = AsyncData.Done(Result.Error("one")).mapError((x) => `${x}!`);
+  expect(result).toEqual(AsyncData.Done(Result.Error("one!")));
+});
+
+test("Future mapError ok", async () => {
+  const result = AsyncData.Done(Result.Ok("one")).mapError((x) => `${x}!`);
+  expect(result).toEqual(AsyncData.Done(Result.Ok("one")));
+});
+
+test("Future mapResult", async () => {
+  const result = AsyncData.Done(Result.Ok("one")).mapResult((x) =>
+    Result.Ok(`${x}!`),
+  );
+  expect(result).toEqual(AsyncData.Done(Result.Ok("one!")));
+});
+
+test("Future mapResult", async () => {
+  const result = AsyncData.Done(Result.Error("one")).mapResult((x) =>
+    Result.Ok(`${x}!`),
+  );
+  expect(result).toEqual(AsyncData.Done(Result.Error("one")));
+});
+
+test("Future mapResult", async () => {
+  const result = AsyncData.Done(Result.Ok("one")).mapResult((x) =>
+    Result.Error(`${x}!`),
+  );
+  expect(result).toEqual(AsyncData.Done(Result.Error("one!")));
+});
+
+test("Future flatMapOk", async () => {
+  const result = AsyncData.Done(Result.Ok("one")).flatMapOk((x) =>
+    AsyncData.Done(Result.Ok(`${x}!`)),
+  );
+  expect(result).toEqual(AsyncData.Done(Result.Ok("one!")));
+});
+
+test("Future flatMapOk", async () => {
+  const result = AsyncData.Done(Result.Error("one")).flatMapOk((x) =>
+    AsyncData.Done(Result.Ok(`${x}!`)),
+  );
+  expect(result).toEqual(AsyncData.Done(Result.Error("one")));
+});
+
+test("Future flatMapOk", async () => {
+  const result = AsyncData.Done(Result.Ok("one")).flatMapOk((x) =>
+    AsyncData.NotAsked(),
+  );
+  expect(result).toEqual(AsyncData.NotAsked());
+});
+
+test("Future flatMapOk", async () => {
+  const result = AsyncData.Done(Result.Error("one")).flatMapOk((x) =>
+    AsyncData.NotAsked(),
+  );
+  expect(result).toEqual(AsyncData.Done(Result.Error("one")));
+});
+
+test("Future flatMapError", async () => {
+  const result = AsyncData.Done(Result.Error("one")).flatMapError((x) =>
+    AsyncData.Done(Result.Error(`${x}!`)),
+  );
+  expect(result).toEqual(AsyncData.Done(Result.Error("one!")));
+});
+
+test("Future flatMapError ok", async () => {
+  const result = AsyncData.Done(Result.Ok("one")).flatMapError((x) =>
+    AsyncData.Done(Result.Ok(`${x}!`)),
+  );
+  expect(result).toEqual(AsyncData.Done(Result.Ok("one")));
 });

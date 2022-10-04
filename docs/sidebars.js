@@ -28,7 +28,12 @@ module.exports = {
       items: [
         "option",
         "result",
-        "async-data",
+        {
+          type: "category",
+          label: "Async Data",
+          collapsed: false,
+          items: ["async-data", "async-data-result"],
+        },
         {
           type: "category",
           label: "Future",

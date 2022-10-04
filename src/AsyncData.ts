@@ -1,5 +1,5 @@
 import { keys, values } from "./Dict";
-import { Option } from "./OptionResult";
+import { Option, Result } from "./OptionResult";
 import { LooseRecord, Remap } from "./types";
 import { zip } from "./ZipUnzip";
 
@@ -20,6 +20,56 @@ interface IAsyncData<A> {
     this: AsyncData<A>,
     func: (value: A) => AsyncData<B>,
   ): AsyncData<B>;
+
+  /**
+   * Takes a callback taking the Ok value and returning a new result and returns an AsyncData with this new result
+   *
+   * (AsyncData\<Result<A, E>>, A => \<Result<B, F>) => AsyncData\<Result<B, F | E>>
+   */
+  mapResult<A, E, B, F = E>(
+    this: AsyncData<Result<A, E>>,
+    func: (value: A) => Result<B, F>,
+  ): AsyncData<Result<B, F | E>>;
+
+  /**
+   * Takes a callback taking the Ok value and returning a new ok value and returns an AsyncData resolving to this new result
+   *
+   * (AsyncData\<Result<A, E>>, A => B) => AsyncData\<Result<B, E>>
+   */
+  mapOk<A, E, B>(
+    this: AsyncData<Result<A, E>>,
+    func: (value: A) => B,
+  ): AsyncData<Result<B, E>>;
+
+  /**
+   * Takes a callback taking the Error value and returning a new error value and returns an AsyncData to this new result
+   *
+   * (AsyncData\<Result<A, E>>, E => B) => AsyncData\<Result<A, B>>
+   */
+  mapError<A, E, B>(
+    this: AsyncData<Result<A, E>>,
+    func: (value: E) => B,
+  ): AsyncData<Result<A, B>>;
+
+  /**
+   * Takes a callback taking the Ok value and returning an AsyncData
+   *
+   * (AsyncData\<Result<A, E>>, A => AsyncData\<Result\<B, F>>) => AsyncData\<Result<B, F | E>>
+   */
+  flatMapOk<A, E, B, F = E>(
+    this: AsyncData<Result<A, E>>,
+    func: (value: A) => AsyncData<Result<B, F>>,
+  ): AsyncData<Result<B, F | E>>;
+
+  /**
+   * Takes a callback taking the Error value and returning an AsyncData
+   *
+   * (AsyncData\<Result<A, E>>, E => AsyncData\<Result\<B, F>>) => AsyncData\<Result<A | B, F | E>>
+   */
+  flatMapError<A, E, B, F>(
+    this: AsyncData<Result<A, E>>,
+    func: (value: E) => AsyncData<Result<B, F>>,
+  ): AsyncData<Result<A | B, F>>;
 
   /**
    * Return the value if present, and the fallback otherwise
@@ -102,6 +152,92 @@ const asyncDataProto = (<A>(): IAsyncData<A> => ({
     return this.tag === "Done"
       ? func(this.value)
       : (this as unknown as AsyncData<B>);
+  },
+
+  /**
+   * For AsyncData<Result<*>>:
+   *
+   * Takes a callback taking the Ok value and returning a new result and returns an AsyncData with this new result
+   */
+  mapResult<A, E, B, F = E>(
+    this: AsyncData<Result<A, E>>,
+    func: (value: A) => Result<B, F>,
+  ): AsyncData<Result<B, F | E>> {
+    return this.map((value) => {
+      return value.match({
+        Ok: (value) => func(value),
+        Error: () => value as unknown as Result<B, E | F>,
+      });
+    });
+  },
+
+  /**
+   * For AsyncData<Result<*>>:
+   *
+   * Takes a callback taking the Ok value and returning a new ok value and returns an AsyncData resolving to this new result
+   */
+  mapOk<A, E, B>(
+    this: AsyncData<Result<A, E>>,
+    func: (value: A) => B,
+  ): AsyncData<Result<B, E>> {
+    return this.map((value) => {
+      return value.match({
+        Ok: (value) => Result.Ok(func(value)),
+        Error: () => value as unknown as Result<B, E>,
+      });
+    });
+  },
+
+  /**
+   * For AsyncData<Result<*>>:
+   *
+   * Takes a callback taking the Error value and returning a new error value and returns an AsyncData to this new result
+   *
+   */
+  mapError<A, E, B>(
+    this: AsyncData<Result<A, E>>,
+    func: (value: E) => B,
+  ): AsyncData<Result<A, B>> {
+    return this.map((value) => {
+      return value.match({
+        Ok: () => value as unknown as Result<A, B>,
+        Error: (error) => Result.Error(func(error)),
+      });
+    });
+  },
+
+  /**
+   * For AsyncData<Result<*>>:
+   *
+   * Takes a callback taking the Ok value and returning an AsyncData
+   */
+  flatMapOk<A, E, B, F = E>(
+    this: AsyncData<Result<A, E>>,
+    func: (value: A) => AsyncData<Result<B, F>>,
+  ): AsyncData<Result<B, F | E>> {
+    return this.flatMap((value) => {
+      return value.match({
+        Ok: (value) => func(value) as AsyncData<Result<B, F | E>>,
+        Error: () => Done(value as unknown as Result<B, F | E>),
+      });
+    });
+  },
+
+  /**
+   * For AsyncData<Result<*>>:
+   *
+   * Takes a callback taking the Error value and returning an AsyncData
+   */
+  flatMapError<A, E, B, F>(
+    this: AsyncData<Result<A, E>>,
+    func: (value: E) => AsyncData<Result<B, F>>,
+  ): AsyncData<Result<A | B, F>> {
+    return this.flatMap((value) => {
+      return value.match({
+        Ok: () => Done(value as unknown as Result<A | B, F>),
+        Error: (error) => func(error) as AsyncData<Result<A | B, F>>,
+      });
+    });
   },
 
   getWithDefault(this: AsyncData<A>, defaultValue: A) {
