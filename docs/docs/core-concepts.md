@@ -40,7 +40,7 @@ Most of the data-manipulation you'll do comes down to two function: `map` and `f
 
 Here's a visual explanation:
 
-![The map function transforms the value with a callback, the flatMap function returns an box itself](/img/map-flatmap.png)
+![The map function transforms the value with a callback, the flatMap function returns an box itself](/img/map-flatmap.webp)
 
 The `map` and `flatMap` functions allow you to transform data in a typesafe way:
 
