@@ -402,12 +402,12 @@ const b = Result.fromOption(Option.None(), "NotFound");
 ## TS Pattern interop
 
 ```ts
-import { match, select } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import { Result } from "@swan-io/boxed";
 
 match(myResult)
-  .with(Result.pattern.Ok(select()), (value) => console.log(value))
-  .with(Result.pattern.Error(select()), (error) => {
+  .with(Result.pattern.Ok(P.select()), (value) => console.log(value))
+  .with(Result.pattern.Error(P.select()), (error) => {
     console.error(error);
     return "fallback";
   })

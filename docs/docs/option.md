@@ -265,11 +265,11 @@ Option.allFromDict({ a: Option.None(), b: Option.Some(2), c: Option.Some(3) });
 ## TS Pattern interop
 
 ```ts title="Examples"
-import { match, select } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import { Option } from "@swan-io/boxed";
 
 match(myOption)
-  .with(Option.pattern.Some(select()), (value) => console.log(value))
+  .with(Option.pattern.Some(P.select()), (value) => console.log(value))
   .with(Option.pattern.None, () => "No value")
   .exhaustive();
 ```
