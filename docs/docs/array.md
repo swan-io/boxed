@@ -9,7 +9,7 @@ import { Array } from "@swan-io/boxed";
 
 ## Array.keepMap(array, func)
 
-Returns an array containing the `Option.Some` values return by `func` for each array item.
+Returns an array containing the `Option.Some` values returned by `func` for each array item.
 
 This function can be useful to refine the types of an array.
 
@@ -17,6 +17,16 @@ This function can be useful to refine the types of an array.
 Array.keepMap([1, 2, 3], (x) =>
   isEven(x) === 0 ? Option.Some(x) : Option.None(),
 ); // [2]
+```
+
+## Array.keepMapOne(array, func)
+
+Returns the first `Option.Some` value returned by `func` for each array item.
+
+```ts title="Examples"
+Array.keepMapOne([1, 2, 3], (x) =>
+  isEven(x) === 0 ? Option.Some(x) : Option.None(),
+); // Option.Some(2)
 ```
 
 ## Array.getBy(array, predicate)
