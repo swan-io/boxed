@@ -6,6 +6,7 @@ import {
   getIndexBy,
   isArray,
   keepMap,
+  keepMapOne,
   of,
   unzip,
   zip,
@@ -30,6 +31,38 @@ test("Array.keepMap", () => {
       Option.fromNullable(a != null ? a : null),
     ),
   ).toEqual([1, 2, 3, 4]);
+});
+
+test("Array.keepMapOne", () => {
+  expect(
+    keepMapOne([1, 2, 3, 4], (a: number) =>
+      Option.fromNullable(a % 2 === 0 ? a * 2 : null),
+    ),
+  ).toEqual(Option.Some(4));
+
+  expect(
+    keepMapOne([1, 2, 3, 4], (a: number) =>
+      Option.fromNullable(a % 2 === 0 ? a * 2 : undefined),
+    ),
+  ).toEqual(Option.Some(4));
+
+  expect(
+    keepMapOne([1, 2, 3, 4, undefined, null], (a) =>
+      Option.fromNullable(a != null ? a : null),
+    ),
+  ).toEqual(Option.Some(1));
+
+  expect(
+    keepMapOne(
+      [
+        () => Option.None(),
+        () => Option.None(),
+        () => Option.None(),
+        () => Option.Some(1),
+      ],
+      (f) => f(),
+    ),
+  ).toEqual(Option.Some(1));
 });
 
 test("Array.getBy", () => {
