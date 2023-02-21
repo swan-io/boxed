@@ -6,6 +6,21 @@ export const of = Array.of;
 
 export const isArray = Array.isArray;
 
+export const keepMapOne = <A, B>(
+  array: Array<A>,
+  func: (item: A) => Option<B>,
+): Option<B> => {
+  let index = -1;
+  while (++index < array.length) {
+    const item = array[index] as A;
+    const mapped = func(item);
+    if (mapped.isSome()) {
+      return mapped;
+    }
+  }
+  return Option.None();
+};
+
 export const keepMap = <A, B>(
   array: Array<A>,
   func: (item: A) => Option<B>,
