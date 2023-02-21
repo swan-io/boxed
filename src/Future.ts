@@ -264,7 +264,7 @@ export class Future<A> {
    *
    * Takes a callback taking the Ok value and returning a new result and returns a future resolving to this new result
    */
-  mapResult<A, E, B, F>(
+  mapOkToResult<A, E, B, F>(
     this: Future<Result<A, E>>,
     func: (value: A) => Result<B, F>,
     propagateCancel = false,
@@ -273,6 +273,24 @@ export class Future<A> {
       return value.match({
         Ok: (value) => func(value),
         Error: () => value as unknown as Result<B, E | F>,
+      });
+    }, propagateCancel);
+  }
+
+  /**
+   * For Future<Result<*>>:
+   *
+   * Takes a callback taking the Error value and returning a new result and returns a future resolving to this new result
+   */
+  mapErrorToResult<A, E, B, F>(
+    this: Future<Result<A, E>>,
+    func: (value: E) => Result<B, F>,
+    propagateCancel = false,
+  ): Future<Result<A | B, F>> {
+    return this.map((value) => {
+      return value.match({
+        Error: (error) => func(error),
+        Ok: () => value as unknown as Result<A | B, F>,
       });
     }, propagateCancel);
   }

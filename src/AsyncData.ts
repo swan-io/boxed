@@ -26,10 +26,20 @@ interface IAsyncData<A> {
    *
    * (AsyncData\<Result<A, E>>, A => \<Result<B, F>) => AsyncData\<Result<B, F | E>>
    */
-  mapResult<A, E, B, F>(
+  mapOkToResult<A, E, B, F>(
     this: AsyncData<Result<A, E>>,
     func: (value: A) => Result<B, F>,
   ): AsyncData<Result<B, F | E>>;
+
+  /**
+   * Takes a callback taking the Ok value and returning a new result and returns an AsyncData with this new result
+   *
+   * (AsyncData\<Result<A, E>>, E => \<Result<B, F>) => AsyncData\<Result<A | B, F>>
+   */
+  mapErrorToResult<A, E, B, F>(
+    this: AsyncData<Result<A, E>>,
+    func: (value: E) => Result<B, F>,
+  ): AsyncData<Result<A | B, F>>;
 
   /**
    * Takes a callback taking the Ok value and returning a new ok value and returns an AsyncData resolving to this new result
@@ -159,7 +169,7 @@ const asyncDataProto = (<A>(): IAsyncData<A> => ({
    *
    * Takes a callback taking the Ok value and returning a new result and returns an AsyncData with this new result
    */
-  mapResult<A, E, B, F>(
+  mapOkToResult<A, E, B, F>(
     this: AsyncData<Result<A, E>>,
     func: (value: A) => Result<B, F>,
   ): AsyncData<Result<B, F | E>> {
@@ -167,6 +177,23 @@ const asyncDataProto = (<A>(): IAsyncData<A> => ({
       return value.match({
         Ok: (value) => func(value),
         Error: () => value as unknown as Result<B, E | F>,
+      });
+    });
+  },
+
+  /**
+   * For AsyncData<Result<*>>:
+   *
+   * Takes a callback taking the Error value and returning a new result and returns an AsyncData with this new result
+   */
+  mapErrorToResult<A, E, B, F>(
+    this: AsyncData<Result<A, E>>,
+    func: (value: E) => Result<B, F>,
+  ): AsyncData<Result<A | B, F>> {
+    return this.map((value) => {
+      return value.match({
+        Error: (error) => func(error),
+        Ok: () => value as unknown as Result<A | B, F>,
       });
     });
   },

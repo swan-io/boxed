@@ -4,6 +4,12 @@ Changes:
 
 - Don't default error types to initial ones in `flatMap`-like methods (29d3307)
 
+# 0.12.1
+
+Features:
+
+- Add `Array.keepMapOne` (a8300de)
+
 # 0.12.0
 
 Features:
