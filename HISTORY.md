@@ -1,6 +1,12 @@
+# 0.12.1
+
+Features:
+
+- Add `Array.keepMapOne` (a8300de)
+
 # 0.12.0
 
-Fatures:
+Features:
 
 - Add helpers for `AsyncData<Result>` (6319ada)
 
