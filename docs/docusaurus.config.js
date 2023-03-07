@@ -21,6 +21,7 @@ module.exports = {
       searchParameters: {},
       searchPagePath: "search",
     },
+    image: "img/social-preview.png",
     navbar: {
       title: "Boxed",
       logo: {
