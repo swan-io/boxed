@@ -106,7 +106,7 @@ const Home = () => {
               <>
                 By using <strong>functional type-safe constructs</strong> like{" "}
                 <a href="./option">Option</a>, <a href="./result">Result</a> and{" "}
-                <a href="./asyncdata">AsyncData</a>, you can{" "}
+                <a href="./async-data">AsyncData</a>, you can{" "}
                 <strong>eliminate bugs right from the modeling</strong>
                 .
                 <br />
