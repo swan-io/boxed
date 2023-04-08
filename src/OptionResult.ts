@@ -268,7 +268,7 @@ interface IResult<A, E> {
    *
    * (Result\<A, E>, A => Result\<B, F>) => Result\<B, E | F>
    */
-  flatMap<B, F = E>(
+  flatMap<B, F>(
     this: Result<A, E>,
     func: (value: A) => Result<B, F>,
   ): Result<B, F | E>;
@@ -369,7 +369,7 @@ const resultProto = (<A, E>(): IResult<A, E> => ({
       : Error(func(this.value));
   },
 
-  flatMap<B, F = E>(this: Result<A, E>, func: (value: A) => Result<B, F>) {
+  flatMap<B, F>(this: Result<A, E>, func: (value: A) => Result<B, F>) {
     return this.tag === "Ok"
       ? func(this.value)
       : (this as unknown as Result<B, F | E>);

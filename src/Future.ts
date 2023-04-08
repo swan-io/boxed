@@ -264,7 +264,7 @@ export class Future<A> {
    *
    * Takes a callback taking the Ok value and returning a new result and returns a future resolving to this new result
    */
-  mapResult<A, E, B, F = E>(
+  mapResult<A, E, B, F>(
     this: Future<Result<A, E>>,
     func: (value: A) => Result<B, F>,
     propagateCancel = false,
@@ -318,7 +318,7 @@ export class Future<A> {
    *
    * Takes a callback taking the Ok value and returning a future
    */
-  flatMapOk<A, E, B, F = E>(
+  flatMapOk<A, E, B, F>(
     this: Future<Result<A, E>>,
     func: (value: A) => Future<Result<B, F>>,
     propagateCancel = false,

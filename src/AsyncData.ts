@@ -26,7 +26,7 @@ interface IAsyncData<A> {
    *
    * (AsyncData\<Result<A, E>>, A => \<Result<B, F>) => AsyncData\<Result<B, F | E>>
    */
-  mapResult<A, E, B, F = E>(
+  mapResult<A, E, B, F>(
     this: AsyncData<Result<A, E>>,
     func: (value: A) => Result<B, F>,
   ): AsyncData<Result<B, F | E>>;
@@ -56,7 +56,7 @@ interface IAsyncData<A> {
    *
    * (AsyncData\<Result<A, E>>, A => AsyncData\<Result\<B, F>>) => AsyncData\<Result<B, F | E>>
    */
-  flatMapOk<A, E, B, F = E>(
+  flatMapOk<A, E, B, F>(
     this: AsyncData<Result<A, E>>,
     func: (value: A) => AsyncData<Result<B, F>>,
   ): AsyncData<Result<B, F | E>>;
@@ -159,7 +159,7 @@ const asyncDataProto = (<A>(): IAsyncData<A> => ({
    *
    * Takes a callback taking the Ok value and returning a new result and returns an AsyncData with this new result
    */
-  mapResult<A, E, B, F = E>(
+  mapResult<A, E, B, F>(
     this: AsyncData<Result<A, E>>,
     func: (value: A) => Result<B, F>,
   ): AsyncData<Result<B, F | E>> {
@@ -211,7 +211,7 @@ const asyncDataProto = (<A>(): IAsyncData<A> => ({
    *
    * Takes a callback taking the Ok value and returning an AsyncData
    */
-  flatMapOk<A, E, B, F = E>(
+  flatMapOk<A, E, B, F>(
     this: AsyncData<Result<A, E>>,
     func: (value: A) => AsyncData<Result<B, F>>,
   ): AsyncData<Result<B, F | E>> {
