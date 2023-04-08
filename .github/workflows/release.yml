@@ -27,6 +27,6 @@ jobs:
       - run: yarn test
 
       - name: Publish
-        run: yarn workspace @swan-io/lake publish && yarn workspace @swan-io/shared-business publish
+        run: yarn publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
