@@ -1,6 +1,12 @@
+# 0.13.0
+
+Changes:
+
+- Don't default error types to initial ones in `flatMap`-like methods (29d3307)
+
 # 0.12.0
 
-Fatures:
+Features:
 
 - Add helpers for `AsyncData<Result>` (6319ada)
 
