@@ -1,11 +1,20 @@
 import { expect, test } from "vitest";
-import { entries, keys, values } from "../src/Dict";
+import { entries, fromEntries, keys, values } from "../src/Dict";
 
 test("Dict.entries", () => {
   expect(entries({ foo: 1, bar: 2 })).toEqual([
     ["foo", 1],
     ["bar", 2],
   ]);
+});
+
+test("Dict.fromEntries", () => {
+  expect(
+    fromEntries([
+      ["foo", 1],
+      ["bar", 2],
+    ]),
+  ).toEqual({ foo: 1, bar: 2 });
 });
 
 test("Dict.keys", () => {
