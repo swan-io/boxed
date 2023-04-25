@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React from "react";
 import styles from "./styles.module.css";
 
@@ -80,7 +81,7 @@ const FeatureList = [
 
 function Feature({ svg, title, description }) {
   return (
-    <div className="col col--4">
+    <div className={clsx("col col--4", styles.feature)}>
       <div className={styles.svgContainer}>{svg}</div>
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>

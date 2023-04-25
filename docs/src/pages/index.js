@@ -1,31 +1,44 @@
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import HomepageFeatures from "@site/src/components/HomepageFeatures";
 import CodeBlock from "@theme/CodeBlock";
 import Layout from "@theme/Layout";
-import * as React from "react";
-import HomepageFeatures from "../components/HomepageFeatures";
+import clsx from "clsx";
+import React from "react";
 import styles from "./index.module.css";
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <header className={"hero hero--primary " + styles.hero}>
-      <img src={"./img/logo.svg"} alt="" className={styles.logo} />
-      <div className="container">
-        <h1 className={styles.heroTitle}>{siteConfig.title}</h1>
-        <p className={styles.heroSubtitle}>{siteConfig.tagline}</p>
+    <header className={clsx("hero hero--primary", styles.heroBanner)}>
+      <div className={styles.heroLeft}>
+        <img
+          src={"./img/logo.svg"}
+          alt="Boxed logo"
+          className={styles.heroLogo}
+        />
         <div>
-          <Link className="button button--lg" to="/getting-started">
-            Get started
-          </Link>
-          <span className={styles.separator} />
-          <Link className="button button--lg" to="/option">
-            API reference
-          </Link>
+          <h1 className={styles.heroTitle}>{siteConfig.title}</h1>
+          <p className={styles.heroSubtitle}>{siteConfig.tagline}</p>
+          <div className={styles.heroButtons}>
+            <Link
+              className={clsx("button button--lg", styles.heroButton)}
+              to="/getting-started"
+            >
+              Get started
+            </Link>
+            <span className={styles.heroButtonSeparator} />
+            <Link
+              className={clsx("button button--lg", styles.heroButton)}
+              to="/option"
+            >
+              API reference
+            </Link>
+          </div>
         </div>
       </div>
-      <div className={styles.code}>
-        <CodeBlock className={styles.codeBlock} language={"typescript"}>
+      <div className={styles.heroCode}>
+        <CodeBlock className={styles.heroCodeBlock} language="typescript">
           {`import { AsyncData } from "@swan-io/boxed";
 
 const UserCard = ({user}: {user: AsyncData<User>}) => {
@@ -46,9 +59,11 @@ const UserCard = ({user}: {user: AsyncData<User>}) => {
 
 const Block = ({ children, reversed = false, title, description }) => {
   return (
-    <div className={reversed ? styles.blockReversed : styles.block}>
-      <div className={styles.blockSide}>{children}</div>
-      <div className={styles.blockSide}>
+    <div
+      className={reversed ? styles.contentBlockReversed : styles.contentBlock}
+    >
+      <div className={styles.contentBlockSide}>{children}</div>
+      <div className={styles.contentBlockSide}>
         <h2>{title}</h2>
         <p>{description}</p>
       </div>
@@ -56,7 +71,7 @@ const Block = ({ children, reversed = false, title, description }) => {
   );
 };
 
-const Home = () => {
+export default function Home() {
   const { siteConfig } = useDocusaurusContext();
   const videoContainer = React.useRef(null);
 
@@ -194,6 +209,4 @@ const Home = () => {
       </main>
     </Layout>
   );
-};
-
-export default Home;
+}

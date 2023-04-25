@@ -190,7 +190,7 @@ export const Option = {
   /**
    * Turns an array of options into an option of array
    */
-  all<Options extends Option<any>[] | []>(options: Options) {
+  all<Options extends Option<unknown>[] | []>(options: Options) {
     const length = options.length;
     let acc = Option.Some<Array<unknown>>([]);
     let index = 0;
@@ -220,7 +220,7 @@ export const Option = {
   /**
    * Turns an dict of options into a options of dict
    */
-  allFromDict<Dict extends LooseRecord<Option<any>>>(
+  allFromDict<Dict extends LooseRecord<Option<unknown>>>(
     dict: Dict,
   ): Option<{
     [K in keyof Dict]: Dict[K] extends Option<infer T> ? T : never;
@@ -503,7 +503,7 @@ export const Result = {
   /**
    * Turns an array of results into an result of array
    */
-  all<Results extends Result<any, any>[] | []>(results: Results) {
+  all<Results extends Result<unknown, unknown>[] | []>(results: Results) {
     const length = results.length;
     let acc = Result.Ok<Array<unknown>, unknown>([]);
     let index = 0;
@@ -512,12 +512,12 @@ export const Result = {
       if (index >= length) {
         return acc as Result<
           {
-            [K in keyof Results]: Results[K] extends Result<infer T, any>
+            [K in keyof Results]: Results[K] extends Result<infer T, unknown>
               ? T
               : never;
           },
           {
-            [K in keyof Results]: Results[K] extends Result<any, infer T>
+            [K in keyof Results]: Results[K] extends Result<unknown, infer T>
               ? T
               : never;
           }[number]
@@ -542,14 +542,14 @@ export const Result = {
   /**
    * Turns an dict of results into a results of dict
    */
-  allFromDict<Dict extends LooseRecord<Result<any, any>>>(
+  allFromDict<Dict extends LooseRecord<Result<unknown, unknown>>>(
     dict: Dict,
   ): Result<
     {
-      [K in keyof Dict]: Dict[K] extends Result<infer T, any> ? T : never;
+      [K in keyof Dict]: Dict[K] extends Result<infer T, unknown> ? T : never;
     },
     {
-      [K in keyof Dict]: Dict[K] extends Result<any, infer T> ? T : never;
+      [K in keyof Dict]: Dict[K] extends Result<unknown, infer T> ? T : never;
     }[keyof Dict]
   > {
     const dictKeys = keys(dict);

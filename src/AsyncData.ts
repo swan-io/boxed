@@ -333,7 +333,7 @@ export const AsyncData = {
   /**
    * Turns an array of asyncData into an asyncData of array
    */
-  all<AsyncDatas extends AsyncData<any>[] | []>(asyncDatas: AsyncDatas) {
+  all<AsyncDatas extends AsyncData<unknown>[] | []>(asyncDatas: AsyncDatas) {
     const length = asyncDatas.length;
     let acc = AsyncData.Done<Array<unknown>>([]);
     let index = 0;
@@ -365,7 +365,7 @@ export const AsyncData = {
   /**
    * Turns an dict of asyncData into a asyncData of dict
    */
-  allFromDict<Dict extends LooseRecord<AsyncData<any>>>(
+  allFromDict<Dict extends LooseRecord<AsyncData<unknown>>>(
     dict: Dict,
   ): AsyncData<{
     [K in keyof Dict]: Dict[K] extends AsyncData<infer T> ? T : never;

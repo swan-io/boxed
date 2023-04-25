@@ -1,7 +1,7 @@
 import { AsyncData } from "./AsyncData";
 import { Option, Result } from "./OptionResult";
 
-export const encode = (value: any, indent?: number | undefined) => {
+export const encode = (value: unknown, indent?: number | undefined) => {
   return JSON.stringify(
     value,
     function (key, value) {
