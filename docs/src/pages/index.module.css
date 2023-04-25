@@ -1,20 +1,32 @@
-.hero {
+.heroBanner {
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  position: relative;
+  color: #fff;
   background: linear-gradient(
     to bottom right,
     #8266c4 0%,
     rgba(217, 97, 81, 0.5) 70.75%
   );
-  color: #fff;
 }
 
-.hero a {
-  color: #fff;
+.heroLogo {
+  max-width: 150px;
+  height: auto;
+  align-self: center;
+  margin-right: 32px;
+}
+
+.heroLeft {
+  display: flex;
+  flex-direction: row;
 }
 
 .heroTitle {
+  font-size: 64px;
   margin: 0;
   padding: 0;
-  font-size: 64px;
 }
 
 .heroSubtitle {
@@ -22,59 +34,43 @@
   line-height: 1.2;
 }
 
-.logo {
-  max-width: 150px;
-  height: auto;
-  align-self: center;
+.heroButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
-@media (max-width: 1000px) {
-  .logo {
-    max-width: 100px;
-  }
+.heroButton {
+  border: 1px solid white;
+  color: #fff;
 }
 
-@media (max-width: 1000px) {
-  .hero {
-    flex-direction: column;
-    text-align: center;
-    align-items: stretch;
-  }
+.heroButton:hover {
+  color: #fff;
 }
 
-.code {
-  text-align: left;
-  border-radius: 10px;
-  box-shadow: 0 20px 30px -10px #d96151;
-}
-
-:global([data-theme="dark"]) .code {
-  box-shadow: 0 20px 30px -10px #572720;
-}
-
-.codeBlock {
-  margin-bottom: 0 !important;
-}
-
-@media (max-width: 1000px) {
-  .code {
-    padding: 30px 10px 0;
-  }
-}
-
-.separator {
-  display: inline-block;
+.heroButtonSeparator {
+  display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
   width: 10px;
   height: 10px;
 }
 
-@media (max-width: 1200px) {
-  .separator {
-    display: block;
-  }
+.heroCode {
+  box-shadow: 0 20px 30px -10px #d96151;
+  text-align: left;
 }
 
-.block {
+:global([data-theme="dark"]) .heroCode {
+  box-shadow: 0 20px 30px -10px #572720;
+}
+
+.heroCodeBlock {
+  margin-bottom: 0 !important;
+}
+
+.contentBlock {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -84,7 +80,7 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-.blockReversed {
+.contentBlockReversed {
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
@@ -94,19 +90,46 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-.blockSide {
+.contentBlockSide {
   flex-grow: 1;
   padding: 2rem;
   width: 50%;
 }
 
+@media (max-width: 1200px) {
+  .heroBanner {
+    padding: 2rem;
+    padding-top: 3rem;
+    flex-direction: column;
+    text-align: center;
+    align-items: stretch;
+  }
+
+  .heroLeft {
+    flex-direction: column;
+    margin-bottom: 3rem;
+  }
+
+  .heroLogo {
+    max-width: 100px;
+    margin-right: 0;
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 400px) {
+  .heroButtons {
+    flex-direction: column;
+  }
+}
+
 @media (max-width: 920px) {
-  .block,
-  .blockReversed {
+  .contentBlock,
+  .contentBlockReversed {
     flex-direction: column;
   }
 
-  .blockSide {
+  .contentBlockSide {
     width: 100%;
   }
 }
