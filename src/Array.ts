@@ -6,7 +6,7 @@ export const of = Array.of;
 
 export const isArray = Array.isArray;
 
-export const filterMapOne = <A, B>(
+export const findMap = <A, B>(
   array: Array<A>,
   func: (item: A) => Option<B>,
 ): Option<B> => {

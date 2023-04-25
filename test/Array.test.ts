@@ -4,6 +4,7 @@ import {
   filterMap,
   find,
   findIndex,
+  findMap,
   from,
   isArray,
   of,
@@ -32,27 +33,27 @@ test("Array.filterMap", () => {
   ).toEqual([1, 2, 3, 4]);
 });
 
-test("Array.filterMap", () => {
+test("Array.findMap", () => {
   expect(
-    filterMap([1, 2, 3, 4], (a: number) =>
+    findMap([1, 2, 3, 4], (a: number) =>
       Option.fromNullable(a % 2 === 0 ? a * 2 : null),
     ),
   ).toEqual(Option.Some(4));
 
   expect(
-    filterMap([1, 2, 3, 4], (a: number) =>
+    findMap([1, 2, 3, 4], (a: number) =>
       Option.fromNullable(a % 2 === 0 ? a * 2 : undefined),
     ),
   ).toEqual(Option.Some(4));
 
   expect(
-    filterMap([1, 2, 3, 4, undefined, null], (a) =>
+    findMap([1, 2, 3, 4, undefined, null], (a) =>
       Option.fromNullable(a != null ? a : null),
     ),
   ).toEqual(Option.Some(1));
 
   expect(
-    filterMap(
+    findMap(
       [
         () => Option.None(),
         () => Option.None(),

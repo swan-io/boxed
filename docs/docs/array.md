@@ -19,12 +19,12 @@ Array.filterMap([1, 2, 3], (x) =>
 ); // [2]
 ```
 
-## Array.filterMapOne(array, func)
+## Array.findMap(array, func)
 
 Returns the first `Option.Some` value returned by `func` for each array item.
 
 ```ts title="Examples"
-Array.filterMapOne([1, 2, 3], (x) =>
+Array.findMap([1, 2, 3], (x) =>
   isEven(x) === 0 ? Option.Some(x) : Option.None(),
 ); // Option.Some(2)
 ```
