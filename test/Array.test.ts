@@ -1,59 +1,58 @@
 import { expect, test } from "vitest";
 import {
   binarySearchBy,
+  filterMap,
   from,
   getBy,
   getIndexBy,
   isArray,
-  keepMap,
-  keepMapOne,
   of,
   unzip,
   zip,
 } from "../src/Array";
 import { Option } from "../src/OptionResult";
 
-test("Array.keepMap", () => {
+test("Array.filterMap", () => {
   expect(
-    keepMap([1, 2, 3, 4], (a: number) =>
+    filterMap([1, 2, 3, 4], (a: number) =>
       Option.fromNullable(a % 2 === 0 ? a * 2 : null),
     ),
   ).toEqual([4, 8]);
 
   expect(
-    keepMap([1, 2, 3, 4], (a: number) =>
+    filterMap([1, 2, 3, 4], (a: number) =>
       Option.fromNullable(a % 2 === 0 ? a * 2 : undefined),
     ),
   ).toEqual([4, 8]);
 
   expect(
-    keepMap([1, 2, 3, 4, undefined, null], (a) =>
+    filterMap([1, 2, 3, 4, undefined, null], (a) =>
       Option.fromNullable(a != null ? a : null),
     ),
   ).toEqual([1, 2, 3, 4]);
 });
 
-test("Array.keepMapOne", () => {
+test("Array.filterMap", () => {
   expect(
-    keepMapOne([1, 2, 3, 4], (a: number) =>
+    filterMap([1, 2, 3, 4], (a: number) =>
       Option.fromNullable(a % 2 === 0 ? a * 2 : null),
     ),
   ).toEqual(Option.Some(4));
 
   expect(
-    keepMapOne([1, 2, 3, 4], (a: number) =>
+    filterMap([1, 2, 3, 4], (a: number) =>
       Option.fromNullable(a % 2 === 0 ? a * 2 : undefined),
     ),
   ).toEqual(Option.Some(4));
 
   expect(
-    keepMapOne([1, 2, 3, 4, undefined, null], (a) =>
+    filterMap([1, 2, 3, 4, undefined, null], (a) =>
       Option.fromNullable(a != null ? a : null),
     ),
   ).toEqual(Option.Some(1));
 
   expect(
-    keepMapOne(
+    filterMap(
       [
         () => Option.None(),
         () => Option.None(),

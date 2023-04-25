@@ -7,24 +7,24 @@ sidebar_label: Array
 import { Array } from "@swan-io/boxed";
 ```
 
-## Array.keepMap(array, func)
+## Array.filterMap(array, func)
 
 Returns an array containing the `Option.Some` values returned by `func` for each array item.
 
 This function can be useful to refine the types of an array.
 
 ```ts title="Examples"
-Array.keepMap([1, 2, 3], (x) =>
+Array.filterMap([1, 2, 3], (x) =>
   isEven(x) === 0 ? Option.Some(x) : Option.None(),
 ); // [2]
 ```
 
-## Array.keepMapOne(array, func)
+## Array.filterMapOne(array, func)
 
 Returns the first `Option.Some` value returned by `func` for each array item.
 
 ```ts title="Examples"
-Array.keepMapOne([1, 2, 3], (x) =>
+Array.filterMapOne([1, 2, 3], (x) =>
   isEven(x) === 0 ? Option.Some(x) : Option.None(),
 ); // Option.Some(2)
 ```

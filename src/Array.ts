@@ -6,7 +6,7 @@ export const of = Array.of;
 
 export const isArray = Array.isArray;
 
-export const keepMapOne = <A, B>(
+export const filterMapOne = <A, B>(
   array: Array<A>,
   func: (item: A) => Option<B>,
 ): Option<B> => {
@@ -21,7 +21,7 @@ export const keepMapOne = <A, B>(
   return Option.None();
 };
 
-export const keepMap = <A, B>(
+export const filterMap = <A, B>(
   array: Array<A>,
   func: (item: A) => Option<B>,
 ): Array<B> => {
