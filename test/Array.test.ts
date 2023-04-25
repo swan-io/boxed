@@ -3,8 +3,8 @@ import {
   binarySearchBy,
   filterMap,
   find,
+  findIndex,
   from,
-  getIndexBy,
   isArray,
   of,
   unzip,
@@ -78,15 +78,15 @@ test("Array.find", () => {
   ).toEqual(Option.Some(Option.None()));
 });
 
-test("Array.getIndexBy", () => {
-  expect(getIndexBy([1, undefined, 2], (a) => a === undefined)).toEqual(
+test("Array.findIndex", () => {
+  expect(findIndex([1, undefined, 2], (a) => a === undefined)).toEqual(
     Option.Some(1),
   );
 
-  expect(getIndexBy([1, undefined, 2], (a) => a === 1)).toEqual(Option.Some(0));
+  expect(findIndex([1, undefined, 2], (a) => a === 1)).toEqual(Option.Some(0));
 
   expect(
-    getIndexBy([Option.Some(1), Option.None(), Option.Some(2)], (x) =>
+    findIndex([Option.Some(1), Option.None(), Option.Some(2)], (x) =>
       x.isNone(),
     ),
   ).toEqual(Option.Some(1));

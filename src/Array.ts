@@ -49,7 +49,7 @@ export const find = <A>(
   return Option.None();
 };
 
-export const getIndexBy = <A>(
+export const findIndex = <A>(
   array: Array<A>,
   func: (item: A) => boolean,
 ): Option<number> => {

@@ -41,14 +41,14 @@ Array.getfindBy(array, (x) => x === undefined);
 // None if not found
 ```
 
-## Array.getIndexBy(array, predicate)
+## Array.findIndex(array, predicate)
 
 Return the first index in the array for which `predicate` returns true.
 
 The function returns an `Option`.
 
 ```ts title="Examples"
-Array.getIndexBy(array, (x) => x === undefined);
+Array.findIndex(array, (x) => x === undefined);
 // Some(index) if found
 // None if not found
 ```
