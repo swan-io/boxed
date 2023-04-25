@@ -2,8 +2,8 @@ import { expect, test } from "vitest";
 import {
   binarySearchBy,
   filterMap,
+  find,
   from,
-  getBy,
   getIndexBy,
   isArray,
   of,
@@ -64,17 +64,17 @@ test("Array.filterMap", () => {
   ).toEqual(Option.Some(1));
 });
 
-test("Array.getBy", () => {
-  expect(getBy([1, undefined, 2], (a) => a === undefined)).toEqual(
+test("Array.find", () => {
+  expect(find([1, undefined, 2], (a) => a === undefined)).toEqual(
     Option.Some(undefined),
   );
 
-  expect(getBy([1, 2, 3], (a) => a > 4)).toEqual(Option.None());
+  expect(find([1, 2, 3], (a) => a > 4)).toEqual(Option.None());
 
-  expect(getBy([1, undefined, 2], (a) => a === 1)).toEqual(Option.Some(1));
+  expect(find([1, undefined, 2], (a) => a === 1)).toEqual(Option.Some(1));
 
   expect(
-    getBy([Option.Some(1), Option.None(), Option.Some(2)], (x) => x.isNone()),
+    find([Option.Some(1), Option.None(), Option.Some(2)], (x) => x.isNone()),
   ).toEqual(Option.Some(Option.None()));
 });
 

@@ -29,14 +29,14 @@ Array.filterMapOne([1, 2, 3], (x) =>
 ); // Option.Some(2)
 ```
 
-## Array.getBy(array, predicate)
+## Array.find(array, predicate)
 
 Return the first item in the array for which `predicate` returns true.
 
 The function returns an `Option` so that we can distinguish between a found nullish value and a not found value.
 
 ```ts title="Examples"
-Array.getBy(array, (x) => x === undefined);
+Array.getfindBy(array, (x) => x === undefined);
 // Some(undefined) if found
 // None if not found
 ```

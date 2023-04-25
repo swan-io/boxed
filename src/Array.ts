@@ -35,7 +35,7 @@ export const filterMap = <A, B>(
   return result;
 };
 
-export const getBy = <A>(
+export const find = <A>(
   array: Array<A>,
   func: (item: A) => boolean,
 ): Option<A> => {
