@@ -54,7 +54,7 @@ export class Future<A> {
   /**
    * Turns an array of futures into a future of array
    */
-  static all = <Futures extends readonly Future<any>[] | []>(
+  static all = <Futures extends readonly Future<unknown>[] | []>(
     futures: Futures,
     propagateCancel = false,
   ) => {
@@ -87,7 +87,7 @@ export class Future<A> {
   /**
    * Turns an dict of futures into a future of dict
    */
-  static allFromDict = <Dict extends LooseRecord<Future<any>>>(
+  static allFromDict = <Dict extends LooseRecord<Future<unknown>>>(
     dict: Dict,
   ): Future<{
     [K in keyof Dict]: Dict[K] extends Future<infer T> ? T : never;
