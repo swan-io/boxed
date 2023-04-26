@@ -1,6 +1,4 @@
-export const unzip = <TupleArray extends [any, any][] | readonly [any, any][]>(
-  array: TupleArray,
-) => {
+export const unzip = <TupleArray extends [any, any][]>(array: TupleArray) => {
   const length = array.length;
   const arrayA = Array(length);
   const arrayB = Array(length);
@@ -30,10 +28,7 @@ export const unzip = <TupleArray extends [any, any][] | readonly [any, any][]>(
   ];
 };
 
-export const zip = <
-  ArrayA extends any[] | readonly any[],
-  ArrayB extends any[] | readonly any[],
->(
+export const zip = <ArrayA extends any[], ArrayB extends any[]>(
   arrayA: ArrayA,
   arrayB: ArrayB,
 ) => {
