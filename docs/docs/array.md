@@ -77,7 +77,7 @@ Array.zip([1, 2, 3], ["one", "two", "three"]);
 Turns an array of pairs into two arrays.
 
 ```ts title="Examples"
-Array.zip([
+Array.unzip([
   [1, "one"],
   [2, "two"],
   [3, "three"],

@@ -190,7 +190,7 @@ export const Option = {
   /**
    * Turns an array of options into an option of array
    */
-  all<Options extends Option<unknown>[] | []>(options: Options) {
+  all<Options extends Option<any>[] | []>(options: Options) {
     const length = options.length;
     let acc = Option.Some<Array<unknown>>([]);
     let index = 0;
@@ -220,16 +220,14 @@ export const Option = {
   /**
    * Turns an dict of options into a options of dict
    */
-  allFromDict<Dict extends LooseRecord<Option<unknown>>>(
-    dict: Dict,
-  ): Option<{
-    [K in keyof Dict]: Dict[K] extends Option<infer T> ? T : never;
-  }> {
+  allFromDict<Dict extends LooseRecord<Option<any>>>(dict: Dict) {
     const dictKeys = keys(dict);
 
     return this.all(values(dict)).map((values) =>
       Object.fromEntries(zip(dictKeys, values)),
-    );
+    ) as Option<{
+      [K in keyof Dict]: Dict[K] extends Option<infer T> ? T : never;
+    }>;
   },
 
   equals<A>(
@@ -503,7 +501,7 @@ export const Result = {
   /**
    * Turns an array of results into an result of array
    */
-  all<Results extends Result<unknown, unknown>[] | []>(results: Results) {
+  all<Results extends Result<any, any>[] | []>(results: Results) {
     const length = results.length;
     let acc = Result.Ok<Array<unknown>, unknown>([]);
     let index = 0;
@@ -512,12 +510,12 @@ export const Result = {
       if (index >= length) {
         return acc as Result<
           {
-            [K in keyof Results]: Results[K] extends Result<infer T, unknown>
+            [K in keyof Results]: Results[K] extends Result<infer T, any>
               ? T
               : never;
           },
           {
-            [K in keyof Results]: Results[K] extends Result<unknown, infer T>
+            [K in keyof Results]: Results[K] extends Result<any, infer T>
               ? T
               : never;
           }[number]
@@ -542,21 +540,19 @@ export const Result = {
   /**
    * Turns an dict of results into a results of dict
    */
-  allFromDict<Dict extends LooseRecord<Result<unknown, unknown>>>(
-    dict: Dict,
-  ): Result<
-    {
-      [K in keyof Dict]: Dict[K] extends Result<infer T, unknown> ? T : never;
-    },
-    {
-      [K in keyof Dict]: Dict[K] extends Result<unknown, infer T> ? T : never;
-    }[keyof Dict]
-  > {
+  allFromDict<Dict extends LooseRecord<Result<any, any>>>(dict: Dict) {
     const dictKeys = keys(dict);
 
     return Result.all(values(dict)).map((values) =>
       Object.fromEntries(zip(dictKeys, values)),
-    );
+    ) as Result<
+      {
+        [K in keyof Dict]: Dict[K] extends Result<infer T, any> ? T : never;
+      },
+      {
+        [K in keyof Dict]: Dict[K] extends Result<any, infer T> ? T : never;
+      }[keyof Dict]
+    >;
   },
 
   equals<A, E>(

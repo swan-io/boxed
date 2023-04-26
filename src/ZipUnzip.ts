@@ -1,6 +1,4 @@
-export const unzip = <TupleArray extends [unknown, unknown][]>(
-  array: TupleArray,
-) => {
+export const unzip = <A, B>(array: [A, B][]) => {
   const length = array.length;
   const arrayA = Array(length);
   const arrayB = Array(length);
@@ -12,42 +10,15 @@ export const unzip = <TupleArray extends [unknown, unknown][]>(
       arrayB[index] = match[1];
     }
   }
-  return [arrayA, arrayB] as unknown as [
-    {
-      [I in keyof TupleArray]: TupleArray[I] extends [unknown, unknown]
-        ? TupleArray[I][0] extends infer T
-          ? T
-          : never
-        : never;
-    },
-    {
-      [I in keyof TupleArray]: TupleArray[I] extends [unknown, unknown]
-        ? TupleArray[I][1] extends infer T
-          ? T
-          : never
-        : never;
-    },
-  ];
+  return [arrayA, arrayB] as [A[], B[]];
 };
 
-export const zip = <ArrayA extends unknown[], ArrayB extends unknown[]>(
-  arrayA: ArrayA,
-  arrayB: ArrayB,
-) => {
+export const zip = <A, B>(arrayA: A[], arrayB: B[]) => {
   const length = Math.min(arrayA.length, arrayB.length);
   const array = Array(length);
   let index = -1;
   while (++index < length) {
     array[index] = [arrayA[index], arrayB[index]];
   }
-  return array as unknown as Array<
-    [
-      {
-        [I in keyof ArrayA]: ArrayA[I] extends infer T ? T : never;
-      }[number],
-      {
-        [I in keyof ArrayB]: ArrayB[I] extends infer T ? T : never;
-      }[number],
-    ]
-  >;
+  return array as [A, B][];
 };

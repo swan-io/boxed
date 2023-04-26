@@ -360,7 +360,7 @@ export const AsyncData = {
   /**
    * Turns an array of asyncData into an asyncData of array
    */
-  all<AsyncDatas extends AsyncData<unknown>[] | []>(asyncDatas: AsyncDatas) {
+  all<AsyncDatas extends AsyncData<any>[] | []>(asyncDatas: AsyncDatas) {
     const length = asyncDatas.length;
     let acc = AsyncData.Done<Array<unknown>>([]);
     let index = 0;
@@ -392,16 +392,14 @@ export const AsyncData = {
   /**
    * Turns an dict of asyncData into a asyncData of dict
    */
-  allFromDict<Dict extends LooseRecord<AsyncData<unknown>>>(
-    dict: Dict,
-  ): AsyncData<{
-    [K in keyof Dict]: Dict[K] extends AsyncData<infer T> ? T : never;
-  }> {
+  allFromDict<Dict extends LooseRecord<AsyncData<any>>>(dict: Dict) {
     const dictKeys = keys(dict);
 
     return AsyncData.all(values(dict)).map((values) =>
       Object.fromEntries(zip(dictKeys, values)),
-    );
+    ) as AsyncData<{
+      [K in keyof Dict]: Dict[K] extends AsyncData<infer T> ? T : never;
+    }>;
   },
 
   equals<A>(a: AsyncData<A>, b: AsyncData<A>, equals: (a: A, b: A) => boolean) {
