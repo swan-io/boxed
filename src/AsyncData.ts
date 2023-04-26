@@ -392,14 +392,16 @@ export const AsyncData = {
   /**
    * Turns an dict of asyncData into a asyncData of dict
    */
-  allFromDict<Dict extends LooseRecord<AsyncData<any>>>(dict: Dict) {
+  allFromDict<Dict extends LooseRecord<AsyncData<any>>>(
+    dict: Dict,
+  ): AsyncData<{
+    [K in keyof Dict]: Dict[K] extends AsyncData<infer T> ? T : never;
+  }> {
     const dictKeys = keys(dict);
 
     return AsyncData.all(values(dict)).map((values) =>
       Object.fromEntries(zip(dictKeys, values)),
-    ) as AsyncData<{
-      [K in keyof Dict]: Dict[K] extends AsyncData<infer T> ? T : never;
-    }>;
+    );
   },
 
   equals<A>(a: AsyncData<A>, b: AsyncData<A>, equals: (a: A, b: A) => boolean) {

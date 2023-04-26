@@ -87,14 +87,16 @@ export class Future<A> {
   /**
    * Turns an dict of futures into a future of dict
    */
-  static allFromDict = <Dict extends LooseRecord<Future<any>>>(dict: Dict) => {
+  static allFromDict = <Dict extends LooseRecord<Future<any>>>(
+    dict: Dict,
+  ): Future<{
+    [K in keyof Dict]: Dict[K] extends Future<infer T> ? T : never;
+  }> => {
     const dictKeys = keys(dict);
 
     return Future.all(values(dict)).map((values) =>
       Object.fromEntries(zip(dictKeys, values)),
-    ) as Future<{
-      [K in keyof Dict]: Dict[K] extends Future<infer T> ? T : never;
-    }>;
+    );
   };
 
   // Not accessible from the outside
