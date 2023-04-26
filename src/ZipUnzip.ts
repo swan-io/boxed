@@ -1,4 +1,4 @@
-export const unzip = <A, B>(array: Array<[A, B]> | ReadonlyArray<[A, B]>) => {
+export const unzip = <TupleArray extends [any, any][]>(array: TupleArray) => {
   const length = array.length;
   const arrayA = Array(length);
   const arrayB = Array(length);
@@ -10,12 +10,27 @@ export const unzip = <A, B>(array: Array<[A, B]> | ReadonlyArray<[A, B]>) => {
       arrayB[index] = match[1];
     }
   }
-  return [arrayA, arrayB] as [A[], B[]];
+  return [arrayA, arrayB] as unknown as [
+    {
+      [I in keyof TupleArray]: TupleArray[I] extends [any, any]
+        ? TupleArray[I][0] extends infer T
+          ? T
+          : never
+        : never;
+    },
+    {
+      [I in keyof TupleArray]: TupleArray[I] extends [any, any]
+        ? TupleArray[I][1] extends infer T
+          ? T
+          : never
+        : never;
+    },
+  ];
 };
 
-export const zip = <A, B>(
-  arrayA: A[] | ReadonlyArray<A>,
-  arrayB: B[] | ReadonlyArray<B>,
+export const zip = <ArrayA extends any[], ArrayB extends any[]>(
+  arrayA: ArrayA,
+  arrayB: ArrayB,
 ) => {
   const length = Math.min(arrayA.length, arrayB.length);
   const array = Array(length);
@@ -23,5 +38,12 @@ export const zip = <A, B>(
   while (++index < length) {
     array[index] = [arrayA[index], arrayB[index]];
   }
-  return array as [A, B][];
+  return array as unknown as [
+    {
+      [I in keyof ArrayA]: ArrayA[I] extends infer T ? T : never;
+    }[number],
+    {
+      [I in keyof ArrayB]: ArrayB[I] extends infer T ? T : never;
+    }[number],
+  ][];
 };

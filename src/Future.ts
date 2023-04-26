@@ -92,7 +92,7 @@ export class Future<A> {
 
     return Future.all(values(dict)).map((values) =>
       Object.fromEntries(zip(dictKeys, values)),
-    ) as unknown as Future<{
+    ) as Future<{
       [K in keyof Dict]: Dict[K] extends Future<infer T> ? T : never;
     }>;
   };
