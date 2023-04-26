@@ -1,3 +1,9 @@
+# 1.0.1
+
+Changes:
+
+- Fix `Dict.entries` type (142b7c7)
+
 # 1.0.0
 
 Breaking changes:
