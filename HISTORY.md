@@ -1,3 +1,17 @@
+# 1.0.0
+
+Breaking changes:
+
+- Rename `mapResult` to `mapOkToResult` (e00b0c0)
+- Rename `keepMap` to `filterMap` (27f8f4e)
+- Rename `getBy` to `find` (ad5c0da)
+- Rename `getIndexBy` to `findIndex` (a8dda24)
+- Rename `keepMapOne` to `findMap` (cee8c2a)
+
+Features:
+
+- Add `mapErrorToResult` (e00b0c0)
+
 # 0.13.0
 
 Changes:
