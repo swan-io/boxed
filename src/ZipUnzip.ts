@@ -1,4 +1,4 @@
-export const unzip = <A, B>(array: [A, B][]) => {
+export const unzip = <A, B>(array: Array<[A, B]> | ReadonlyArray<[A, B]>) => {
   const length = array.length;
   const arrayA = Array(length);
   const arrayB = Array(length);
@@ -13,7 +13,10 @@ export const unzip = <A, B>(array: [A, B][]) => {
   return [arrayA, arrayB] as [A[], B[]];
 };
 
-export const zip = <A, B>(arrayA: A[], arrayB: B[]) => {
+export const zip = <A, B>(
+  arrayA: A[] | ReadonlyArray<A>,
+  arrayB: B[] | ReadonlyArray<B>,
+) => {
   const length = Math.min(arrayA.length, arrayB.length);
   const array = Array(length);
   let index = -1;
