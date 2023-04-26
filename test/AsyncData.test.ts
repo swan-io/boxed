@@ -275,25 +275,46 @@ test("Future mapError ok", async () => {
   expect(result).toEqual(AsyncData.Done(Result.Ok("one")));
 });
 
-test("Future mapResult", async () => {
-  const result = AsyncData.Done(Result.Ok("one")).mapResult((x) =>
+test("Future mapOkToResult", async () => {
+  const result = AsyncData.Done(Result.Ok("one")).mapOkToResult((x) =>
     Result.Ok(`${x}!`),
   );
   expect(result).toEqual(AsyncData.Done(Result.Ok("one!")));
 });
 
-test("Future mapResult", async () => {
-  const result = AsyncData.Done(Result.Error("one")).mapResult((x) =>
+test("Future mapOkToResult", async () => {
+  const result = AsyncData.Done(Result.Error("one")).mapOkToResult((x) =>
     Result.Ok(`${x}!`),
   );
   expect(result).toEqual(AsyncData.Done(Result.Error("one")));
 });
 
-test("Future mapResult", async () => {
-  const result = AsyncData.Done(Result.Ok("one")).mapResult((x) =>
+test("Future mapOkToResult", async () => {
+  const result = AsyncData.Done(Result.Ok("one")).mapOkToResult((x) =>
     Result.Error(`${x}!`),
   );
   expect(result).toEqual(AsyncData.Done(Result.Error("one!")));
+});
+
+test("Future mapErrorToResult", async () => {
+  const result = AsyncData.Done(Result.Error("one")).mapErrorToResult((x) =>
+    Result.Ok(`${x}!`),
+  );
+  expect(result).toEqual(AsyncData.Done(Result.Ok("one!")));
+});
+
+test("Future mapErrorToResult", async () => {
+  const result = AsyncData.Done(Result.Ok("one")).mapErrorToResult((x) =>
+    Result.Ok(`${x}!`),
+  );
+  expect(result).toEqual(AsyncData.Done(Result.Ok("one")));
+});
+
+test("Future mapErrorToResult", async () => {
+  const result = AsyncData.Done(Result.Error("one")).mapErrorToResult((x) =>
+    Result.Ok(`${x}!`),
+  );
+  expect(result).toEqual(AsyncData.Done(Result.Ok("one!")));
 });
 
 test("Future flatMapOk", async () => {

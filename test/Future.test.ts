@@ -112,18 +112,32 @@ test("Future mapError ok", async () => {
   expect(result).toEqual(Result.Ok("one"));
 });
 
-test("Future mapResult", async () => {
-  const result = await Future.value(Result.Ok("one")).mapResult((x) =>
+test("Future mapOkToResult", async () => {
+  const result = await Future.value(Result.Ok("one")).mapOkToResult((x) =>
     Result.Ok(`${x}!`),
   );
   expect(result).toEqual(Result.Ok("one!"));
 });
 
-test("Future mapResult error", async () => {
-  const result = await Future.value(Result.Error("one")).mapResult((x) =>
+test("Future mapOkToResult error", async () => {
+  const result = await Future.value(Result.Error("one")).mapOkToResult((x) =>
     Result.Ok(`${x}!`),
   );
   expect(result).toEqual(Result.Error("one"));
+});
+
+test("Future mapErrorToResult", async () => {
+  const result = await Future.value(Result.Error("one")).mapErrorToResult((x) =>
+    Result.Error(`${x}!`),
+  );
+  expect(result).toEqual(Result.Error("one!"));
+});
+
+test("Future mapErrorToResult ok", async () => {
+  const result = await Future.value(Result.Ok("one")).mapErrorToResult((x) =>
+    Result.Error(`${x}!`),
+  );
+  expect(result).toEqual(Result.Ok("one"));
 });
 
 test("Future flatMapOk", async () => {

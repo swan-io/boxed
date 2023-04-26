@@ -6,7 +6,7 @@ export const of = Array.of;
 
 export const isArray = Array.isArray;
 
-export const keepMapOne = <A, B>(
+export const findMap = <A, B>(
   array: Array<A>,
   func: (item: A) => Option<B>,
 ): Option<B> => {
@@ -21,7 +21,7 @@ export const keepMapOne = <A, B>(
   return Option.None();
 };
 
-export const keepMap = <A, B>(
+export const filterMap = <A, B>(
   array: Array<A>,
   func: (item: A) => Option<B>,
 ): Array<B> => {
@@ -35,7 +35,7 @@ export const keepMap = <A, B>(
   return result;
 };
 
-export const getBy = <A>(
+export const find = <A>(
   array: Array<A>,
   func: (item: A) => boolean,
 ): Option<A> => {
@@ -49,7 +49,7 @@ export const getBy = <A>(
   return Option.None();
 };
 
-export const getIndexBy = <A>(
+export const findIndex = <A>(
   array: Array<A>,
   func: (item: A) => boolean,
 ): Option<number> => {

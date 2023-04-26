@@ -11,10 +11,10 @@ You can still use all the regular [Future](./future) methods. The following help
 
 ## Methods
 
-### .mapResult(f)
+### .mapOkToResult(f)
 
 ```ts
-Future<Result<A, E>>.mapResult<B, F>(
+Future<Result<A, E>>.mapOkToResult<B, F>(
   func: (value: A) => Result<B, F>,
   propagateCancel?: boolean
 ): Future<Result<B, E | F>>
@@ -23,12 +23,35 @@ Future<Result<A, E>>.mapResult<B, F>(
 Takes a `Future<Result<Ok, Error>>` and a `f` function taking `Ok` and returning `Result<ReturnValue, Error>` and returns a new `Future<Result<ReturnValue, Error>>`
 
 ```ts title="Examples"
-Future.value(Result.Ok(3)).mapResult((ok) => {
+Future.value(Result.Ok(3)).mapOkToResult((ok) => {
   return Result.Ok(ok * 2);
 });
 // Future<Result.Ok<6>>
 
-Future.value(Result.Ok(3)).mapResult((ok) =>
+Future.value(Result.Ok(3)).mapOkToResult((ok) =>
+  isEven(ok) ? Result.Ok(ok) : Result.Error("Odd number");
+);
+// Future<Result.Error<"Odd number">>
+```
+
+### .mapErrorToResult(f)
+
+```ts
+Future<Result<A, E>>.mapErrorToResult<B, F>(
+  func: (value: E) => Result<B, F>,
+  propagateCancel?: boolean
+): Future<Result<A | B, F>>
+```
+
+Takes a `Future<Result<Ok, Error>>` and a `f` function taking `Error` and returning `Result<ReturnValue, Error>` and returns a new `Future<Result<ReturnValue, Error>>`
+
+```ts title="Examples"
+Future.value(Result.Error(3)).mapErrorToResult((ok) => {
+  return Result.Ok(ok * 2);
+});
+// Future<Result.Ok<6>>
+
+Future.value(Result.Error(3)).mapErrorToResult((ok) =>
   isEven(ok) ? Result.Ok(ok) : Result.Error("Odd number");
 );
 // Future<Result.Error<"Odd number">>
@@ -248,18 +271,21 @@ const step2 = f.map(Result.all);
 
 ## Cheatsheet
 
-| Method                           | Input              | Function input | Function output    | Returned value     |
-| -------------------------------- | ------------------ | -------------- | ------------------ | ------------------ |
-| [`mapResult`](#mapresultf)       | `Future(Ok(x))`    | `x`            | `Ok(y)`            | `Future(Ok(y))`    |
-| [`mapResult`](#mapresultf)       | `Future(Ok(x))`    | `x`            | `Error(f)`         | `Future(Error(f))` |
-| [`mapResult`](#mapresultf)       | `Future(Error(e))` | _not provided_ | _not executed_     | `Future(Error(e))` |
-| [`mapOk`](#mapokf)               | `Future(Ok(x))`    | `x`            | `y`                | `Future(Ok(y))`    |
-| [`mapOk`](#mapokf)               | `Future(Error(e))` | _not provided_ | _not executed_     | `Future(Error(e))` |
-| [`mapError`](#maperrorf)         | `Future(Ok(x))`    | _not provided_ | _not executed_     | `Future(Ok(x))`    |
-| [`mapError`](#maperrorf)         | `Future(Error(e))` | `e`            | `f`                | `Future(Error(f))` |
-| [`flatMapOk`](#flatmapokf)       | `Future(Ok(x))`    | `x`            | `Future(Ok(y))`    | `Future(Ok(y))`    |
-| [`flatMapOk`](#flatmapokf)       | `Future(Ok(x))`    | `x`            | `Future(Error(f))` | `Future(Error(f))` |
-| [`flatMapOk`](#flatmapokf)       | `Future(Error(e))` | _not provided_ | _not executed_     | `Future(Error(e))` |
-| [`flatMapError`](#flatmaperrorf) | `Future(Ok(x))`    | _not provided_ | _not executed_     | `Future(Ok(x))`    |
-| [`flatMapError`](#flatmaperrorf) | `Future(Error(e))` | `e`            | `Future(Ok(y))`    | `Future(Ok(y))`    |
-| [`flatMapError`](#flatmaperrorf) | `Future(Error(e))` | `e`            | `Future(Error(f))` | `Future(Error(f))` |
+| Method                                   | Input              | Function input | Function output    | Returned value     |
+| ---------------------------------------- | ------------------ | -------------- | ------------------ | ------------------ |
+| [`mapOkToResult`](#mapoktoresultf)       | `Future(Ok(x))`    | `x`            | `Ok(y)`            | `Future(Ok(y))`    |
+| [`mapOkToResult`](#mapoktoresultf)       | `Future(Ok(x))`    | `x`            | `Error(f)`         | `Future(Error(f))` |
+| [`mapOkToResult`](#mapoktoresultf)       | `Future(Error(e))` | _not provided_ | _not executed_     | `Future(Error(e))` |
+| [`mapErrorToResult`](#maperrortoresultf) | `Future(Error(e))` | `e`            | `Ok(y)`            | `Future(Ok(y))`    |
+| [`mapErrorToResult`](#maperrortoresultf) | `Future(Error(e))` | `e`            | `Error(f)`         | `Future(Error(f))` |
+| [`mapErrorToResult`](#maperrortoresultf) | `Future(Ok(x))`    | _not provided_ | _not executed_     | `Future(Ok(x))`    |
+| [`mapOk`](#mapokf)                       | `Future(Ok(x))`    | `x`            | `y`                | `Future(Ok(y))`    |
+| [`mapOk`](#mapokf)                       | `Future(Error(e))` | _not provided_ | _not executed_     | `Future(Error(e))` |
+| [`mapError`](#maperrorf)                 | `Future(Ok(x))`    | _not provided_ | _not executed_     | `Future(Ok(x))`    |
+| [`mapError`](#maperrorf)                 | `Future(Error(e))` | `e`            | `f`                | `Future(Error(f))` |
+| [`flatMapOk`](#flatmapokf)               | `Future(Ok(x))`    | `x`            | `Future(Ok(y))`    | `Future(Ok(y))`    |
+| [`flatMapOk`](#flatmapokf)               | `Future(Ok(x))`    | `x`            | `Future(Error(f))` | `Future(Error(f))` |
+| [`flatMapOk`](#flatmapokf)               | `Future(Error(e))` | _not provided_ | _not executed_     | `Future(Error(e))` |
+| [`flatMapError`](#flatmaperrorf)         | `Future(Ok(x))`    | _not provided_ | _not executed_     | `Future(Ok(x))`    |
+| [`flatMapError`](#flatmaperrorf)         | `Future(Error(e))` | `e`            | `Future(Ok(y))`    | `Future(Ok(y))`    |
+| [`flatMapError`](#flatmaperrorf)         | `Future(Error(e))` | `e`            | `Future(Error(f))` | `Future(Error(f))` |

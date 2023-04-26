@@ -26,10 +26,20 @@ interface IAsyncData<A> {
    *
    * (AsyncData\<Result<A, E>>, A => \<Result<B, F>) => AsyncData\<Result<B, F | E>>
    */
-  mapResult<A, E, B, F>(
+  mapOkToResult<A, E, B, F>(
     this: AsyncData<Result<A, E>>,
     func: (value: A) => Result<B, F>,
   ): AsyncData<Result<B, F | E>>;
+
+  /**
+   * Takes a callback taking the Ok value and returning a new result and returns an AsyncData with this new result
+   *
+   * (AsyncData\<Result<A, E>>, E => \<Result<B, F>) => AsyncData\<Result<A | B, F>>
+   */
+  mapErrorToResult<A, E, B, F>(
+    this: AsyncData<Result<A, E>>,
+    func: (value: E) => Result<B, F>,
+  ): AsyncData<Result<A | B, F>>;
 
   /**
    * Takes a callback taking the Ok value and returning a new ok value and returns an AsyncData resolving to this new result
@@ -159,7 +169,7 @@ const asyncDataProto = (<A>(): IAsyncData<A> => ({
    *
    * Takes a callback taking the Ok value and returning a new result and returns an AsyncData with this new result
    */
-  mapResult<A, E, B, F>(
+  mapOkToResult<A, E, B, F>(
     this: AsyncData<Result<A, E>>,
     func: (value: A) => Result<B, F>,
   ): AsyncData<Result<B, F | E>> {
@@ -167,6 +177,23 @@ const asyncDataProto = (<A>(): IAsyncData<A> => ({
       return value.match({
         Ok: (value) => func(value),
         Error: () => value as unknown as Result<B, E | F>,
+      });
+    });
+  },
+
+  /**
+   * For AsyncData<Result<*>>:
+   *
+   * Takes a callback taking the Error value and returning a new result and returns an AsyncData with this new result
+   */
+  mapErrorToResult<A, E, B, F>(
+    this: AsyncData<Result<A, E>>,
+    func: (value: E) => Result<B, F>,
+  ): AsyncData<Result<A | B, F>> {
+    return this.map((value) => {
+      return value.match({
+        Error: (error) => func(error),
+        Ok: () => value as unknown as Result<A | B, F>,
       });
     });
   },
@@ -333,7 +360,7 @@ export const AsyncData = {
   /**
    * Turns an array of asyncData into an asyncData of array
    */
-  all<AsyncDatas extends AsyncData<unknown>[] | []>(asyncDatas: AsyncDatas) {
+  all<AsyncDatas extends AsyncData<any>[] | []>(asyncDatas: AsyncDatas) {
     const length = asyncDatas.length;
     let acc = AsyncData.Done<Array<unknown>>([]);
     let index = 0;
@@ -365,16 +392,14 @@ export const AsyncData = {
   /**
    * Turns an dict of asyncData into a asyncData of dict
    */
-  allFromDict<Dict extends LooseRecord<AsyncData<unknown>>>(
-    dict: Dict,
-  ): AsyncData<{
-    [K in keyof Dict]: Dict[K] extends AsyncData<infer T> ? T : never;
-  }> {
+  allFromDict<Dict extends LooseRecord<AsyncData<any>>>(dict: Dict) {
     const dictKeys = keys(dict);
 
     return AsyncData.all(values(dict)).map((values) =>
       Object.fromEntries(zip(dictKeys, values)),
-    );
+    ) as AsyncData<{
+      [K in keyof Dict]: Dict[K] extends AsyncData<infer T> ? T : never;
+    }>;
   },
 
   equals<A>(a: AsyncData<A>, b: AsyncData<A>, equals: (a: A, b: A) => boolean) {

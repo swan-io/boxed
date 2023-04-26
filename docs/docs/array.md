@@ -7,48 +7,48 @@ sidebar_label: Array
 import { Array } from "@swan-io/boxed";
 ```
 
-## Array.keepMap(array, func)
+## Array.filterMap(array, func)
 
 Returns an array containing the `Option.Some` values returned by `func` for each array item.
 
 This function can be useful to refine the types of an array.
 
 ```ts title="Examples"
-Array.keepMap([1, 2, 3], (x) =>
+Array.filterMap([1, 2, 3], (x) =>
   isEven(x) === 0 ? Option.Some(x) : Option.None(),
 ); // [2]
 ```
 
-## Array.keepMapOne(array, func)
+## Array.findMap(array, func)
 
 Returns the first `Option.Some` value returned by `func` for each array item.
 
 ```ts title="Examples"
-Array.keepMapOne([1, 2, 3], (x) =>
+Array.findMap([1, 2, 3], (x) =>
   isEven(x) === 0 ? Option.Some(x) : Option.None(),
 ); // Option.Some(2)
 ```
 
-## Array.getBy(array, predicate)
+## Array.find(array, predicate)
 
 Return the first item in the array for which `predicate` returns true.
 
 The function returns an `Option` so that we can distinguish between a found nullish value and a not found value.
 
 ```ts title="Examples"
-Array.getBy(array, (x) => x === undefined);
+Array.getfindBy(array, (x) => x === undefined);
 // Some(undefined) if found
 // None if not found
 ```
 
-## Array.getIndexBy(array, predicate)
+## Array.findIndex(array, predicate)
 
 Return the first index in the array for which `predicate` returns true.
 
 The function returns an `Option`.
 
 ```ts title="Examples"
-Array.getIndexBy(array, (x) => x === undefined);
+Array.findIndex(array, (x) => x === undefined);
 // Some(index) if found
 // None if not found
 ```
@@ -77,7 +77,7 @@ Array.zip([1, 2, 3], ["one", "two", "three"]);
 Turns an array of pairs into two arrays.
 
 ```ts title="Examples"
-Array.zip([
+Array.unzip([
   [1, "one"],
   [2, "two"],
   [3, "three"],

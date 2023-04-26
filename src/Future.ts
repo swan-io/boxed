@@ -54,7 +54,7 @@ export class Future<A> {
   /**
    * Turns an array of futures into a future of array
    */
-  static all = <Futures extends readonly Future<unknown>[] | []>(
+  static all = <Futures extends readonly Future<any>[] | []>(
     futures: Futures,
     propagateCancel = false,
   ) => {
@@ -87,16 +87,14 @@ export class Future<A> {
   /**
    * Turns an dict of futures into a future of dict
    */
-  static allFromDict = <Dict extends LooseRecord<Future<unknown>>>(
-    dict: Dict,
-  ): Future<{
-    [K in keyof Dict]: Dict[K] extends Future<infer T> ? T : never;
-  }> => {
+  static allFromDict = <Dict extends LooseRecord<Future<any>>>(dict: Dict) => {
     const dictKeys = keys(dict);
 
     return Future.all(values(dict)).map((values) =>
       Object.fromEntries(zip(dictKeys, values)),
-    );
+    ) as Future<{
+      [K in keyof Dict]: Dict[K] extends Future<infer T> ? T : never;
+    }>;
   };
 
   // Not accessible from the outside
@@ -264,7 +262,7 @@ export class Future<A> {
    *
    * Takes a callback taking the Ok value and returning a new result and returns a future resolving to this new result
    */
-  mapResult<A, E, B, F>(
+  mapOkToResult<A, E, B, F>(
     this: Future<Result<A, E>>,
     func: (value: A) => Result<B, F>,
     propagateCancel = false,
@@ -273,6 +271,24 @@ export class Future<A> {
       return value.match({
         Ok: (value) => func(value),
         Error: () => value as unknown as Result<B, E | F>,
+      });
+    }, propagateCancel);
+  }
+
+  /**
+   * For Future<Result<*>>:
+   *
+   * Takes a callback taking the Error value and returning a new result and returns a future resolving to this new result
+   */
+  mapErrorToResult<A, E, B, F>(
+    this: Future<Result<A, E>>,
+    func: (value: E) => Result<B, F>,
+    propagateCancel = false,
+  ): Future<Result<A | B, F>> {
+    return this.map((value) => {
+      return value.match({
+        Error: (error) => func(error),
+        Ok: () => value as unknown as Result<A | B, F>,
       });
     }, propagateCancel);
   }
