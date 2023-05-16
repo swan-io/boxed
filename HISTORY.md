@@ -1,3 +1,9 @@
+# 1.0.2
+
+Features:
+
+- Add `P` alias for `pattern` (afb971e)
+
 # 1.0.1
 
 Changes:
