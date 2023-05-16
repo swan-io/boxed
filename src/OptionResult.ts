@@ -155,6 +155,11 @@ const NONE = (() => {
 
 const None = <A = never>(): Option<A> => NONE as None<A>;
 
+const optionPattern = {
+  Some: <A>(value: A) => ({ tag: "Some", value } as const),
+  None: { tag: "None" } as const,
+};
+
 export const Option = {
   /**
    * Create an Option.Some value
@@ -242,10 +247,8 @@ export const Option = {
       : a.tag === b.tag;
   },
 
-  pattern: {
-    Some: <T>(x: T) => ({ tag: "Some", value: x } as const),
-    None: { tag: "None" } as const,
-  },
+  P: optionPattern,
+  pattern: optionPattern,
 };
 
 interface IResult<A, E> {
@@ -457,6 +460,11 @@ const Error = <A = never, E = never>(value: E): Result<A, E> => {
   return result;
 };
 
+const resultPattern = {
+  Ok: <A>(value: A) => ({ tag: "Ok", value } as const),
+  Error: <E>(value: E) => ({ tag: "Error", value } as const),
+};
+
 export const Result = {
   /**
    * Create an Result.Ok value
@@ -573,8 +581,6 @@ export const Result = {
     return equals(a.value as unknown as A, b.value as unknown as A);
   },
 
-  pattern: {
-    Ok: <T>(x: T) => ({ tag: "Ok", value: x } as const),
-    Error: <T>(x: T) => ({ tag: "Error", value: x } as const),
-  },
+  P: resultPattern,
+  pattern: resultPattern,
 };

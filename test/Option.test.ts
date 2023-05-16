@@ -158,15 +158,15 @@ test("Option.allFromDict", () => {
 test("ts-pattern", () => {
   expect(
     match(Option.Some(1))
-      .with(Option.pattern.Some(P.select()), (value) => value)
-      .with(Option.pattern.None, () => 2)
+      .with(Option.P.Some(P.select()), (value) => value)
+      .with(Option.P.None, () => 2)
       .exhaustive(),
   ).toEqual(1);
 
   expect(
     match(Option.None())
-      .with(Option.pattern.Some(P.any), (value) => value)
-      .with(Option.pattern.None, () => 2)
+      .with(Option.P.Some(P.any), (value) => value)
+      .with(Option.P.None, () => 2)
       .exhaustive(),
   ).toEqual(2);
 });

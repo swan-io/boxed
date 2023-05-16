@@ -43,12 +43,12 @@
   "devDependencies": {
     "@types/benchmark": "^2.1.2",
     "benchmark": "^2.1.4",
-    "fp-ts": "^2.14.0",
+    "fp-ts": "^2.15.0",
     "microbundle": "^0.15.1",
     "prettier": "^2.8.8",
     "prettier-plugin-organize-imports": "^3.2.2",
-    "ts-pattern": "^4.2.2",
+    "ts-pattern": "^4.3.0",
     "typescript": "^5.0.4",
-    "vitest": "^0.30.1"
+    "vitest": "^0.31.0"
   }
 }
