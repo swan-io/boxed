@@ -207,15 +207,15 @@ test("Result.allFromDict", () => {
 test("ts-pattern", () => {
   expect(
     match(Result.Ok(1))
-      .with(Result.pattern.Ok(P.select()), (value) => value)
-      .with(Result.pattern.Error(P.any), () => 2)
+      .with(Result.P.Ok(P.select()), (value) => value)
+      .with(Result.P.Error(P.any), () => 2)
       .exhaustive(),
   ).toEqual(1);
 
   expect(
     match(Result.Error(2))
-      .with(Result.pattern.Ok(P.any), (value) => value)
-      .with(Result.pattern.Error(P.select()), (value) => value)
+      .with(Result.P.Ok(P.any), (value) => value)
+      .with(Result.P.Error(P.select()), (value) => value)
       .exhaustive(),
   ).toEqual(2);
 });

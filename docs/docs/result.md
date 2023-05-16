@@ -406,8 +406,8 @@ import { match, P } from "ts-pattern";
 import { Result } from "@swan-io/boxed";
 
 match(myResult)
-  .with(Result.pattern.Ok(P.select()), (value) => console.log(value))
-  .with(Result.pattern.Error(P.select()), (error) => {
+  .with(Result.P.Ok(P.select()), (value) => console.log(value))
+  .with(Result.P.Error(P.select()), (error) => {
     console.error(error);
     return "fallback";
   })

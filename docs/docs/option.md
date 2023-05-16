@@ -269,8 +269,8 @@ import { match, P } from "ts-pattern";
 import { Option } from "@swan-io/boxed";
 
 match(myOption)
-  .with(Option.pattern.Some(P.select()), (value) => console.log(value))
-  .with(Option.pattern.None, () => "No value")
+  .with(Option.P.Some(P.select()), (value) => console.log(value))
+  .with(Option.P.None, () => "No value")
   .exhaustive();
 ```
 

@@ -286,9 +286,9 @@ import { match, P } from "ts-pattern";
 import { AsyncData } from "@swan-io/boxed";
 
 match(asyncData)
-  .with(AsyncData.pattern.Done(P.select()), (value) => console.log(value))
-  .with(AsyncData.pattern.Loading, () => "Loading ...")
-  .with(AsyncData.pattern.NotAsked, () => "")
+  .with(AsyncData.P.Done(P.select()), (value) => console.log(value))
+  .with(AsyncData.P.Loading, () => "Loading ...")
+  .with(AsyncData.P.NotAsked, () => "")
   .exhaustive();
 ```
 

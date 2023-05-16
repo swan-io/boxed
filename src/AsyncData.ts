@@ -341,6 +341,12 @@ const NOT_ASKED = (() => {
 const Loading = <A = never>(): AsyncData<A> => LOADING as Loading<A>;
 const NotAsked = <A = never>(): AsyncData<A> => NOT_ASKED as NotAsked<A>;
 
+const asyncDataPattern = {
+  Done: <A>(value: A) => ({ tag: "Done", value } as const),
+  NotAsked: { tag: "NotAsked" } as const,
+  Loading: { tag: "Loading" } as const,
+};
+
 export const AsyncData = {
   /**
    * Create an AsyncData.Done value
@@ -410,9 +416,6 @@ export const AsyncData = {
       : a.tag === b.tag;
   },
 
-  pattern: {
-    Done: <T>(x: T) => ({ tag: "Done", value: x } as const),
-    NotAsked: { tag: "NotAsked" } as const,
-    Loading: { tag: "Loading" } as const,
-  },
+  P: asyncDataPattern,
+  pattern: asyncDataPattern,
 };
