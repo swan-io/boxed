@@ -313,6 +313,22 @@ result.tapError(console.log).map((x) => x * 2);
 
 ## Statics
 
+### Result.isResult(value)
+
+```ts
+isResult(value: unknown): boolean
+```
+
+Type guard, checks if the provided value is a result.
+
+```ts title="Examples"
+Result.isResult(Result.Ok(1));
+// true
+
+Result.isResult([]);
+// false
+```
+
 ### Result.all(results)
 
 ```ts

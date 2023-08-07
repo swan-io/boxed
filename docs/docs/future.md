@@ -126,6 +126,22 @@ We provide [some special helpers](/future-result) for `Future`s containing a `Re
 
 ## Statics
 
+### Future.isFuture(value)
+
+```ts
+isFuture(value: unknown): boolean
+```
+
+Type guard, checks if the provided value is a future.
+
+```ts title="Examples"
+Future.isFuture(Future.value(1));
+// true
+
+Future.isFuture([]);
+// false
+```
+
 ### Future.all(futures)
 
 ```ts

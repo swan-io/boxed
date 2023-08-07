@@ -230,6 +230,22 @@ option.tap(console.log).map((x) => x * 2);
 
 ## Statics
 
+### Option.isOption(value)
+
+```ts
+isOption(value: unknown): boolean
+```
+
+Type guard, checks if the provided value is an option.
+
+```ts title="Examples"
+Option.isOption(Option.Some(1));
+// true
+
+Option.isOption([]);
+// false
+```
+
 ### Option.all(options)
 
 ```ts

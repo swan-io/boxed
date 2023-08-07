@@ -229,6 +229,22 @@ asyncData.tap(console.log).map((x) => x * 2);
 
 ## Statics
 
+### AsyncData.isAsyncData(value)
+
+```ts
+isAsyncData(value: unknown): boolean
+```
+
+Type guard, checks if the provided value is an asyncData.
+
+```ts title="Examples"
+AsyncData.isAsyncData(AsyncData.Done(1));
+// true
+
+AsyncData.isAsyncData([]);
+// false
+```
+
 ### AsyncData.all(asyncDatas)
 
 ```ts
