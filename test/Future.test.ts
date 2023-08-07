@@ -411,3 +411,11 @@ test("Future resultToPromise", async () => {
     expect(err).toEqual(1);
   }
 });
+
+test("Future isFuture", async () => {
+  expect(Future.isFuture(Future.value(1))).toEqual(true);
+  expect(Future.isFuture(Promise.resolve(1))).toEqual(false);
+  expect(Future.isFuture(1)).toEqual(false);
+  expect(Future.isFuture([])).toEqual(false);
+  expect(Future.isFuture({})).toEqual(false);
+});

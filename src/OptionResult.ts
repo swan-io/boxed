@@ -171,6 +171,11 @@ export const Option = {
    */
   None,
 
+  isOption: (value: unknown): value is Option<unknown> =>
+    value != null &&
+    (Object.prototype.isPrototypeOf.call(optionProto, value) ||
+      Object.prototype.isPrototypeOf.call(someProto, value)),
+
   /**
    * Create an Option from a nullable value
    */
@@ -475,6 +480,11 @@ export const Result = {
    * Create an Result.Error value
    */
   Error,
+
+  isResult: (value: unknown): value is Result<unknown, unknown> =>
+    value != null &&
+    (Object.prototype.isPrototypeOf.call(okProto, value) ||
+      Object.prototype.isPrototypeOf.call(errorProto, value)),
 
   /**
    * Runs the function and resolves a result of its return value, or to an error if thrown
