@@ -1,3 +1,9 @@
+# 1.1.0
+
+Features:
+
+- Add `Option.isOption`, `Result.isResult`, `AsyncData.isAsyncData` & `Future.isFuture` guards (8b7841c)
+
 # 1.0.2
 
 Features:
