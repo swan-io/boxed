@@ -417,8 +417,9 @@ export const AsyncData = {
   },
 
   isAsyncData: (value: unknown): value is AsyncData<unknown> =>
-    Object.prototype.isPrototypeOf.call(doneProto, value as Object) ||
-    Object.prototype.isPrototypeOf.call(asyncDataProto, value as Object),
+    value != null &&
+    (Object.prototype.isPrototypeOf.call(doneProto, value) ||
+      Object.prototype.isPrototypeOf.call(asyncDataProto, value)),
 
   P: asyncDataPattern,
   pattern: asyncDataPattern,

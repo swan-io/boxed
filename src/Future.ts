@@ -31,7 +31,7 @@ export class Future<A> {
   };
 
   static isFuture = (value: unknown): value is Future<unknown> =>
-    Object.prototype.isPrototypeOf.call(futureProto, value as Object);
+    value != null && Object.prototype.isPrototypeOf.call(futureProto, value);
 
   /**
    * Creates a future resolved to the passed value
