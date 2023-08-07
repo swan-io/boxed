@@ -182,3 +182,11 @@ test("Option.toResult", () => {
   expect(Option.Some(1).toResult("NotFound")).toEqual(Result.Ok(1));
   expect(Option.None().toResult("NotFound")).toEqual(Result.Error("NotFound"));
 });
+
+test("Option.isOption", async () => {
+  expect(Option.isOption(Option.Some(1))).toEqual(true);
+  expect(Option.isOption(Option.None())).toEqual(true);
+  expect(Option.isOption(1)).toEqual(false);
+  expect(Option.isOption([])).toEqual(false);
+  expect(Option.isOption({})).toEqual(false);
+});

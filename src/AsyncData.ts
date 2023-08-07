@@ -416,6 +416,10 @@ export const AsyncData = {
       : a.tag === b.tag;
   },
 
+  isAsyncData: (value: unknown): value is AsyncData<unknown> =>
+    Object.prototype.isPrototypeOf.call(doneProto, value as Object) ||
+    Object.prototype.isPrototypeOf.call(asyncDataProto, value as Object),
+
   P: asyncDataPattern,
   pattern: asyncDataPattern,
 };

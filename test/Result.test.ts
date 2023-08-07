@@ -240,3 +240,11 @@ test("Result.fromOption", () => {
     Result.Error("NotFound"),
   );
 });
+
+test("Result.isResult", async () => {
+  expect(Result.isResult(Result.Ok(1))).toEqual(true);
+  expect(Result.isResult(Result.Error(1))).toEqual(true);
+  expect(Result.isResult(1)).toEqual(false);
+  expect(Result.isResult([])).toEqual(false);
+  expect(Result.isResult({})).toEqual(false);
+});
