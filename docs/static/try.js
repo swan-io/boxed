@@ -1,4 +1,4 @@
-import("https://unpkg.com/@swan-io/boxed/dist/Boxed.esm.js").then((Boxed) => {
+import("https://unpkg.com/@swan-io/boxed/dist/Boxed.mjs").then((Boxed) => {
   window.Boxed = Boxed;
   const { Array, ...SafeBoxed } = Boxed;
   Object.assign(window, SafeBoxed);
