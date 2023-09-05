@@ -231,7 +231,7 @@ const step1 = Future.all(input);
 
 // Future<Result<Array<number>, never>>
 // -> Future<[Result.Ok<[1, 2, 3]>>
-const step2 = f.map(Result.all);
+const step2 = step1.map(Result.all);
 ```
 
 ### Future.allFromDict(resultFutures)
@@ -266,7 +266,7 @@ const step1 = Future.all(input);
 
 // Future<Result<Array<number>, never>>
 // -> Future<[Result.Ok<{a: 1, b: 2, c: 3}>>
-const step2 = f.map(Result.all);
+const step2 = step1.map(Result.all);
 ```
 
 ## Cheatsheet
