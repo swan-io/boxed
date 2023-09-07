@@ -1,3 +1,9 @@
+# 1.2.0
+
+Fixes:
+
+- Make `_state` private in `Future`'s exposed signature (25f7bc9)
+
 # 1.1.0
 
 Features:
