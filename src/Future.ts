@@ -3,21 +3,6 @@ import { Result } from "./OptionResult";
 import { LooseRecord } from "./types";
 import { zip } from "./ZipUnzip";
 
-function FutureInit<A>(
-  this: Future<A>,
-  init: (resolver: (value: A) => void) => (() => void) | void,
-) {
-  const resolver = (value: A) => {
-    if (this._state.tag === "Pending") {
-      this._state.resolveCallbacks?.forEach((func) => func(value));
-      this._state = { tag: "Resolved", value };
-    }
-  };
-
-  this._state = { tag: "Pending" };
-  this._state.cancel = init(resolver);
-}
-
 export class Future<A> {
   /**
    * Creates a new future from its initializer function (like `new Promise(...)`)
@@ -25,9 +10,7 @@ export class Future<A> {
   static make = <A>(
     init: (resolver: (value: A) => void) => (() => void) | void,
   ): Future<A> => {
-    const future = Object.create(futureProto);
-    FutureInit.call(future, init);
-    return future as Future<A>;
+    return new Future(init);
   };
 
   static isFuture = (value: unknown): value is Future<unknown> =>
@@ -103,7 +86,7 @@ export class Future<A> {
   };
 
   // Not accessible from the outside
-  protected _state:
+  private _state:
     | {
         tag: "Pending";
         resolveCallbacks?: Array<(value: A) => void>;
@@ -114,9 +97,17 @@ export class Future<A> {
     | { tag: "Resolved"; value: A };
 
   protected constructor(
-    _init: (resolver: (value: A) => void) => (() => void) | void,
+    init: (resolver: (value: A) => void) => (() => void) | void,
   ) {
+    const resolver = (value: A) => {
+      if (this._state.tag === "Pending") {
+        this._state.resolveCallbacks?.forEach((func) => func(value));
+        this._state = { tag: "Resolved", value };
+      }
+    };
+
     this._state = { tag: "Pending" };
+    this._state.cancel = init(resolver);
   }
 
   /**
