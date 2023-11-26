@@ -190,3 +190,12 @@ test("Option.isOption", async () => {
   expect(Option.isOption([])).toEqual(false);
   expect(Option.isOption({})).toEqual(false);
 });
+
+test("Option.any", () => {
+  const sum41 = [Option.Some(4), Option.Some(1), Option.None()];
+  expect(Option.any(sum41)).toStrictEqual([Option.Some(4), Option.Some(1)]);
+
+  const listOfNones = [Option.None(), Option.None(), Option.None()];
+  expect(Option.any(listOfNones)).toStrictEqual([]);
+  expect(Option.any([])).toStrictEqual([]);
+});

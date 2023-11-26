@@ -252,6 +252,19 @@ export const Option = {
       : a.tag === b.tag;
   },
 
+  any<DataType extends any, Options extends Option<DataType>[]>(
+    options: Options,
+  ): Some<DataType>[] {
+    const output: Some<DataType>[] = [];
+    for (const item of options) {
+      if (item.isSome()) {
+        output.push(item);
+      }
+    }
+
+    return output;
+  },
+
   P: optionPattern,
   pattern: optionPattern,
 };
