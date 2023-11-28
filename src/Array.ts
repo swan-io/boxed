@@ -7,7 +7,7 @@ export const of = Array.of;
 export const isArray = Array.isArray;
 
 export const findMap = <A, B>(
-  array: Array<A>,
+  array: ReadonlyArray<A>,
   func: (item: A) => Option<B>,
 ): Option<B> => {
   let index = -1;
@@ -22,7 +22,7 @@ export const findMap = <A, B>(
 };
 
 export const filterMap = <A, B>(
-  array: Array<A>,
+  array: ReadonlyArray<A>,
   func: (item: A) => Option<B>,
 ): Array<B> => {
   const result: Array<B> = [];
@@ -36,7 +36,7 @@ export const filterMap = <A, B>(
 };
 
 export const find = <A>(
-  array: Array<A>,
+  array: ReadonlyArray<A>,
   func: (item: A) => boolean,
 ): Option<A> => {
   let index = -1;
@@ -50,7 +50,7 @@ export const find = <A>(
 };
 
 export const findIndex = <A>(
-  array: Array<A>,
+  array: ReadonlyArray<A>,
   func: (item: A) => boolean,
 ): Option<number> => {
   let index = -1;
@@ -71,7 +71,7 @@ const defaultCompare = <A>(a: A, b: A) => {
 };
 
 export const binarySearchBy = <A>(
-  sortedArray: Array<A>,
+  sortedArray: ReadonlyArray<A>,
   key: A,
   compare = defaultCompare,
 ) => {
