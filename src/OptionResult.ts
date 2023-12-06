@@ -156,7 +156,7 @@ const NONE = (() => {
 const None = <A = never>(): Option<A> => NONE as None<A>;
 
 const optionPattern = {
-  Some: <A>(value: A) => ({ tag: "Some", value }) as const,
+  Some: <const A>(value: A) => ({ tag: "Some", value }) as const,
   None: { tag: "None" } as const,
 };
 
@@ -465,8 +465,8 @@ const Error = <A = never, E = never>(value: E): Result<A, E> => {
 };
 
 const resultPattern = {
-  Ok: <A>(value: A) => ({ tag: "Ok", value }) as const,
-  Error: <E>(value: E) => ({ tag: "Error", value }) as const,
+  Ok: <const A>(value: A) => ({ tag: "Ok", value }) as const,
+  Error: <const E>(value: E) => ({ tag: "Error", value }) as const,
 };
 
 export const Result = {

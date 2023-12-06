@@ -342,7 +342,7 @@ const Loading = <A = never>(): AsyncData<A> => LOADING as Loading<A>;
 const NotAsked = <A = never>(): AsyncData<A> => NOT_ASKED as NotAsked<A>;
 
 const asyncDataPattern = {
-  Done: <A>(value: A) => ({ tag: "Done", value }) as const,
+  Done: <const A>(value: A) => ({ tag: "Done", value }) as const,
   NotAsked: { tag: "NotAsked" } as const,
   Loading: { tag: "Loading" } as const,
 };
