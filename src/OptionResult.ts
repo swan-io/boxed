@@ -253,7 +253,6 @@ export const Option = {
   },
 
   P: optionPattern,
-  pattern: optionPattern,
 };
 
 interface IResult<A, E> {
@@ -592,5 +591,4 @@ export const Result = {
   },
 
   P: resultPattern,
-  pattern: resultPattern,
 };

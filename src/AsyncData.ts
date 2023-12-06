@@ -422,5 +422,4 @@ export const AsyncData = {
       Object.prototype.isPrototypeOf.call(asyncDataProto, value)),
 
   P: asyncDataPattern,
-  pattern: asyncDataPattern,
 };
