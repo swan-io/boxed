@@ -52,8 +52,8 @@ export const decode = (value: string) => {
       return value.tag === "NotAsked"
         ? AsyncData.NotAsked()
         : value.tag === "Loading"
-        ? AsyncData.Loading()
-        : AsyncData.Done(value.value);
+          ? AsyncData.Loading()
+          : AsyncData.Done(value.value);
     }
     return value;
   });
