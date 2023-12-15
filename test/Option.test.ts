@@ -27,7 +27,7 @@ test("Option.flatMap", () => {
 
 test("Option.filter", () => {
   const isOne = (value: number): value is 1 => value === 1;
-  expect(Option.Some(1).filter((x) => x === 2)).toEqual(Option.None);
+  expect(Option.Some(1).filter((x) => x === 2)).toEqual(Option.None());
   expect(Option.Some(1).filter((x) => x === 1)).toEqual(Option.Some(1));
   expect(Option.Some(1).filter(isOne)).toEqual(Option.Some(1));
 });
