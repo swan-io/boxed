@@ -18,6 +18,17 @@ interface IOption<A> {
   flatMap<B>(this: Option<A>, func: (value: A) => Option<B>): Option<B>;
 
   /**
+   * Returns the Option if its value matches the predicate, otherwise false
+   *
+   * (Option\<A>, A => boolean) => Option\<A>
+   */
+  filter<B extends A>(
+    this: Option<A>,
+    func: (value: A) => value is B,
+  ): Option<B>;
+  filter(this: Option<A>, func: (value: A) => boolean): Option<A>;
+
+  /**
    * Return the value if present, and the fallback otherwise
    *
    * (Option\<A>, A) => A
@@ -92,6 +103,10 @@ const optionProto = (<A>(): IOption<A> => ({
       : (this as unknown as Option<B>);
   },
 
+  filter(this: Option<A>, func: (value: A) => boolean) {
+    return this.tag === "Some" && func(this.value) ? this : Option.None();
+  },
+
   getWithDefault(this: Option<A>, defaultValue: A) {
     return this.tag === "Some" ? this.value : defaultValue;
   },
@@ -156,7 +171,7 @@ const NONE = (() => {
 const None = <A = never>(): Option<A> => NONE as None<A>;
 
 const optionPattern = {
-  Some: <const A>(value: A) => ({ tag: "Some", value }) as const,
+  Some: <const A>(value: A) => ({ tag: "Some", value } as const),
   None: { tag: "None" } as const,
 };
 
@@ -465,8 +480,8 @@ const Error = <A = never, E = never>(value: E): Result<A, E> => {
 };
 
 const resultPattern = {
-  Ok: <const A>(value: A) => ({ tag: "Ok", value }) as const,
-  Error: <const E>(value: E) => ({ tag: "Error", value }) as const,
+  Ok: <const A>(value: A) => ({ tag: "Ok", value } as const),
+  Error: <const E>(value: E) => ({ tag: "Error", value } as const),
 };
 
 export const Result = {

@@ -282,8 +282,8 @@ const asyncDataProto = (<A>(): IAsyncData<A> => ({
     return this.tag === "Done"
       ? config.Done(this.value)
       : this.tag === "Loading"
-        ? config.Loading()
-        : config.NotAsked();
+      ? config.Loading()
+      : config.NotAsked();
   },
 
   tap(this: AsyncData<A>, func: (asyncData: AsyncData<A>) => unknown) {
@@ -342,7 +342,7 @@ const Loading = <A = never>(): AsyncData<A> => LOADING as Loading<A>;
 const NotAsked = <A = never>(): AsyncData<A> => NOT_ASKED as NotAsked<A>;
 
 const asyncDataPattern = {
-  Done: <const A>(value: A) => ({ tag: "Done", value }) as const,
+  Done: <const A>(value: A) => ({ tag: "Done", value } as const),
   NotAsked: { tag: "NotAsked" } as const,
   Loading: { tag: "Loading" } as const,
 };

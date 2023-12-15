@@ -25,6 +25,13 @@ test("Option.flatMap", () => {
   expect(Option.Some(1).flatMap((x) => Option.None())).toEqual(Option.None());
 });
 
+test("Option.filter", () => {
+  const isOne = (value: number): value is 1 => value === 1;
+  expect(Option.Some(1).filter((x) => x === 2)).toEqual(Option.None);
+  expect(Option.Some(1).filter((x) => x === 1)).toEqual(Option.Some(1));
+  expect(Option.Some(1).filter(isOne)).toEqual(Option.Some(1));
+});
+
 test("Option.getWithDefault", () => {
   expect(Option.Some(1).getWithDefault(0)).toEqual(1);
   expect(Option.None<number>().getWithDefault(0)).toEqual(0);

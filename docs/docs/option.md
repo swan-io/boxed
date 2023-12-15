@@ -79,6 +79,22 @@ option.flatMap((value) => value.optionalProperty);
 // Option<optionalProperty>
 ```
 
+### .filter(f)
+
+```ts
+Option<A>.filter(f: (value: A) => boolean): Option<A>
+```
+
+If the option is `Some(value)` and that `f(value)` is `true``, returns `Some(value)`, otherwise returns `None`.
+
+```ts title="Examples"
+Option.Some(3).filter((x) => x > 2);
+// Option.Some(3)
+
+Option.Some(1).filter((x) => x > 2);
+// Option.None
+```
+
 ### .getWithDefault(defaultValue)
 
 ```ts
