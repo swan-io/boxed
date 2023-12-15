@@ -1,3 +1,18 @@
+# 2.0.0
+
+Breaking changes:
+
+- Boxed now requires TypeScript > 5 ⚠️
+
+Features:
+
+- Add `option.filter` method (2f72ce8)
+
+Changes:
+
+- Make patterns use `const` parameter for more precise handling (ebbc808)
+- Make `Array` functions accept `ReadonlyArray` (687b688) (thanks [@runeh](https://github.com/runeh))
+
 # 1.2.0
 
 Fixes:
