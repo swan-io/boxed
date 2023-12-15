@@ -139,7 +139,7 @@ export default function Home() {
 
           <Block
             reversed
-            title={"Taylored for your IDE"}
+            title={"Tailored for your IDE"}
             description={
               <>
                 Thanks to our <strong>chaining API</strong>, you get a nice{" "}
