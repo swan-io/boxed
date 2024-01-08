@@ -2,7 +2,7 @@
 
 Breaking changes:
 
-- Boxed now requires TypeScript > 5 ⚠️
+- Boxed now requires TypeScript >= 5 ⚠️
 
 Features:
 
