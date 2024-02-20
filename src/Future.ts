@@ -101,8 +101,9 @@ export class Future<A> {
   ) {
     const resolver = (value: A) => {
       if (this._state.tag === "Pending") {
-        this._state.resolveCallbacks?.forEach((func) => func(value));
+        const resolveCallbacks = this._state.resolveCallbacks;
         this._state = { tag: "Resolved", value };
+        resolveCallbacks?.forEach((func) => func(value));
       }
     };
 

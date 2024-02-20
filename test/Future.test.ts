@@ -419,3 +419,13 @@ test("Future isFuture", async () => {
   expect(Future.isFuture([])).toEqual(false);
   expect(Future.isFuture({})).toEqual(false);
 });
+
+test("Future doesn't hang", async () => {
+  const future = Future.make((resolve) => {
+    setTimeout(() => resolve(0), 10);
+  });
+  return future
+    .flatMap(() => Future.value(1))
+    .flatMap(() => future.flatMap(() => Future.value(2)))
+    .tap((value) => expect(value).toEqual(2));
+});
