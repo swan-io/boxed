@@ -1,3 +1,9 @@
+# 2.0.1
+
+Fixes:
+
+- Added a fix for a case where Future hangs when waited on circularly (dfe94fb)
+
 # 2.0.0
 
 Breaking changes:
