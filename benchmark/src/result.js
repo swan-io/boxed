@@ -1,5 +1,6 @@
 const Benchmark = require("benchmark");
 const fp = require("fp-ts");
+const effect = require("effect");
 const { Result } = require("../../dist/Boxed");
 
 const suite = new Benchmark.Suite();
@@ -9,6 +10,14 @@ suite.add("fp-ts Result", () => {
     fp.either.right(1),
     fp.either.map((x) => x * 2),
     fp.either.getOrElse(() => 10),
+  );
+});
+
+suite.add("effect Result", () => {
+  return effect.pipe(
+    effect.Either.right(1),
+    effect.Either.map((x) => x * 2),
+    effect.Either.orElse(() => 10),
   );
 });
 

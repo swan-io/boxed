@@ -46,6 +46,7 @@
   "devDependencies": {
     "@types/benchmark": "^2.1.5",
     "benchmark": "^2.1.4",
+    "effect": "^2.4.3",
     "fp-ts": "^2.16.1",
     "microbundle": "^0.15.1",
     "prettier": "^3.1.0",
