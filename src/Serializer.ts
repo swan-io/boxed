@@ -20,6 +20,7 @@ export const encode = (value: any, indent?: number | undefined) => {
           __boxed_type__: "Result",
           tag: value.tag,
           value: value.value,
+          error: value.error,
         };
       }
       if (value.__boxed_type__ === "AsyncData") {
@@ -46,7 +47,7 @@ export const decode = (value: string) => {
     if (value.__boxed_type__ === "Result") {
       return value.tag === "Ok"
         ? Result.Ok(value.value)
-        : Result.Error(value.value);
+        : Result.Error(value.error);
     }
     if (value.__boxed_type__ === "AsyncData") {
       return value.tag === "NotAsked"
