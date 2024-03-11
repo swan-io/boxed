@@ -3,24 +3,34 @@ import { Result } from "./OptionResult";
 import { LooseRecord } from "./types";
 import { zip } from "./ZipUnzip";
 
-export class Future<A> {
+export class __Future<A> {
   /**
    * Creates a new future from its initializer function (like `new Promise(...)`)
    */
   static make = <A>(
     init: (resolver: (value: A) => void) => (() => void) | void,
   ): Future<A> => {
-    return new Future(init);
+    const future = Object.create(FUTURE_PROTO) as Future<A>;
+    const resolver = (value: A) => {
+      if (future._state.tag === "Pending") {
+        const resolveCallbacks = future._state.resolveCallbacks;
+        future._state = { tag: "Resolved", value };
+        resolveCallbacks?.forEach((func) => func(value));
+      }
+    };
+    future._state = { tag: "Pending" };
+    future._state.cancel = init(resolver);
+    return future as Future<A>;
   };
 
   static isFuture = (value: unknown): value is Future<unknown> =>
-    value != null && Object.prototype.isPrototypeOf.call(futureProto, value);
+    value != null && Object.prototype.isPrototypeOf.call(FUTURE_PROTO, value);
 
   /**
    * Creates a future resolved to the passed value
    */
   static value = <A>(value: A): Future<A> => {
-    const future = Object.create(futureProto);
+    const future = Object.create(FUTURE_PROTO);
     future._state = { tag: "Resolved", value };
     return future as Future<A>;
   };
@@ -98,19 +108,8 @@ export class Future<A> {
     | { tag: "Cancelled" }
     | { tag: "Resolved"; value: A };
 
-  protected constructor(
-    init: (resolver: (value: A) => void) => (() => void) | void,
-  ) {
-    const resolver = (value: A) => {
-      if (this._state.tag === "Pending") {
-        const resolveCallbacks = this._state.resolveCallbacks;
-        this._state = { tag: "Resolved", value };
-        resolveCallbacks?.forEach((func) => func(value));
-      }
-    };
-
+  protected constructor() {
     this._state = { tag: "Pending" };
-    this._state.cancel = init(resolver);
   }
 
   /**
@@ -145,7 +144,9 @@ export class Future<A> {
       const { cancel, cancelCallbacks } = this._state;
       // We have to set the future as cancelled first to avoid an infinite loop
       this._state = { tag: "Cancelled" };
-      cancel?.();
+      if (cancel != undefined) {
+        cancel();
+      }
       cancelCallbacks?.forEach((func) => func());
     }
   }
@@ -390,7 +391,10 @@ export class Future<A> {
   }
 }
 
-const futureProto = Object.create(
+const FUTURE_PROTO = Object.create(
   null,
-  Object.getOwnPropertyDescriptors(Future.prototype),
+  Object.getOwnPropertyDescriptors(__Future.prototype),
 );
+
+export const Future = __Future;
+export type Future<A> = __Future<A>;
