@@ -145,6 +145,7 @@ export class __Future<A> {
       // We have to set the future as cancelled first to avoid an infinite loop
       this._state = { tag: "Cancelled" };
       if (cancel != undefined) {
+        // @ts-ignore Compiler doesn't like that `cancel` is potentially `void`
         cancel();
       }
       cancelCallbacks?.forEach((func) => func());
