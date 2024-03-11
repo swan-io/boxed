@@ -1,3 +1,11 @@
+# 2.1.0-beta
+
+Changes:
+
+- Improved overall performance (245d7b4)
+- Improved type structure for better compiler errors (245d7b4)
+- Allow `Future.fromPromise` to type error (d3afa85)
+
 # 2.0.1
 
 Fixes:
