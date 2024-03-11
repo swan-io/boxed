@@ -28,11 +28,13 @@ export class Future<A> {
   /**
    * Converts a Promise to a Future\<Result\<Value, unknown>>
    */
-  static fromPromise<A>(promise: Promise<A>): Future<Result<A, unknown>> {
+  static fromPromise<A, E = unknown>(
+    promise: Promise<A>,
+  ): Future<Result<A, E>> {
     return Future.make((resolve) => {
       promise.then(
         (ok) => resolve(Result.Ok(ok)),
-        (reason) => resolve(Result.Error(reason)),
+        (error: E) => resolve(Result.Error(error)),
       );
     });
   }
