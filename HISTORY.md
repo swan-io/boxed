@@ -1,3 +1,9 @@
+# 2.1.1
+
+Changes:
+
+- Improve `Deferred` typing (4dea113)
+
 # 2.1.0
 
 Changes:
