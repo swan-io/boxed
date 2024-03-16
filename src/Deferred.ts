@@ -2,10 +2,11 @@ import { Future } from "./Future";
 
 export const Deferred = {
   make<Value>() {
-    let resolver: ((value: Value) => void) | undefined = undefined;
-    const future = Future.make((resolve) => {
-      resolver = resolve;
+    let resolve: (value: Value) => void;
+    const future = Future.make<Value>((_resolve) => {
+      resolve = _resolve;
     });
-    return [future, resolver as unknown as (value: Value) => void] as const;
+    // @ts-expect-error `resolver` is always defined
+    return [future, resolve] as const;
   },
 };
