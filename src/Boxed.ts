@@ -6,3 +6,4 @@ export { Future } from "./Future";
 export { Lazy } from "./Lazy";
 export { Option, Result } from "./OptionResult";
 export * as Serializer from "./Serializer";
+export { JsonAsyncData, JsonOption, JsonResult } from "./types";
