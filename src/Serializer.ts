@@ -2,38 +2,7 @@ import { AsyncData } from "./AsyncData";
 import { Option, Result } from "./OptionResult";
 
 export const encode = (value: any, indent?: number | undefined) => {
-  return JSON.stringify(
-    value,
-    function (key, value) {
-      if (value == null) {
-        return;
-      }
-      if (value.__boxed_type__ === "Option") {
-        return {
-          __boxed_type__: "Option",
-          tag: value.tag,
-          value: value.value,
-        };
-      }
-      if (value.__boxed_type__ === "Result") {
-        return {
-          __boxed_type__: "Result",
-          tag: value.tag,
-          value: value.value,
-          error: value.error,
-        };
-      }
-      if (value.__boxed_type__ === "AsyncData") {
-        return {
-          __boxed_type__: "AsyncData",
-          tag: value.tag,
-          value: value.value,
-        };
-      }
-      return value;
-    },
-    indent,
-  );
+  return JSON.stringify(value, null, indent);
 };
 
 export const decode = (value: string) => {
@@ -42,19 +11,13 @@ export const decode = (value: string) => {
       return value;
     }
     if (value.__boxed_type__ === "Option") {
-      return value.tag === "Some" ? Option.Some(value.value) : Option.None();
+      return Option.fromJSON(value);
     }
     if (value.__boxed_type__ === "Result") {
-      return value.tag === "Ok"
-        ? Result.Ok(value.value)
-        : Result.Error(value.error);
+      return Result.fromJSON(value);
     }
     if (value.__boxed_type__ === "AsyncData") {
-      return value.tag === "NotAsked"
-        ? AsyncData.NotAsked()
-        : value.tag === "Loading"
-          ? AsyncData.Loading()
-          : AsyncData.Done(value.value);
+      return AsyncData.fromJSON(value);
     }
     return value;
   });
