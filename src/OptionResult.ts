@@ -229,8 +229,8 @@ class __Option<A> {
 
   toJSON(this: Option<A>): JsonOption<A> {
     return this.match<JsonOption<A>>({
-      None: () => ({ tag: "None" }),
-      Some: (value) => ({ tag: "Some", value }),
+      None: () => ({ __boxed_type__: "Option", tag: "None" }),
+      Some: (value) => ({ __boxed_type__: "Option", tag: "Some", value }),
     });
   }
 }
@@ -542,8 +542,8 @@ class __Result<A, E> {
 
   toJSON(this: Result<A, E>): JsonResult<A, E> {
     return this.match<JsonResult<A, E>>({
-      Ok: (value) => ({ tag: "Ok", value }),
-      Error: (error) => ({ tag: "Error", error }),
+      Ok: (value) => ({ __boxed_type__: "Result", tag: "Ok", value }),
+      Error: (error) => ({ __boxed_type__: "Result", tag: "Error", error }),
     });
   }
 }

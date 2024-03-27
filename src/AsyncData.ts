@@ -277,9 +277,9 @@ class __AsyncData<A> {
 
   toJSON(this: AsyncData<A>): JsonAsyncData<A> {
     return this.match<JsonAsyncData<A>>({
-      NotAsked: () => ({ tag: "NotAsked" }),
-      Loading: () => ({ tag: "Loading" }),
-      Done: (value) => ({ tag: "Done", value }),
+      NotAsked: () => ({ __boxed_type__: "AsyncData", tag: "NotAsked" }),
+      Loading: () => ({ __boxed_type__: "AsyncData", tag: "Loading" }),
+      Done: (value) => ({ __boxed_type__: "AsyncData", tag: "Done", value }),
     });
   }
 }

@@ -138,10 +138,12 @@ test("Result.equals", () => {
 
 test("Result serialize", () => {
   expect(JSON.parse(JSON.stringify(Result.Error(1)))).toEqual({
+    __boxed_type__: "Result",
     tag: "Error",
     error: 1,
   });
   expect(JSON.parse(JSON.stringify(Result.Ok(1)))).toEqual({
+    __boxed_type__: "Result",
     tag: "Ok",
     value: 1,
   });
