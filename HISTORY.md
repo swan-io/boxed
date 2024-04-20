@@ -1,3 +1,9 @@
+# 2.2.1
+
+Features:
+
+- Add `getOr` alias for `getWithDefault` (4c51724)
+
 # 2.2.0
 
 Features:
