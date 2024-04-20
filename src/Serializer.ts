@@ -1,34 +1,13 @@
 import { AsyncData } from "./AsyncData";
 import { Option, Result } from "./OptionResult";
+import { BOXED_TYPE } from "./symbols";
 
 export const encode = (value: any, indent?: number | undefined) => {
   return JSON.stringify(
     value,
-    function (key, value) {
-      if (value == null) {
-        return;
-      }
-      if (value.__boxed_type__ === "Option") {
-        return {
-          __boxed_type__: "Option",
-          tag: value.tag,
-          value: value.value,
-        };
-      }
-      if (value.__boxed_type__ === "Result") {
-        return {
-          __boxed_type__: "Result",
-          tag: value.tag,
-          value: value.value,
-          error: value.error,
-        };
-      }
-      if (value.__boxed_type__ === "AsyncData") {
-        return {
-          __boxed_type__: "AsyncData",
-          tag: value.tag,
-          value: value.value,
-        };
+    (key, value) => {
+      if (typeof value[BOXED_TYPE] === "string") {
+        return { ...value, __boxed_type__: value[BOXED_TYPE] };
       }
       return value;
     },
@@ -42,19 +21,13 @@ export const decode = (value: string) => {
       return value;
     }
     if (value.__boxed_type__ === "Option") {
-      return value.tag === "Some" ? Option.Some(value.value) : Option.None();
+      return Option.fromJSON(value);
     }
     if (value.__boxed_type__ === "Result") {
-      return value.tag === "Ok"
-        ? Result.Ok(value.value)
-        : Result.Error(value.error);
+      return Result.fromJSON(value);
     }
     if (value.__boxed_type__ === "AsyncData") {
-      return value.tag === "NotAsked"
-        ? AsyncData.NotAsked()
-        : value.tag === "Loading"
-          ? AsyncData.Loading()
-          : AsyncData.Done(value.value);
+      return AsyncData.fromJSON(value);
     }
     return value;
   });

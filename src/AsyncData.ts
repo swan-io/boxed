@@ -1,6 +1,7 @@
 import { keys, values } from "./Dict";
 import { Option, Result } from "./OptionResult";
-import { LooseRecord } from "./types";
+import { BOXED_TYPE } from "./symbols";
+import { JsonAsyncData, LooseRecord } from "./types";
 import { zip } from "./ZipUnzip";
 
 class __AsyncData<A> {
@@ -91,6 +92,14 @@ class __AsyncData<A> {
   static isAsyncData = (value: unknown): value is AsyncData<unknown> =>
     // @ts-ignore
     value != null && value.__boxed_type__ === "AsyncData";
+
+  static fromJSON = <A>(value: JsonAsyncData<A>) => {
+    return value.tag === "NotAsked"
+      ? AsyncData.NotAsked()
+      : value.tag === "Loading"
+        ? AsyncData.Loading()
+        : AsyncData.Done(value.value);
+  };
 
   map<B>(this: AsyncData<A>, func: (value: A) => B): AsyncData<B> {
     if (this === NOT_ASKED || this === LOADING) {
@@ -265,6 +274,14 @@ class __AsyncData<A> {
 
   isNotAsked(this: AsyncData<A>): this is NotAsked<A> {
     return this === NOT_ASKED;
+  }
+
+  toJSON(this: AsyncData<A>): JsonAsyncData<A> {
+    return this.match<JsonAsyncData<A>>({
+      NotAsked: () => ({ [BOXED_TYPE]: "AsyncData", tag: "NotAsked" }),
+      Loading: () => ({ [BOXED_TYPE]: "AsyncData", tag: "Loading" }),
+      Done: (value) => ({ [BOXED_TYPE]: "AsyncData", tag: "Done", value }),
+    });
   }
 }
 

@@ -1,5 +1,6 @@
 import { keys, values } from "./Dict";
-import { LooseRecord } from "./types";
+import { BOXED_TYPE } from "./symbols";
+import { JsonOption, JsonResult, LooseRecord } from "./types";
 import { zip } from "./ZipUnzip";
 
 class __Option<A> {
@@ -97,6 +98,10 @@ class __Option<A> {
     return a.isSome() && b.isSome()
       ? equals(a.get(), b.get())
       : a.tag === b.tag;
+  };
+
+  static fromJSON = <A>(value: JsonOption<A>) => {
+    return value.tag === "None" ? Option.None() : Option.Some(value.value);
   };
 
   /**
@@ -221,6 +226,13 @@ class __Option<A> {
    */
   isNone(this: Option<A>): this is None<A> {
     return this === NONE;
+  }
+
+  toJSON(this: Option<A>): JsonOption<A> {
+    return this.match<JsonOption<A>>({
+      None: () => ({ [BOXED_TYPE]: "Option", tag: "None" }),
+      Some: (value) => ({ [BOXED_TYPE]: "Option", tag: "Some", value }),
+    });
   }
 }
 
@@ -387,6 +399,12 @@ class __Result<A, E> {
     return false;
   };
 
+  static fromJSON = <A, E>(value: JsonResult<A, E>) => {
+    return value.tag === "Ok"
+      ? Result.Ok(value.value)
+      : Result.Error(value.error);
+  };
+
   /**
    * Returns the Result containing the value from the callback
    *
@@ -521,6 +539,13 @@ class __Result<A, E> {
    */
   isError(this: Result<A, E>): this is Error<A, E> {
     return this.tag === "Error";
+  }
+
+  toJSON(this: Result<A, E>): JsonResult<A, E> {
+    return this.match<JsonResult<A, E>>({
+      Ok: (value) => ({ [BOXED_TYPE]: "Result", tag: "Ok", value }),
+      Error: (error) => ({ [BOXED_TYPE]: "Result", tag: "Error", error }),
+    });
   }
 }
 
