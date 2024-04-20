@@ -1,5 +1,7 @@
 import { LooseRecord } from "./types";
 
+export const fromEntries = Object.fromEntries;
+
 export const entries = <T extends LooseRecord<unknown>>(value: T) => {
   return Object.entries(value) as {
     [K in keyof T]-?: [K, T[K]];
