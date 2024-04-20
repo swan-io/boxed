@@ -235,6 +235,13 @@ class __AsyncData<A> {
     return (this as Done<A>).value;
   }
 
+  getOr(this: AsyncData<A>, defaultValue: A): A {
+    if (this === NOT_ASKED || this === LOADING) {
+      return defaultValue;
+    }
+    return (this as Done<A>).value;
+  }
+
   match<B>(
     this: AsyncData<A>,
     config: {

@@ -56,19 +56,19 @@ suite.add("effect Option some chain", () => {
 suite.add("Boxed Option none", () => {
   return Option.fromNullable(null)
     .map((x) => x * 2)
-    .getWithDefault(10);
+    .getOr(10);
 });
 
 suite.add("Boxed Option some", () => {
   return Option.fromNullable(10)
     .map((x) => x * 2)
-    .getWithDefault(10);
+    .getOr(10);
 });
 
 suite.add("Boxed Option some flatMap", () => {
   return Option.fromNullable(10)
     .flatMap((x) => Option.Some(x * 2))
-    .getWithDefault(10);
+    .getOr(10);
 });
 
 suite.on("cycle", function (event) {

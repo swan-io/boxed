@@ -78,22 +78,24 @@ AsyncData.Loading().flatMap((x) =>
 // AsyncData.Loading
 ```
 
-### .getWithDefault(defaultValue)
+### .getOr(defaultValue)
+
+> Alias: `getWithDefault`
 
 ```ts
-AsyncData<A>.getWithDefault(defaultValue: A): A
+AsyncData<A>.getOr(defaultValue: A): A
 ```
 
 If the async data is `Done(value)` returns `value`, otherwise returns `defaultValue`.
 
 ```ts title="Examples"
-AsyncData.Done(2).getWithDefault(1);
+AsyncData.Done(2).getOr(1);
 // 2
 
-AsyncData.Loading().getWithDefault(1);
+AsyncData.Loading().getOr(1);
 // 1
 
-AsyncData.NotAsked().getWithDefault(1);
+AsyncData.NotAsked().getOr(1);
 // 1
 ```
 

@@ -49,7 +49,7 @@ input
   .flatMap(transform)
   .map(print)
   .map(prettify)
-  .getWithDefault("fallback");
+  .getOr("fallback");
 ```
 
 Here, the **intent** of the code is clearly represented, making it much easier to follow.
@@ -74,5 +74,5 @@ Option.fromNullable(input)
   .flatMap((input) => Option.fromNullable(transform(input)))
   .map(print)
   .map(prettify)
-  .getWithDefault("fallback");
+  .getOr("fallback");
 ```

@@ -95,19 +95,21 @@ Option.Some(1).filter((x) => x > 2);
 // Option.None
 ```
 
-### .getWithDefault(defaultValue)
+### .getOr(defaultValue)
+
+> Alias: `getWithDefault`
 
 ```ts
-Option<A>.getWithDefault(defaultValue: A): A
+Option<A>.getOr(defaultValue: A): A
 ```
 
 If the option is `Some(value)` returns `value`, otherwise returns `defaultValue`.
 
 ```ts title="Examples"
-Option.Some(2).getWithDefault(1);
+Option.Some(2).getOr(1);
 // 2
 
-Option.None().getWithDefault(1);
+Option.None().getOr(1);
 // 1
 ```
 

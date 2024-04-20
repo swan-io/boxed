@@ -66,6 +66,11 @@ test("Result.getWithDefault", () => {
   expect(Result.Error<number, number>(1).getWithDefault(0)).toEqual(0);
 });
 
+test("Result.getOr", () => {
+  expect(Result.Ok(1).getOr(0)).toEqual(1);
+  expect(Result.Error<number, number>(1).getOr(0)).toEqual(0);
+});
+
 test("Result.match", () => {
   Result.Error<number, number>(1).match({
     Error: (value) => expect(value).toBe(1),

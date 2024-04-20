@@ -37,6 +37,11 @@ test("Option.getWithDefault", () => {
   expect(Option.None<number>().getWithDefault(0)).toEqual(0);
 });
 
+test("Option.getOr", () => {
+  expect(Option.Some(1).getOr(0)).toEqual(1);
+  expect(Option.None<number>().getOr(0)).toEqual(0);
+});
+
 test("Option.match", () => {
   Option.None<number>().match({
     None: () => expect(true).toBe(true),

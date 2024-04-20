@@ -24,7 +24,7 @@ suite.add("effect Result", () => {
 suite.add("Boxed Result", () => {
   return Result.Ok(1)
     .map((x) => x * 2)
-    .getWithDefault(10);
+    .getOr(10);
 });
 
 suite.on("cycle", function (event) {

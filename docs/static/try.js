@@ -8,7 +8,7 @@ import("https://unpkg.com/@swan-io/boxed/dist/Boxed.mjs").then((Boxed) => {
     "font-weight: bold;font-size:18px;",
   );
   console.log(
-    "%ce.g. %cOption.fromNullable(1).getWithDefault(0)",
+    "%ce.g. %cOption.fromNullable(1).getOr(0)",
     "color: #ccc;font-family: monospace;",
     "",
   );

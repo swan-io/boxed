@@ -25,7 +25,7 @@ When you extract the value from the box, you have a few options:
 // Let's assument we have `option` be of type `Option<number>`
 
 // Returns the value if present or the fallback otherwise
-const a = option.getWithDefault(0);
+const a = option.getOr(0);
 
 // Explode the box
 const b = option.match({
@@ -73,7 +73,7 @@ type User = {
 const name = user
   .flatMap((user) => user.info) // Returns the Option<UserInfo>
   .flatMap((info) => info.name) // Returns the Option<string>
-  .getWithDefault("Anonymous user");
+  .getOr("Anonymous user");
 ```
 
 ## The main kind of boxes

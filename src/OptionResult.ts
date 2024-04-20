@@ -162,6 +162,17 @@ class __Option<A> {
     }
     return (this as Some<A>).value;
   }
+  /**
+   * Return the value if present, and the fallback otherwise
+   *
+   * (Option\<A>, A) => A
+   */
+  getOr(this: Option<A>, defaultValue: A): A {
+    if (this === NONE) {
+      return defaultValue;
+    }
+    return (this as Some<A>).value;
+  }
 
   /**
    * Explodes the Option given its case
@@ -474,6 +485,15 @@ class __Result<A, E> {
    * (Result\<A, E>, A) => A
    */
   getWithDefault(this: Result<A, E>, defaultValue: A): A {
+    return this.tag === "Ok" ? this.value : defaultValue;
+  }
+
+  /**
+   * Return the value if present, and the fallback otherwise
+   *
+   * (Result\<A, E>, A) => A
+   */
+  getOr(this: Result<A, E>, defaultValue: A): A {
     return this.tag === "Ok" ? this.value : defaultValue;
   }
 

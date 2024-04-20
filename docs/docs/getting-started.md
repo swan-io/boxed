@@ -14,7 +14,7 @@ const make = (input) =>
     .flatMap((input) => Option.fromNullable(transform(input)))
     .map(print)
     .map(prettify)
-    .getWithDefault("fallback");
+    .getOr("fallback");
 ```
 
 ## Design principles

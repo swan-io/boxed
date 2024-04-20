@@ -46,7 +46,7 @@ const UserCard = ({user}: {user: AsyncData<User>}) => {
     NotAsked: () => null,
     Loading: () => \`Loading\`,
     Done: (user) => {
-      const name = user.name.getWithDefault("anonymous");
+      const name = user.name.getOr("anonymous");
       return \`Hello \${name}!\`;
     },
   });

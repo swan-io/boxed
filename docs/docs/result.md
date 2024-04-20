@@ -146,19 +146,21 @@ Result.Ok("ok").flatMapError((x) =>
 // Result.Ok<"ok">
 ```
 
-### .getWithDefault(defaultValue)
+### .getOr(defaultValue)
+
+> Alias: `getWithDefault`
 
 ```ts
-Result<A, E>.getWithDefault(defaultValue: A): A
+Result<A, E>.getOr(defaultValue: A): A
 ```
 
 If the result is `Ok(value)` returns `value`, otherwise returns `defaultValue`.
 
 ```ts title="Examples"
-Result.Ok(2).getWithDefault(1);
+Result.Ok(2).getOr(1);
 // 2
 
-Result.Error(2).getWithDefault(1);
+Result.Error(2).getOr(1);
 // 1
 ```
 
