@@ -1,8 +1,18 @@
 import { AsyncData } from "./AsyncData";
 import { Option, Result } from "./OptionResult";
+import { BOXED_TYPE } from "./symbols";
 
 export const encode = (value: any, indent?: number | undefined) => {
-  return JSON.stringify(value, null, indent);
+  return JSON.stringify(
+    value,
+    (key, value) => {
+      if (typeof value[BOXED_TYPE] === "string") {
+        return { ...value, __boxed_type__: value[BOXED_TYPE] };
+      }
+      return value;
+    },
+    indent,
+  );
 };
 
 export const decode = (value: string) => {

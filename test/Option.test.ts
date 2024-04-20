@@ -107,11 +107,9 @@ test("Option.equals", () => {
 
 test("Option serialize", () => {
   expect(JSON.parse(JSON.stringify(Option.None()))).toEqual({
-    __boxed_type__: "Option",
     tag: "None",
   });
   expect(JSON.parse(JSON.stringify(Option.Some(1)))).toEqual({
-    __boxed_type__: "Option",
     tag: "Some",
     value: 1,
   });

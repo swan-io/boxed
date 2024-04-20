@@ -1,4 +1,5 @@
 import { keys, values } from "./Dict";
+import { BOXED_TYPE } from "./symbols";
 import { JsonOption, JsonResult, LooseRecord } from "./types";
 import { zip } from "./ZipUnzip";
 
@@ -229,8 +230,8 @@ class __Option<A> {
 
   toJSON(this: Option<A>): JsonOption<A> {
     return this.match<JsonOption<A>>({
-      None: () => ({ __boxed_type__: "Option", tag: "None" }),
-      Some: (value) => ({ __boxed_type__: "Option", tag: "Some", value }),
+      None: () => ({ [BOXED_TYPE]: "Option", tag: "None" }),
+      Some: (value) => ({ [BOXED_TYPE]: "Option", tag: "Some", value }),
     });
   }
 }
@@ -542,8 +543,8 @@ class __Result<A, E> {
 
   toJSON(this: Result<A, E>): JsonResult<A, E> {
     return this.match<JsonResult<A, E>>({
-      Ok: (value) => ({ __boxed_type__: "Result", tag: "Ok", value }),
-      Error: (error) => ({ __boxed_type__: "Result", tag: "Error", error }),
+      Ok: (value) => ({ [BOXED_TYPE]: "Result", tag: "Ok", value }),
+      Error: (error) => ({ [BOXED_TYPE]: "Result", tag: "Error", error }),
     });
   }
 }
