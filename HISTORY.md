@@ -1,3 +1,15 @@
+# 2.2.0
+
+Features:
+
+- Add `Dict.fromEntries` (773e81e)
+- Add `Dict.fromOptional` (cc6829c)
+- Handle JSON serialization with `toJSON` method and add static `fromJSON` hydrators (7074d59)
+
+Changes:
+
+- Make typescript peerDependency optional (509d721)
+
 # 2.1.1
 
 Changes:
