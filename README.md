@@ -6,9 +6,9 @@
 [![npm version](https://img.shields.io/npm/v/@swan-io/boxed?style=for-the-badge)](https://www.npmjs.org/package/@swan-io/boxed)
 [![bundlephobia](https://img.shields.io/bundlephobia/minzip/@swan-io/boxed?label=size&style=for-the-badge)](https://bundlephobia.com/result?p=@swan-io/boxed)
 
-> Utility types for functional TypeScript
+> Essential building-blocks for functional & safe TypeScript code
 
-**Boxed** provides functional utility types and functions, while focusing on ease-of-use.
+**Boxed** provides essential building-blocks (in the form of types and functions) so that you can write functional, safe TypeScript code.
 
 ## Design principles
 

@@ -101,7 +101,7 @@ export default function Home() {
   return (
     <Layout
       title={`Boxed: ${siteConfig.tagline}`}
-      description="Functional utility types and functions for TypeScript"
+      description="Essential building-blocks for functional & safe TypeScript code"
     >
       <HomepageHeader />
       <main>

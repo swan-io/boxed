@@ -5,7 +5,7 @@ sidebar_label: Getting started
 
 # Getting started
 
-**Boxed** provides functional utility types and functions, while focusing on ease-of-use.
+**Boxed** provides essential building-blocks (in the form of types and functions) so that you can write functional, safe TypeScript code.
 
 ```ts
 const make = (input) =>

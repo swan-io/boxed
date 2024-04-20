@@ -7,7 +7,7 @@ const darkCodeTheme = require("prism-react-renderer/themes/oceanicNext");
 /** @type {import('@docusaurus/types').Config} */
 module.exports = {
   title: "Boxed",
-  tagline: "Functional utility types and functions for TypeScript",
+  tagline: "Essential building-blocks for functional & safe TypeScript code",
   url: "https://swan-io.github.io",
   baseUrl: "/boxed/",
   onBrokenLinks: "throw",
