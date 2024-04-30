@@ -1,3 +1,12 @@
+# 2.3.0
+
+Features:
+
+- Add `Future.concurrent` (b5ae7e5)
+- Add `Future.retry` (b5ae7e5)
+- Add `Future.wait` (b5ae7e5)
+- Add `option.tapSome` (b5ae7e5)
+
 # 2.2.1
 
 Features:
