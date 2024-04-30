@@ -281,15 +281,21 @@ The function provides a 0-based `attempt` count to the function if you need to i
 
 ```ts title="Examples"
 // retry immediately after failure
-Future.retry((attempt) => {
-  return getUserById(userId);
-});
+Future.retry(
+  (attempt) => {
+    return getUserById(userId);
+  },
+  { max: 3 },
+);
 // Future<Result<...>>
 
 // adding delay
-Future.retry((attempt) => {
-  return Future.wait(attempt * 100).flatMap(() => getUserById(userId));
-});
+Future.retry(
+  (attempt) => {
+    return Future.wait(attempt * 100).flatMap(() => getUserById(userId));
+  },
+  { max: 10 },
+);
 // Future<Result<...>>
 ```
 
