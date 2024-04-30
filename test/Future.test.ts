@@ -429,3 +429,109 @@ test("Future doesn't hang", async () => {
     .flatMap(() => future.flatMap(() => Future.value(2)))
     .tap((value) => expect(value).toEqual(2));
 });
+
+test("Future concurrent", async () => {
+  let parallel = 0;
+
+  const result = await Future.concurrent(
+    [
+      () =>
+        Future.make<0>((resolve) => {
+          expect(++parallel).toBeLessThanOrEqual(2);
+          setTimeout(() => resolve(0), 100);
+        }).tap(() => {
+          --parallel;
+        }),
+      () =>
+        Future.make<1>((resolve) => {
+          expect(++parallel).toBeLessThanOrEqual(2);
+          resolve(1);
+        }).tap(() => {
+          --parallel;
+        }),
+      () =>
+        Future.make<2>((resolve) => {
+          expect(++parallel).toBeLessThanOrEqual(2);
+          setTimeout(() => resolve(2), 50);
+        }).tap(() => {
+          --parallel;
+        }),
+      () =>
+        Future.make<3>((resolve) => {
+          expect(++parallel).toBeLessThanOrEqual(2);
+          setTimeout(() => resolve(3), 25);
+        }).tap(() => {
+          --parallel;
+        }),
+      () =>
+        Future.make<4>((resolve) => {
+          expect(++parallel).toBeLessThanOrEqual(2);
+          setTimeout(() => resolve(undefined), 75);
+        })
+          .map(() => 4)
+          .tap(() => {
+            --parallel;
+          }),
+    ],
+    { concurrency: 2 },
+  );
+
+  expect(result).toEqual([0, 1, 2, 3, 4]);
+});
+
+test("Future try", async () => {
+  let attempts = 0;
+  const value = await Future.retry(
+    (attempt) => {
+      if (++attempts === 5) {
+        return Future.value<Result<number, number>>(Result.Ok(attempt));
+      } else {
+        return Future.make<Result<number, number>>((resolve) => {
+          setTimeout(() => resolve(Result.Error(1)));
+        });
+      }
+    },
+    { max: 6 },
+  );
+
+  expect(attempts).toBe(5);
+  expect(value).toEqual(Result.Ok(4));
+});
+
+test("Future try on last", async () => {
+  let attempts = 0;
+  const value = await Future.retry(
+    (attempt) => {
+      if (++attempts === 5) {
+        return Future.value<Result<number, number>>(Result.Ok(attempt));
+      } else {
+        return Future.make<Result<number, number>>((resolve) => {
+          setTimeout(() => resolve(Result.Error(1)));
+        });
+      }
+    },
+    { max: 5 },
+  );
+
+  expect(attempts).toBe(5);
+  expect(value).toEqual(Result.Ok(4));
+});
+
+test("Future try on last", async () => {
+  let attempts = 0;
+  const value = await Future.retry(
+    (attempt) => {
+      if (++attempts === 5) {
+        return Future.value<Result<number, number>>(Result.Ok(attempt));
+      } else {
+        return Future.make<Result<number, number>>((resolve) => {
+          setTimeout(() => resolve(Result.Error(1)));
+        });
+      }
+    },
+    { max: 4 },
+  );
+
+  expect(attempts).toBe(4);
+  expect(value).toEqual(Result.Error(1));
+});

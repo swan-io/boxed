@@ -52,7 +52,7 @@ export class __Future<A> {
   /**
    * Turns an array of futures into a future of array
    */
-  static all = <Futures extends readonly Future<any>[] | []>(
+  static all = <const Futures extends readonly Future<any>[] | []>(
     futures: Futures,
     propagateCancel = false,
   ) => {
@@ -85,7 +85,7 @@ export class __Future<A> {
   /**
    * Turns an dict of futures into a future of dict
    */
-  static allFromDict = <Dict extends LooseRecord<Future<any>>>(
+  static allFromDict = <const Dict extends LooseRecord<Future<any>>>(
     dict: Dict,
   ): Future<{
     [K in keyof Dict]: Dict[K] extends Future<infer T> ? T : never;
@@ -95,6 +95,58 @@ export class __Future<A> {
     return Future.all(values(dict)).map((values) =>
       Object.fromEntries(zip(dictKeys, values)),
     );
+  };
+
+  static wait = (ms: number) =>
+    Future.make<void>((resolve) => {
+      const timeoutId = setTimeout(() => resolve(), ms);
+      return () => clearTimeout(timeoutId);
+    });
+
+  static retry = <A, E>(
+    getFuture: (attempt: number) => Future<Result<A, E>>,
+    { max }: { max: number },
+  ): Future<Result<A, E>> => {
+    const run = (attempt: number): Future<Result<A, E>> =>
+      getFuture(attempt).flatMapError((error) => {
+        if (attempt + 1 < max) {
+          return run(attempt + 1);
+        } else {
+          return Future.value(Result.Error(error));
+        }
+      });
+
+    return run(0);
+  };
+
+  static concurrent = <const Futures extends readonly (() => Future<any>)[]>(
+    array: Futures,
+    { concurrency }: { concurrency: number },
+  ) => {
+    return Future.make((resolve) => {
+      const returnValue = Array(array.length);
+      let index = concurrency - 1;
+      let done = 0;
+
+      const run = (func: () => Future<any>, currentIndex: number) =>
+        func().tap((value) => {
+          returnValue[currentIndex] = value;
+          if (++done < array.length) {
+            const next = array[++index];
+            if (next != undefined) {
+              run(next, index);
+            }
+          } else {
+            resolve(returnValue);
+          }
+        });
+
+      array.slice(0, concurrency).forEach(run);
+    }) as unknown as Future<{
+      [K in keyof Futures]: Futures[K] extends () => Future<infer T>
+        ? T
+        : never;
+    }>;
   };
 
   // Not accessible from the outside

@@ -196,6 +196,17 @@ class __Option<A> {
   }
 
   /**
+   * Runs the callback if some and returns `this`
+   */
+  tapSome(this: Option<A>, func: (option: A) => unknown): Option<A> {
+    if (this === NONE) {
+      return this;
+    }
+    func((this as Some<A>).value);
+    return this;
+  }
+
+  /**
    * Converts the Option\<A> to a `A | undefined`
    */
   toUndefined(this: Option<A>): A | undefined {

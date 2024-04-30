@@ -155,6 +155,38 @@ Future.all([Future.value(1), Future.value(2), Future.value(3)]);
 // Future<[1, 2, 3]>
 ```
 
+### Future.concurrent(futureGetters, options)
+
+```ts
+all(futures: Array<() => Future<A>>, {concurrency: number}): Future<Array<A>>
+```
+
+Like `Future.all` with a max concurrency, and in order to control the flow, provided with functions returning futures.
+
+```ts title="Examples"
+Future.concurrent(
+  userIds.map((userId) => {
+    // notice we return a function
+    return () => getUserById(userId);
+  }),
+  { concurrency: 10 },
+);
+// Future<[...]>
+```
+
+### Future.wait(ms)
+
+```ts
+wait(ms: number): Future<void>
+```
+
+Helper to create a future that resolves after `ms` (in milliseconds).
+
+```ts title="Examples"
+Future.wait(1000).tap(() => console.log("Hey"));
+// Logs "Hey" after 1s
+```
+
 ### Future.allFromDict(futures)
 
 ```ts

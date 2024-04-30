@@ -18,6 +18,19 @@ const index = Dict.entries({ foo: 1, bar: 2, baz: 3 });
 // [["foo", 1], ["bar", 2], ["baz", 3]];
 ```
 
+## Dict.fromEntries(entries)
+
+Returns a dict from the provided `[key, value]` pairs.
+
+```ts title="Examples"
+const dict = Dict.fromEntries([
+  ["foo", 1],
+  ["bar", 2],
+  ["baz", 3],
+]);
+// { foo: 1, bar: 2, baz: 3 };
+```
+
 ## Dict.keys(dict)
 
 Returns the keys in the dict.

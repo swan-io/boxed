@@ -269,6 +269,30 @@ const step1 = Future.all(input);
 const step2 = step1.map(Result.all);
 ```
 
+### Future.retry(getFuture)
+
+```ts
+retry(getFuture: () => Future<Result<A, E>>, {max: number}): Future<Result<A, E>>
+```
+
+Runs the future getter, if the future resolves with a `Result.Error`, retries until hitting `max` attempts.
+
+The function provides a 0-based `attempt` count to the function if you need to implement delay logic.
+
+```ts title="Examples"
+// retry immediately after failure
+Future.retry((attempt) => {
+  return getUserById(userId);
+});
+// Future<Result<...>>
+
+// adding delay
+Future.retry((attempt) => {
+  return Future.wait(attempt * 100).flatMap(() => getUserById(userId));
+});
+// Future<Result<...>>
+```
+
 ## Cheatsheet
 
 | Method                                   | Input              | Function input | Function output    | Returned value     |
