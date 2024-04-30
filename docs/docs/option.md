@@ -246,6 +246,18 @@ Executes `func` with `option`, and returns `option`. Useful for logging and debu
 option.tap(console.log).map((x) => x * 2);
 ```
 
+### .tapSome(func)
+
+```ts
+Option<A>.tapSome(func: (option: A) => unknown): Option<A>
+```
+
+Executes `func` with `option`'s value if `Some`, and returns `option`. Useful for logging and debugging.
+
+```ts title="Examples"
+option.tapSome(console.log).map((x) => x * 2);
+```
+
 ## Statics
 
 ### Option.isOption(value)
