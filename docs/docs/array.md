@@ -36,7 +36,7 @@ Return the first item in the array for which `predicate` returns true.
 The function returns an `Option` so that we can distinguish between a found nullish value and a not found value.
 
 ```ts title="Examples"
-Array.getfindBy(array, (x) => x === undefined);
+Array.find(array, (x) => x === undefined);
 // Some(undefined) if found
 // None if not found
 ```
