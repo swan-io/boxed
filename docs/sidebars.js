@@ -15,16 +15,27 @@
 module.exports = {
   docs: [
     {
-      type: "doc",
-      id: "getting-started",
-    },
-    {
-      type: "doc",
-      id: "core-concepts",
-    },
-    {
-      type: "doc",
-      id: "trivia",
+      type: "category",
+      label: "Learn",
+      collapsed: false,
+      items: [
+        {
+          type: "doc",
+          id: "getting-started",
+        },
+        {
+          type: "doc",
+          id: "core-concepts",
+        },
+        {
+          type: "doc",
+          id: "installation",
+        },
+        {
+          type: "doc",
+          id: "design-choices",
+        },
+      ],
     },
     {
       type: "category",
@@ -62,6 +73,10 @@ module.exports = {
         "nested-optional-values",
         "cancellable-request",
       ],
+    },
+    {
+      type: "doc",
+      id: "inspirations",
     },
   ],
 };

@@ -17,7 +17,7 @@ suite.add("effect Result", () => {
   return effect.pipe(
     effect.Either.right(1),
     effect.Either.map((x) => x * 2),
-    effect.Either.orElse(() => 10),
+    effect.Either.getOrElse(() => 10),
   );
 });
 

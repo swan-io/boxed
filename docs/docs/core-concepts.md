@@ -5,11 +5,29 @@ sidebar_label: Core Concepts
 
 The Boxed approach takes root in **typed functional paradigms**. We know that these concepts can be overwhelming, especially with their jargon and mathematical concepts, and therefore want to make them more **accessible**.
 
-As beautiful and powerful these concepts are, they come with a huge learning curve that we want to avoid. We also want your code to be simple to read, write and reason about.
+![](/img/profunctor-optics.jpg)
+
+As beautiful and powerful these concepts are, they come with a huge learning curve that we want to avoid. We also want your code to be **simple to read, write and reason about** without having to know the full theory behind.
+
+:::warning
+If you have a strong opinion on what metaphor to use to describe monads, please stop reading this page immediately and visit the [API reference](./option).
+:::
+
+## Schrödinger's cat
+
+When physicists discovered that particules do weird stuff, they decided that while we don't look at them, they're in a **superposition of states**.
+
+[Erwin Schrödinger](https://en.wikipedia.org/wiki/Erwin_Schr%C3%B6dinger) didn't like that one bit and decided to show them how utterly stupid it was. For that, he created a thought experiment now called the [Schrödinger's cat](https://en.wikipedia.org/wiki/Schr%C3%B6dinger%27s_cat) experiment, in which a cat is put into a **box** (_roll credits_) with a cat-killing device reacting to some quantum stuff. While we don't open the box, the cat is both alive and dead as the same time, when we open the box, we fix an outcome.
+
+![Schrödinger's cat experiment](/img/experiment.png)
+
+:::info
+We **love** cats and the boxes used in the following explanations will only contain JavaScript values.
+:::
 
 ## Boxes
 
-The way we like to think of the data-structures we expose are that they're **boxes** (or containers) that **may or may not contain a value**.
+The way we like to think of the data-structures we expose are that they're **boxes** (think of it as containers) that **may or may not contain a value**.
 
 Here's a visual example using the **Option type**. The Option represents an optional value, **it can have two possible states**: either `Some(value)` or `None()`.
 

@@ -41,7 +41,7 @@ suite.add("effect Option some", () => {
   return effect.pipe(
     effect.Option.fromNullable(10),
     effect.Option.map((x) => x * 2),
-    effect.Option.orElse(() => 10),
+    effect.Option.getOrElse(() => 10),
   );
 });
 
@@ -49,7 +49,7 @@ suite.add("effect Option some chain", () => {
   return effect.pipe(
     effect.Option.fromNullable(10),
     effect.Option.flatMap((x) => effect.Option.some(x * 2)),
-    effect.Option.orElse(() => 10),
+    effect.Option.getOrElse(() => 10),
   );
 });
 
