@@ -41,7 +41,7 @@
     "prepack": "yarn test && yarn build",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "benchmark": "node benchmark/src/option && node benchmark/src/result && node benchmark/src/future"
+    "benchmark": "node benchmark/src/option && node benchmark/src/result && node benchmark/src/future && node benchmark/src/future-result"
   },
   "devDependencies": {
     "@types/benchmark": "^2.1.5",

@@ -3,18 +3,23 @@ const { Future } = require("../../dist/Boxed");
 
 const suite = new Benchmark.Suite();
 
-suite.add("Future", () => {
-  Future.value(1)
-    .map((x) => x + 1)
-    .onResolve((v) => {});
-});
-
 suite.add("Promise", {
   defer: true,
   fn: (deferred) => {
     Promise.resolve(1)
       .then((x) => x + 1)
       .then((v) => {
+        deferred.resolve();
+      });
+  },
+});
+
+suite.add("Future", {
+  defer: true,
+  fn: (deferred) => {
+    Future.value(1)
+      .map((x) => x + 1)
+      .onResolve((v) => {
         deferred.resolve();
       });
   },
