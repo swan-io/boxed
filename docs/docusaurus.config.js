@@ -4,6 +4,8 @@
 const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/oceanicNext");
 
+const url = "https://swan-io.github.io/boxed";
+
 /** @type {import('@docusaurus/types').Config} */
 module.exports = {
   title: "Boxed",
@@ -109,6 +111,13 @@ module.exports = {
         style: "dark",
         copyright: `Copyright © ${new Date().getFullYear()} Swan`,
       },
+      metadata: [
+        { name: "twitter:card", content: "summary_large_image" },
+        { property: "og:image", content: `${url}/img/social.png` },
+        { property: "og:image:width", content: `1280` },
+        { property: "og:image:height", content: `640` },
+        { name: "twitter:image", content: `${url}/img/social.png` },
+      ],
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
