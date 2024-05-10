@@ -102,7 +102,7 @@ AsyncData.Done(Result.Ok("something")).mapError((ok) => {
 ### .flatMapOk(f)
 
 ```ts
-AsyncData<Result<A, E>>.mapError<B, F>(
+AsyncData<Result<A, E>>.flatMapOk<B, F>(
   func: (value: A) => AsyncData<Result<B, F>>,
 ): AsyncData<Result<B, E | F>>
 ```
@@ -129,7 +129,7 @@ AsyncData.Done(Result.Error("Error")).flatMapOk((ok) =>
 ### .flatMapError(f)
 
 ```ts
-AsyncData<Result<A, E>>.mapError<B, F>(
+AsyncData<Result<A, E>>.flatMapError<B, F>(
   func: (value: E) => AsyncData<Result<B, F>>,
 ): AsyncData<Result<A | B, F>>
 ```

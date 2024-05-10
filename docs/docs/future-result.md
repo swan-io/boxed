@@ -106,7 +106,7 @@ Future.value(Result.Ok("something")).mapError((ok) => {
 ### .flatMapOk(f)
 
 ```ts
-Future<Result<A, E>>.mapError<B, F>(
+Future<Result<A, E>>.flatMapOk<B, F>(
   func: (value: A) => Future<Result<B, F>>,
   propagateCancel?: boolean
 ): Future<Result<B, E | F>>
@@ -132,7 +132,7 @@ Future.value(Result.Error("Error")).flatMapOk((ok) =>
 ### .flatMapError(f)
 
 ```ts
-Future<Result<A, E>>.mapError<B, F>(
+Future<Result<A, E>>.flatMapError<B, F>(
   func: (value: E) => Future<Result<B, F>>,
   propagateCancel?: boolean
 ): Future<Result<A | B, F>>
