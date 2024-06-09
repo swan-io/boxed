@@ -1,7 +1,8 @@
-import { expect, test } from "vitest";
-import { Deferred } from "../src/Deferred";
+import { expect } from "@std/expect"
 
-test("Deferred", async () => {
+import { Deferred } from "../src/Deferred.ts";
+
+Deno.test("Deferred", async () => {
   const [future, resolve] = Deferred.make();
 
   future.onResolve((n) => {

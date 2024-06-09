@@ -1,4 +1,5 @@
-import { expect, test } from "vitest";
+import { expect } from "@std/expect"
+
 import {
   binarySearchBy,
   filterMap,
@@ -10,10 +11,10 @@ import {
   of,
   unzip,
   zip,
-} from "../src/Array";
-import { Option } from "../src/OptionResult";
+} from "../src/Array.ts";
+import { Option } from "../src/OptionResult.ts";
 
-test("Array.filterMap", () => {
+Deno.test("Array.filterMap", () => {
   expect(
     filterMap([1, 2, 3, 4], (a: number) =>
       Option.fromNullable(a % 2 === 0 ? a * 2 : null),
@@ -33,7 +34,7 @@ test("Array.filterMap", () => {
   ).toEqual([1, 2, 3, 4]);
 });
 
-test("Array.findMap", () => {
+Deno.test("Array.findMap", () => {
   expect(
     findMap([1, 2, 3, 4], (a: number) =>
       Option.fromNullable(a % 2 === 0 ? a * 2 : null),
@@ -65,7 +66,7 @@ test("Array.findMap", () => {
   ).toEqual(Option.Some(1));
 });
 
-test("Array.find", () => {
+Deno.test("Array.find", () => {
   expect(find([1, undefined, 2], (a) => a === undefined)).toEqual(
     Option.Some(undefined),
   );
@@ -79,7 +80,7 @@ test("Array.find", () => {
   ).toEqual(Option.Some(Option.None()));
 });
 
-test("Array.findIndex", () => {
+Deno.test("Array.findIndex", () => {
   expect(findIndex([1, undefined, 2], (a) => a === undefined)).toEqual(
     Option.Some(1),
   );
@@ -93,13 +94,13 @@ test("Array.findIndex", () => {
   ).toEqual(Option.Some(1));
 });
 
-test("Array.binarySearchBy", () => {
+Deno.test("Array.binarySearchBy", () => {
   expect(binarySearchBy([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 5)).toEqual(4);
   expect(binarySearchBy([1, 2, 3, 4, 6, 7, 8, 9, 10], 5)).toEqual(4);
   expect(binarySearchBy([], 2)).toEqual(-1);
 });
 
-test("Array.of", () => {
+Deno.test("Array.of", () => {
   expect(of(1, 2, 3)).toEqual([1, 2, 3]);
 
   expect(from({ length: 3 }, (_, index) => index)).toEqual([0, 1, 2]);
@@ -108,7 +109,7 @@ test("Array.of", () => {
   expect(isArray({ length: 0 })).toEqual(false);
 });
 
-test("Array.zip", () => {
+Deno.test("Array.zip", () => {
   expect(zip([1, 2, 3], ["one", "two", "three"])).toEqual([
     [1, "one"],
     [2, "two"],
@@ -124,7 +125,7 @@ test("Array.zip", () => {
   ]);
 });
 
-test("Array.unzip", () => {
+Deno.test("Array.unzip", () => {
   expect(
     unzip([
       [1, "one"],

@@ -1,9 +1,10 @@
+import { expect } from "@std/expect"
 import { match, P } from "ts-pattern";
-import { expect, test } from "vitest";
-import { AsyncData } from "../src/AsyncData";
-import { Option, Result } from "../src/OptionResult";
 
-test("AsyncData.is{Done|Loading|NotAsked}", () => {
+import { AsyncData } from "../src/AsyncData.ts";
+import { Option, Result } from "../src/OptionResult.ts";
+
+Deno.test("AsyncData.is{Done|Loading|NotAsked}", () => {
   expect(AsyncData.Done(1).isDone()).toBeTruthy();
   expect(AsyncData.Done(1).isLoading()).toBeFalsy();
   expect(AsyncData.Done(1).isNotAsked()).toBeFalsy();
@@ -17,7 +18,7 @@ test("AsyncData.is{Done|Loading|NotAsked}", () => {
   expect(AsyncData.NotAsked().isNotAsked()).toBeTruthy();
 });
 
-test("AsyncData.map", () => {
+Deno.test("AsyncData.map", () => {
   expect(AsyncData.NotAsked<number>().map((x) => x * 2)).toEqual(
     AsyncData.NotAsked(),
   );
@@ -27,7 +28,7 @@ test("AsyncData.map", () => {
   expect(AsyncData.Done(5).map((x) => x * 2)).toEqual(AsyncData.Done(10));
 });
 
-test("AsyncData.flatMap", () => {
+Deno.test("AsyncData.flatMap", () => {
   expect(
     AsyncData.NotAsked<number>().flatMap((x) => AsyncData.Done(x * 2)),
   ).toEqual(AsyncData.NotAsked());
@@ -45,25 +46,25 @@ test("AsyncData.flatMap", () => {
   );
 });
 
-test("AsyncData.getWithDefault", () => {
+Deno.test("AsyncData.getWithDefault", () => {
   expect(AsyncData.NotAsked<number>().getWithDefault(0)).toEqual(0);
   expect(AsyncData.Loading<number>().getWithDefault(0)).toEqual(0);
   expect(AsyncData.Done(5).getWithDefault(0)).toEqual(5);
 });
 
-test("AsyncData.getOr", () => {
+Deno.test("AsyncData.getOr", () => {
   expect(AsyncData.NotAsked<number>().getOr(0)).toEqual(0);
   expect(AsyncData.Loading<number>().getOr(0)).toEqual(0);
   expect(AsyncData.Done(5).getOr(0)).toEqual(5);
 });
 
-test("AsyncData.toOption", () => {
+Deno.test("AsyncData.toOption", () => {
   expect(AsyncData.NotAsked<number>().toOption()).toEqual(Option.None());
   expect(AsyncData.Loading<number>().toOption()).toEqual(Option.None());
   expect(AsyncData.Done(5).toOption()).toEqual(Option.Some(5));
 });
 
-test("AsyncData.match", () => {
+Deno.test("AsyncData.match", () => {
   AsyncData.NotAsked<number>().match({
     NotAsked: () => expect(true).toBe(true),
     Loading: () => expect(true).toBe(false),
@@ -81,7 +82,7 @@ test("AsyncData.match", () => {
   });
 });
 
-test("AsyncData.equals", () => {
+Deno.test("AsyncData.equals", () => {
   expect(
     AsyncData.equals(
       AsyncData.NotAsked(),
@@ -135,7 +136,7 @@ test("AsyncData.equals", () => {
   ).toBe(false);
 });
 
-test("AsyncData serialize", () => {
+Deno.test("AsyncData serialize", () => {
   expect(JSON.parse(JSON.stringify(AsyncData.NotAsked()))).toEqual({
     tag: "NotAsked",
   });
@@ -148,7 +149,7 @@ test("AsyncData serialize", () => {
   });
 });
 
-test("AsyncData.tap", () => {
+Deno.test("AsyncData.tap", () => {
   expect(
     AsyncData.NotAsked().tap((value) =>
       expect(value).toEqual(AsyncData.NotAsked()),
@@ -164,7 +165,7 @@ test("AsyncData.tap", () => {
   ).toEqual(AsyncData.Done(1));
 });
 
-test("AsyncData.all", () => {
+Deno.test("AsyncData.all", () => {
   expect(AsyncData.all([])).toEqual(AsyncData.Done([]));
   expect(
     AsyncData.all([AsyncData.Done(1), AsyncData.Done(2), AsyncData.Done(3)]),
@@ -191,7 +192,7 @@ test("AsyncData.all", () => {
   ).toEqual(AsyncData.NotAsked());
 });
 
-test("AsyncData.allFromDict", () => {
+Deno.test("AsyncData.allFromDict", () => {
   expect(AsyncData.allFromDict({})).toEqual(AsyncData.Done({}));
   expect(
     AsyncData.allFromDict({
@@ -230,7 +231,7 @@ test("AsyncData.allFromDict", () => {
   ).toEqual(AsyncData.NotAsked());
 });
 
-test("ts-pattern", () => {
+Deno.test("ts-pattern", () => {
   expect(
     match(AsyncData.Done(1))
       .with(AsyncData.P.Done(P.select()), (value) => value)
@@ -254,125 +255,125 @@ test("ts-pattern", () => {
   ).toEqual(3);
 });
 
-test("Option.get", () => {
+Deno.test("Option.get", () => {
   const asyncData: AsyncData<number> = AsyncData.Done(1);
   if (asyncData.isDone()) {
     expect(asyncData.get()).toEqual(1);
   }
 });
 
-test("AsyncData mapOk", async () => {
+Deno.test("AsyncData mapOk", async () => {
   const result = AsyncData.Done(Result.Ok("one")).mapOk((x) => `${x}!`);
   expect(result).toEqual(AsyncData.Done(Result.Ok("one!")));
 });
 
-test("AsyncData mapOk", async () => {
+Deno.test("AsyncData mapOk", async () => {
   const result = AsyncData.Done(Result.Error("one")).mapOk((x) => `${x}!`);
   expect(result).toEqual(AsyncData.Done(Result.Error("one")));
 });
 
-test("AsyncData mapError", async () => {
+Deno.test("AsyncData mapError", async () => {
   const result = AsyncData.Done(Result.Error("one")).mapError((x) => `${x}!`);
   expect(result).toEqual(AsyncData.Done(Result.Error("one!")));
 });
 
-test("AsyncData mapError ok", async () => {
+Deno.test("AsyncData mapError ok", async () => {
   const result = AsyncData.Done(Result.Ok("one")).mapError((x) => `${x}!`);
   expect(result).toEqual(AsyncData.Done(Result.Ok("one")));
 });
 
-test("AsyncData mapOkToResult", async () => {
+Deno.test("AsyncData mapOkToResult", async () => {
   const result = AsyncData.Done(Result.Ok("one")).mapOkToResult((x) =>
     Result.Ok(`${x}!`),
   );
   expect(result).toEqual(AsyncData.Done(Result.Ok("one!")));
 });
 
-test("AsyncData mapOkToResult", async () => {
+Deno.test("AsyncData mapOkToResult", async () => {
   const result = AsyncData.Done(Result.Error("one")).mapOkToResult((x) =>
     Result.Ok(`${x}!`),
   );
   expect(result).toEqual(AsyncData.Done(Result.Error("one")));
 });
 
-test("AsyncData mapOkToResult", async () => {
+Deno.test("AsyncData mapOkToResult", async () => {
   const result = AsyncData.Done(Result.Ok("one")).mapOkToResult((x) =>
     Result.Error(`${x}!`),
   );
   expect(result).toEqual(AsyncData.Done(Result.Error("one!")));
 });
 
-test("AsyncData mapErrorToResult", async () => {
+Deno.test("AsyncData mapErrorToResult", async () => {
   const result = AsyncData.Done(Result.Error("one")).mapErrorToResult((x) =>
     Result.Ok(`${x}!`),
   );
   expect(result).toEqual(AsyncData.Done(Result.Ok("one!")));
 });
 
-test("AsyncData mapErrorToResult", async () => {
+Deno.test("AsyncData mapErrorToResult", async () => {
   const result = AsyncData.Done(Result.Ok("one")).mapErrorToResult((x) =>
     Result.Ok(`${x}!`),
   );
   expect(result).toEqual(AsyncData.Done(Result.Ok("one")));
 });
 
-test("AsyncData mapErrorToResult", async () => {
+Deno.test("AsyncData mapErrorToResult", async () => {
   const result = AsyncData.Done(Result.Error("one")).mapErrorToResult((x) =>
     Result.Ok(`${x}!`),
   );
   expect(result).toEqual(AsyncData.Done(Result.Ok("one!")));
 });
 
-test("AsyncData flatMapOk", async () => {
+Deno.test("AsyncData flatMapOk", async () => {
   const result = AsyncData.Done(Result.Ok("one")).flatMapOk((x) =>
     AsyncData.Done(Result.Ok(`${x}!`)),
   );
   expect(result).toEqual(AsyncData.Done(Result.Ok("one!")));
 });
 
-test("AsyncData flatMapOk", async () => {
+Deno.test("AsyncData flatMapOk", async () => {
   const result = AsyncData.Done(Result.Error("one")).flatMapOk((x) =>
     AsyncData.Done(Result.Ok(`${x}!`)),
   );
   expect(result).toEqual(AsyncData.Done(Result.Error("one")));
 });
 
-test("AsyncData flatMapOk", async () => {
+Deno.test("AsyncData flatMapOk", async () => {
   const result = AsyncData.Done(Result.Ok("one")).flatMapOk((x) =>
     AsyncData.NotAsked(),
   );
   expect(result).toEqual(AsyncData.NotAsked());
 });
 
-test("AsyncData flatMapOk", async () => {
+Deno.test("AsyncData flatMapOk", async () => {
   const result = AsyncData.Done(Result.Error("one")).flatMapOk((x) =>
     AsyncData.NotAsked(),
   );
   expect(result).toEqual(AsyncData.Done(Result.Error("one")));
 });
 
-test("AsyncData flatMapError", async () => {
+Deno.test("AsyncData flatMapError", async () => {
   const result = AsyncData.Done(Result.Error("one")).flatMapError((x) =>
     AsyncData.Done(Result.Error(`${x}!`)),
   );
   expect(result).toEqual(AsyncData.Done(Result.Error("one!")));
 });
 
-test("AsyncData flatMapError ok", async () => {
+Deno.test("AsyncData flatMapError ok", async () => {
   const result = AsyncData.Done(Result.Ok("one")).flatMapError((x) =>
     AsyncData.Done(Result.Ok(`${x}!`)),
   );
   expect(result).toEqual(AsyncData.Done(Result.Ok("one")));
 });
 
-test("AsyncData flatMapError ok", async () => {
+Deno.test("AsyncData flatMapError ok", async () => {
   const result = AsyncData.Done(Result.Ok("one")).flatMapError((x) =>
     AsyncData.Done(Result.Ok(`${x}!`)),
   );
   expect(result).toEqual(AsyncData.Done(Result.Ok("one")));
 });
 
-test("AsyncData isAsyncData", async () => {
+Deno.test("AsyncData isAsyncData", async () => {
   expect(AsyncData.isAsyncData(AsyncData.Done(1))).toEqual(true);
   expect(AsyncData.isAsyncData(AsyncData.NotAsked())).toEqual(true);
   expect(AsyncData.isAsyncData(AsyncData.Loading())).toEqual(true);

@@ -1,23 +1,24 @@
-import { expect, test } from "vitest";
-import { entries, fromOptional, keys, values } from "../src/Dict";
-import { Option } from "../src/OptionResult";
+import { expect } from "@std/expect"
 
-test("Dict.entries", () => {
+import { entries, fromOptional, keys, values } from "../src/Dict.ts";
+import { Option } from "../src/OptionResult.ts";
+
+Deno.test("Dict.entries", () => {
   expect(entries({ foo: 1, bar: 2 })).toEqual([
     ["foo", 1],
     ["bar", 2],
   ]);
 });
 
-test("Dict.keys", () => {
+Deno.test("Dict.keys", () => {
   expect(keys({ foo: 1, bar: 2 })).toEqual(["foo", "bar"]);
 });
 
-test("Dict.values", () => {
+Deno.test("Dict.values", () => {
   expect(values({ foo: 1, bar: 2 })).toEqual([1, 2]);
 });
 
-test("Dict.fromOptional", () => {
+Deno.test("Dict.fromOptional", () => {
   expect(fromOptional({})).toEqual({});
   expect(
     fromOptional({

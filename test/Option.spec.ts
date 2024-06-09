@@ -1,8 +1,9 @@
+import { expect } from "@std/expect"
 import { match, P } from "ts-pattern";
-import { expect, test } from "vitest";
-import { Option, Result } from "../src/OptionResult";
 
-test("Option.is{Some|None}", () => {
+import { Option, Result } from "../src/OptionResult.ts";
+
+Deno.test("Option.is{Some|None}", () => {
   expect(Option.Some(1).isSome()).toBeTruthy();
   expect(Option.Some(1).isNone()).toBeFalsy();
 
@@ -10,12 +11,12 @@ test("Option.is{Some|None}", () => {
   expect(Option.None().isNone()).toBeTruthy();
 });
 
-test("Option.map", () => {
+Deno.test("Option.map", () => {
   expect(Option.Some(1).map((x) => x * 2)).toEqual(Option.Some(2));
   expect(Option.None<number>().map((x) => x * 2)).toEqual(Option.None());
 });
 
-test("Option.flatMap", () => {
+Deno.test("Option.flatMap", () => {
   expect(Option.Some(1).flatMap((x) => Option.Some(x * 2))).toEqual(
     Option.Some(2),
   );
@@ -25,24 +26,24 @@ test("Option.flatMap", () => {
   expect(Option.Some(1).flatMap((x) => Option.None())).toEqual(Option.None());
 });
 
-test("Option.filter", () => {
+Deno.test("Option.filter", () => {
   const isOne = (value: number): value is 1 => value === 1;
   expect(Option.Some(1).filter((x) => x === 2)).toEqual(Option.None());
   expect(Option.Some(1).filter((x) => x === 1)).toEqual(Option.Some(1));
   expect(Option.Some(1).filter(isOne)).toEqual(Option.Some(1));
 });
 
-test("Option.getWithDefault", () => {
+Deno.test("Option.getWithDefault", () => {
   expect(Option.Some(1).getWithDefault(0)).toEqual(1);
   expect(Option.None<number>().getWithDefault(0)).toEqual(0);
 });
 
-test("Option.getOr", () => {
+Deno.test("Option.getOr", () => {
   expect(Option.Some(1).getOr(0)).toEqual(1);
   expect(Option.None<number>().getOr(0)).toEqual(0);
 });
 
-test("Option.match", () => {
+Deno.test("Option.match", () => {
   Option.None<number>().match({
     None: () => expect(true).toBe(true),
     Some: () => expect(true).toBe(false),
@@ -53,35 +54,35 @@ test("Option.match", () => {
   });
 });
 
-test("Option.toNull", () => {
+Deno.test("Option.toNull", () => {
   expect(Option.None<number>().toNull()).toBe(null);
   expect(Option.Some(1).toNull()).toBe(1);
 });
 
-test("Option.toUndefined", () => {
+Deno.test("Option.toUndefined", () => {
   expect(Option.None<number>().toUndefined()).toBe(undefined);
   expect(Option.Some(1).toUndefined()).toBe(1);
 });
 
-test("Option.fromNullable", () => {
+Deno.test("Option.fromNullable", () => {
   expect(Option.fromNullable(1)).toEqual(Option.Some(1));
   expect(Option.fromNullable(null)).toEqual(Option.None());
   expect(Option.fromNullable(undefined)).toEqual(Option.None());
 });
 
-test("Option.fromNull", () => {
+Deno.test("Option.fromNull", () => {
   expect(Option.fromNull(1)).toEqual(Option.Some(1));
   expect(Option.fromNull(null)).toEqual(Option.None());
   expect(Option.fromNull(undefined)).toEqual(Option.Some(undefined));
 });
 
-test("Option.fromUndefined", () => {
+Deno.test("Option.fromUndefined", () => {
   expect(Option.fromUndefined(1)).toEqual(Option.Some(1));
   expect(Option.fromUndefined(null)).toEqual(Option.Some(null));
   expect(Option.fromUndefined(undefined)).toEqual(Option.None());
 });
 
-test("Option.equals", () => {
+Deno.test("Option.equals", () => {
   expect(Option.equals(Option.None(), Option.None(), (a, b) => a === b)).toBe(
     true,
   );
@@ -110,7 +111,7 @@ test("Option.equals", () => {
   ).toBe(false);
 });
 
-test("Option serialize", () => {
+Deno.test("Option serialize", () => {
   expect(JSON.parse(JSON.stringify(Option.None()))).toEqual({
     tag: "None",
   });
@@ -120,7 +121,7 @@ test("Option serialize", () => {
   });
 });
 
-test("Option.tap", () => {
+Deno.test("Option.tap", () => {
   expect(
     Option.Some(1).tap((value) => expect(value).toEqual(Option.Some(1))),
   ).toEqual(Option.Some(1));
@@ -129,7 +130,7 @@ test("Option.tap", () => {
   ).toEqual(Option.None());
 });
 
-test("Option.all", () => {
+Deno.test("Option.all", () => {
   expect(Option.all([])).toEqual(Option.Some([]));
   expect(Option.all([Option.Some(1), Option.Some(2), Option.Some(3)])).toEqual(
     Option.Some([1, 2, 3]),
@@ -142,7 +143,7 @@ test("Option.all", () => {
   );
 });
 
-test("Option.allFromDict", () => {
+Deno.test("Option.allFromDict", () => {
   expect(Option.allFromDict({})).toEqual(Option.Some({}));
   expect(
     Option.allFromDict({
@@ -167,7 +168,7 @@ test("Option.allFromDict", () => {
   ).toEqual(Option.None());
 });
 
-test("ts-pattern", () => {
+Deno.test("ts-pattern", () => {
   expect(
     match(Option.Some(1))
       .with(Option.P.Some(P.select()), (value) => value)
@@ -183,19 +184,19 @@ test("ts-pattern", () => {
   ).toEqual(2);
 });
 
-test("Option.get", () => {
+Deno.test("Option.get", () => {
   const option: Option<number> = Option.Some(1);
   if (option.isSome()) {
     expect(option.get()).toEqual(1);
   }
 });
 
-test("Option.toResult", () => {
+Deno.test("Option.toResult", () => {
   expect(Option.Some(1).toResult("NotFound")).toEqual(Result.Ok(1));
   expect(Option.None().toResult("NotFound")).toEqual(Result.Error("NotFound"));
 });
 
-test("Option.isOption", async () => {
+Deno.test("Option.isOption", async () => {
   expect(Option.isOption(Option.Some(1))).toEqual(true);
   expect(Option.isOption(Option.None())).toEqual(true);
   expect(Option.isOption(1)).toEqual(false);

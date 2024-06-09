@@ -1,9 +1,9 @@
-import { expect, test } from "vitest";
-import { AsyncData } from "../src/AsyncData";
-import { Option, Result } from "../src/OptionResult";
-import { decode, encode } from "../src/Serializer";
+import { expect } from "@std/expect"
+import { AsyncData } from "../src/AsyncData.ts";
+import { Option, Result } from "../src/OptionResult.ts";
+import { decode, encode } from "../src/Serializer.ts";
 
-test("Serializer", () => {
+Deno.test("Serializer", () => {
   const start = {
     value: AsyncData.Done(
       Result.Ok(

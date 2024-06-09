@@ -1,8 +1,10 @@
+import { expect } from "@std/expect"
+import {fail} from "@std/assert"
 import { match, P } from "ts-pattern";
-import { expect, test } from "vitest";
-import { Option, Result } from "../src/OptionResult";
 
-test("Result.is{Ok|Error}", () => {
+import { Option, Result } from "../src/OptionResult.ts";
+
+Deno.test("Result.is{Ok|Error}", () => {
   expect(Result.Ok(1).isOk()).toBeTruthy();
   expect(Result.Ok(1).isError()).toBeFalsy();
 
@@ -10,14 +12,14 @@ test("Result.is{Ok|Error}", () => {
   expect(Result.Error(1).isError()).toBeTruthy();
 });
 
-test("Result.map", () => {
+Deno.test("Result.map", () => {
   expect(Result.Ok(1).map((x) => x * 2)).toEqual(Result.Ok(2));
   expect(Result.Error<number, number>(1).map((x) => x * 2)).toEqual(
     Result.Error(1),
   );
 });
 
-test("Result.mapError", () => {
+Deno.test("Result.mapError", () => {
   expect(Result.Ok<number, number>(1).mapError((x) => x * 2)).toEqual(
     Result.Ok(1),
   );
@@ -29,7 +31,7 @@ test("Result.mapError", () => {
 type A = 1;
 type B = 2;
 
-test("Result.flatMap", () => {
+Deno.test("Result.flatMap", () => {
   expect(Result.Ok(1).flatMap((x) => Result.Ok(x * 2))).toEqual(Result.Ok(2));
   expect(
     Result.Error<number, number>(1).flatMap((x) => Result.Ok(x * 2)),
@@ -43,7 +45,7 @@ test("Result.flatMap", () => {
   expect(resultC).toEqual(Result.Error(2));
 });
 
-test("Result.flatMapError", () => {
+Deno.test("Result.flatMapError", () => {
   expect(
     Result.Ok<number, number>(1).flatMapError((x) => Result.Ok(x * 2)),
   ).toEqual(Result.Ok(1));
@@ -61,17 +63,17 @@ test("Result.flatMapError", () => {
   expect(resultC).toEqual(Result.Error(2));
 });
 
-test("Result.getWithDefault", () => {
+Deno.test("Result.getWithDefault", () => {
   expect(Result.Ok(1).getWithDefault(0)).toEqual(1);
   expect(Result.Error<number, number>(1).getWithDefault(0)).toEqual(0);
 });
 
-test("Result.getOr", () => {
+Deno.test("Result.getOr", () => {
   expect(Result.Ok(1).getOr(0)).toEqual(1);
   expect(Result.Error<number, number>(1).getOr(0)).toEqual(0);
 });
 
-test("Result.match", () => {
+Deno.test("Result.match", () => {
   Result.Error<number, number>(1).match({
     Error: (value) => expect(value).toBe(1),
     Ok: () => expect(true).toBe(false),
@@ -82,12 +84,12 @@ test("Result.match", () => {
   });
 });
 
-test("Result.toOption", () => {
+Deno.test("Result.toOption", () => {
   expect(Result.Ok(1).toOption()).toEqual(Option.Some(1));
   expect(Result.Error(1).toOption()).toEqual(Option.None());
 });
 
-test("Result.fromExecution", () => {
+Deno.test("Result.fromExecution", () => {
   expect(Result.fromExecution(() => 1)).toEqual(Result.Ok(1));
   expect(
     Result.fromExecution(() => {
@@ -101,7 +103,7 @@ test("Result.fromExecution", () => {
   ).toEqual(Result.Error(1));
 });
 
-test("Result.fromPromise", async () => {
+Deno.test("Result.fromPromise", async () => {
   await expect(await Result.fromPromise(Promise.resolve(1))).toEqual(
     Result.Ok(1),
   );
@@ -120,7 +122,7 @@ test("Result.fromPromise", async () => {
   ).toEqual(Result.Error(2));
 });
 
-test("Result.equals", () => {
+Deno.test("Result.equals", () => {
   expect(
     Result.equals(Result.Error(1), Result.Error(2), (a, b) => a === b),
   ).toBe(true);
@@ -141,7 +143,7 @@ test("Result.equals", () => {
   ).toBe(false);
 });
 
-test("Result serialize", () => {
+Deno.test("Result serialize", () => {
   expect(JSON.parse(JSON.stringify(Result.Error(1)))).toEqual({
     tag: "Error",
     error: 1,
@@ -152,7 +154,7 @@ test("Result serialize", () => {
   });
 });
 
-test("Result.tap", () => {
+Deno.test("Result.tap", () => {
   expect(
     Result.Ok(1).tap((value) => expect(value).toEqual(Result.Ok(1))),
   ).toEqual(Result.Ok(1));
@@ -161,21 +163,21 @@ test("Result.tap", () => {
   ).toEqual(Result.Error(1));
 });
 
-test("Result.tapOk", () => {
+Deno.test("Result.tapOk", () => {
   expect(Result.Ok(1).tapOk((value) => expect(value).toEqual(1))).toEqual(
     Result.Ok(1),
   );
-  expect(Result.Error(1).tapOk(() => expect.fail())).toEqual(Result.Error(1));
+  expect(Result.Error(1).tapOk(() => fail())).toEqual(Result.Error(1));
 });
 
-test("Result.tapError", () => {
-  expect(Result.Ok(1).tapError((value) => expect.fail())).toEqual(Result.Ok(1));
+Deno.test("Result.tapError", () => {
+  expect(Result.Ok(1).tapError((value) => fail())).toEqual(Result.Ok(1));
   expect(Result.Error(1).tapError((value) => expect(value).toEqual(1))).toEqual(
     Result.Error(1),
   );
 });
 
-test("Result.all", () => {
+Deno.test("Result.all", () => {
   expect(Result.all([])).toEqual(Result.Ok([]));
   expect(Result.all([Result.Ok(1), Result.Ok(2), Result.Ok(3)])).toEqual(
     Result.Ok([1, 2, 3]),
@@ -188,7 +190,7 @@ test("Result.all", () => {
   );
 });
 
-test("Result.allFromDict", () => {
+Deno.test("Result.allFromDict", () => {
   expect(Result.allFromDict({})).toEqual(Result.Ok({}));
   expect(
     Result.allFromDict({ a: Result.Ok(1), b: Result.Ok(2), c: Result.Ok(3) }),
@@ -209,7 +211,7 @@ test("Result.allFromDict", () => {
   ).toEqual(Result.Error(2));
 });
 
-test("ts-pattern", () => {
+Deno.test("ts-pattern", () => {
   expect(
     match(Result.Ok(1))
       .with(Result.P.Ok(P.select()), (value) => value)
@@ -225,28 +227,28 @@ test("ts-pattern", () => {
   ).toEqual(2);
 });
 
-test("Result.get", () => {
+Deno.test("Result.get", () => {
   const result: Result<number, unknown> = Result.Ok(1);
   if (result.isOk()) {
     expect(result.get()).toEqual(1);
   }
 });
 
-test("Result.getError", () => {
+Deno.test("Result.getError", () => {
   const result: Result<unknown, number> = Result.Error(1);
   if (result.isError()) {
     expect(result.getError()).toEqual(1);
   }
 });
 
-test("Result.fromOption", () => {
+Deno.test("Result.fromOption", () => {
   expect(Result.fromOption(Option.Some(1), "NotFound")).toEqual(Result.Ok(1));
   expect(Result.fromOption(Option.None(), "NotFound")).toEqual(
     Result.Error("NotFound"),
   );
 });
 
-test("Result.isResult", async () => {
+Deno.test("Result.isResult", async () => {
   expect(Result.isResult(Result.Ok(1))).toEqual(true);
   expect(Result.isResult(Result.Error(1))).toEqual(true);
   expect(Result.isResult(1)).toEqual(false);
