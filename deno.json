@@ -15,7 +15,8 @@
       ".github",
       ".vscode",
       "tests",
-      "benchmark"
+      "benchmark",
+      "docs"
     ]
   },
   "test": {
