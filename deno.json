@@ -1,0 +1,30 @@
+{
+  "name": "@swan-io/boxed",
+  "version": "2.3.0",
+  "description": "Utility types for functional TypeScript",
+  "exports": {
+    ".": "./mod.ts"
+  },
+  "imports": {
+    "@std/expect": "jsr:@std/expect@^0.224.2",
+    "ts-pattern": "npm:ts-pattern@^5.1.2"
+  },
+  "publish": {
+    "exclude": [
+      ".github",
+      ".vscode",
+      "tests",
+      "benchmark"
+    ]
+  },
+  "test": {
+    "include": [
+      "test/*.spec.ts"
+    ]
+  },
+  "bench": {
+    "include": [
+      "bench/*.bench.ts"
+    ]
+  }
+}
