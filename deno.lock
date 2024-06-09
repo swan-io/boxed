@@ -2,12 +2,16 @@
   "version": "3",
   "packages": {
     "specifiers": {
+      "jsr:@dewars/pattern@^5.1.2": "jsr:@dewars/pattern@5.1.2",
       "jsr:@std/assert@^0.226.0": "jsr:@std/assert@0.226.0",
       "jsr:@std/expect@^0.224.2": "jsr:@std/expect@0.224.4",
       "jsr:@std/internal@^1.0.0": "jsr:@std/internal@1.0.0",
       "npm:ts-pattern@^5.1.2": "npm:ts-pattern@5.1.2"
     },
     "jsr": {
+      "@dewars/pattern@5.1.2": {
+        "integrity": "d0b64c350c2548bdd8fad7e1c48ae09935a3297ef4ba9fb72dbb7d3c20445119"
+      },
       "@std/assert@0.226.0": {
         "integrity": "0dfb5f7c7723c18cec118e080fec76ce15b4c31154b15ad2bd74822603ef75b3",
         "dependencies": [
@@ -35,8 +39,10 @@
   "remote": {},
   "workspace": {
     "dependencies": [
+      "jsr:@dewars/pattern@^5.1.2",
       "jsr:@std/assert@^0.226.0",
       "jsr:@std/expect@^0.224.2",
+      "npm:fp-ts@^2.16.6",
       "npm:ts-pattern@^5.1.2"
     ]
   }

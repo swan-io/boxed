@@ -1,13 +1,15 @@
 {
-  "name": "@swan-io/boxed",
+  "name": "@dewars/boxed",
   "version": "2.3.0",
   "description": "Utility types for functional TypeScript",
   "exports": {
     ".": "./mod.ts"
   },
   "imports": {
+    "@dewars/pattern": "jsr:@dewars/pattern@^5.1.2",
     "@std/assert": "jsr:@std/assert@^0.226.0",
     "@std/expect": "jsr:@std/expect@^0.224.2",
+    "fp-ts": "npm:fp-ts@^2.16.6",
     "ts-pattern": "npm:ts-pattern@^5.1.2"
   },
   "publish": {

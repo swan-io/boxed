@@ -1,6 +1,6 @@
 import { expect } from "@std/expect";
 import { fail } from "@std/assert";
-import { match, P } from "ts-pattern";
+import { match, P } from "@dewars/pattern";
 
 import { Option, Result } from "../src/OptionResult.ts";
 
@@ -211,7 +211,7 @@ Deno.test("Result.allFromDict", () => {
   ).toEqual(Result.Error(2));
 });
 
-Deno.test("ts-pattern", () => {
+Deno.test("@dewars/pattern", () => {
   expect(
     match(Result.Ok(1))
       .with(Result.P.Ok(P.select()), (value) => value)

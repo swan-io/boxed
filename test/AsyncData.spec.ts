@@ -1,5 +1,5 @@
 import { expect } from "@std/expect";
-import { match, P } from "ts-pattern";
+import { match, P } from "@dewars/pattern";
 
 import { AsyncData } from "../src/AsyncData.ts";
 import { Option, Result } from "../src/OptionResult.ts";
@@ -231,7 +231,7 @@ Deno.test("AsyncData.allFromDict", () => {
   ).toEqual(AsyncData.NotAsked());
 });
 
-Deno.test("ts-pattern", () => {
+Deno.test("@dewars/pattern", () => {
   expect(
     match(AsyncData.Done(1))
       .with(AsyncData.P.Done(P.select()), (value) => value)
