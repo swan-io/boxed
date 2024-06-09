@@ -1,0 +1,43 @@
+{
+  "version": "3",
+  "packages": {
+    "specifiers": {
+      "jsr:@std/assert@^0.226.0": "jsr:@std/assert@0.226.0",
+      "jsr:@std/expect@^0.224.2": "jsr:@std/expect@0.224.4",
+      "jsr:@std/internal@^1.0.0": "jsr:@std/internal@1.0.0",
+      "npm:ts-pattern@^5.1.2": "npm:ts-pattern@5.1.2"
+    },
+    "jsr": {
+      "@std/assert@0.226.0": {
+        "integrity": "0dfb5f7c7723c18cec118e080fec76ce15b4c31154b15ad2bd74822603ef75b3",
+        "dependencies": [
+          "jsr:@std/internal@^1.0.0"
+        ]
+      },
+      "@std/expect@0.224.4": {
+        "integrity": "36c89c4ef0ea051b97c9d34fc6dc469b2f3d1345fea5887bacc7875689d2fc19",
+        "dependencies": [
+          "jsr:@std/assert@^0.226.0",
+          "jsr:@std/internal@^1.0.0"
+        ]
+      },
+      "@std/internal@1.0.0": {
+        "integrity": "ac6a6dfebf838582c4b4f61a6907374e27e05bedb6ce276e0f1608fe84e7cd9a"
+      }
+    },
+    "npm": {
+      "ts-pattern@5.1.2": {
+        "integrity": "sha512-u+ElKUIWnqisjpRBhv6Y89yNq7Pmz6xL0v7pTSckrVZ0+5Vf32oh/3jmxWl80rAOGcnbBa7fCyeqNdP4yXzWWg==",
+        "dependencies": {}
+      }
+    }
+  },
+  "remote": {},
+  "workspace": {
+    "dependencies": [
+      "jsr:@std/assert@^0.226.0",
+      "jsr:@std/expect@^0.224.2",
+      "npm:ts-pattern@^5.1.2"
+    ]
+  }
+}
