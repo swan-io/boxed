@@ -1,4 +1,4 @@
-import { expect } from "@std/expect"
+import { expect } from "@std/expect";
 import { AsyncData } from "../src/AsyncData.ts";
 import { Option, Result } from "../src/OptionResult.ts";
 import { decode, encode } from "../src/Serializer.ts";

@@ -1,4 +1,4 @@
-import { expect } from "@std/expect"
+import { expect } from "@std/expect";
 
 import { Lazy } from "../src/Lazy.ts";
 

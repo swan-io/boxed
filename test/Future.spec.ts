@@ -1,4 +1,4 @@
-import { expect } from "@std/expect"
+import { expect } from "@std/expect";
 
 import { Future } from "../src/Future.ts";
 import { Result } from "../src/OptionResult.ts";
@@ -115,56 +115,56 @@ Deno.test("Future mapError ok", async () => {
 
 Deno.test("Future mapOkToResult", async () => {
   const result = await Future.value(Result.Ok("one")).mapOkToResult((x) =>
-    Result.Ok(`${x}!`),
+    Result.Ok(`${x}!`)
   );
   expect(result).toEqual(Result.Ok("one!"));
 });
 
 Deno.test("Future mapOkToResult error", async () => {
   const result = await Future.value(Result.Error("one")).mapOkToResult((x) =>
-    Result.Ok(`${x}!`),
+    Result.Ok(`${x}!`)
   );
   expect(result).toEqual(Result.Error("one"));
 });
 
 Deno.test("Future mapErrorToResult", async () => {
   const result = await Future.value(Result.Error("one")).mapErrorToResult((x) =>
-    Result.Error(`${x}!`),
+    Result.Error(`${x}!`)
   );
   expect(result).toEqual(Result.Error("one!"));
 });
 
 Deno.test("Future mapErrorToResult ok", async () => {
   const result = await Future.value(Result.Ok("one")).mapErrorToResult((x) =>
-    Result.Error(`${x}!`),
+    Result.Error(`${x}!`)
   );
   expect(result).toEqual(Result.Ok("one"));
 });
 
 Deno.test("Future flatMapOk", async () => {
   const result = await Future.value(Result.Ok("one")).flatMapOk((x) =>
-    Future.value(Result.Ok(`${x}!`)),
+    Future.value(Result.Ok(`${x}!`))
   );
   expect(result).toEqual(Result.Ok("one!"));
 });
 
 Deno.test("Future flatMapOk error", async () => {
   const result = await Future.value(Result.Error("one")).flatMapOk((x) =>
-    Future.value(Result.Ok(`${x}!`)),
+    Future.value(Result.Ok(`${x}!`))
   );
   expect(result).toEqual(Result.Error("one"));
 });
 
 Deno.test("Future flatMapError", async () => {
   const result = await Future.value(Result.Error("one")).flatMapError((x) =>
-    Future.value(Result.Error(`${x}!`)),
+    Future.value(Result.Error(`${x}!`))
   );
   expect(result).toEqual(Result.Error("one!"));
 });
 
 Deno.test("Future flatMapError ok", async () => {
   const result = await Future.value(Result.Ok("one")).flatMapError((x) =>
-    Future.value(Result.Ok(`${x}!`)),
+    Future.value(Result.Ok(`${x}!`))
   );
   expect(result).toEqual(Result.Ok("one"));
 });

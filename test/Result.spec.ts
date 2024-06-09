@@ -1,5 +1,5 @@
-import { expect } from "@std/expect"
-import {fail} from "@std/assert"
+import { expect } from "@std/expect";
+import { fail } from "@std/assert";
 import { match, P } from "ts-pattern";
 
 import { Option, Result } from "../src/OptionResult.ts";

@@ -1,4 +1,4 @@
-import { expect } from "@std/expect"
+import { expect } from "@std/expect";
 
 import { entries, fromOptional, keys, values } from "../src/Dict.ts";
 import { Option } from "../src/OptionResult.ts";

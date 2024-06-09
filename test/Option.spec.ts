@@ -1,4 +1,4 @@
-import { expect } from "@std/expect"
+import { expect } from "@std/expect";
 import { match, P } from "ts-pattern";
 
 import { Option, Result } from "../src/OptionResult.ts";

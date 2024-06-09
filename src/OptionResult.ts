@@ -55,9 +55,12 @@ class __Option<A> {
 
     while (true) {
       if (index >= length) {
-        return acc as Option<{
-          [K in keyof Options]: Options[K] extends Option<infer T> ? T : never;
-        }>;
+        return acc as Option<
+          {
+            [K in keyof Options]: Options[K] extends Option<infer T> ? T
+              : never;
+          }
+        >;
       }
 
       const item = options[index];
@@ -80,13 +83,15 @@ class __Option<A> {
    */
   static allFromDict = <Dict extends LooseRecord<Option<any>>>(
     dict: Dict,
-  ): Option<{
-    [K in keyof Dict]: Dict[K] extends Option<infer T> ? T : never;
-  }> => {
+  ): Option<
+    {
+      [K in keyof Dict]: Dict[K] extends Option<infer T> ? T : never;
+    }
+  > => {
     const dictKeys = keys(dict);
 
     return Option.all(values(dict)).map((values) =>
-      Object.fromEntries(zip(dictKeys, values)),
+      Object.fromEntries(zip(dictKeys, values))
     );
   };
 
@@ -355,13 +360,11 @@ class __Result<A, E> {
       if (index >= length) {
         return acc as Result<
           {
-            [K in keyof Results]: Results[K] extends Result<infer T, any>
-              ? T
+            [K in keyof Results]: Results[K] extends Result<infer T, any> ? T
               : never;
           },
           {
-            [K in keyof Results]: Results[K] extends Result<any, infer T>
-              ? T
+            [K in keyof Results]: Results[K] extends Result<any, infer T> ? T
               : never;
           }[number]
         >;
@@ -398,7 +401,7 @@ class __Result<A, E> {
     const dictKeys = keys(dict);
 
     return Result.all(values(dict)).map((values) =>
-      Object.fromEntries(zip(dictKeys, values)),
+      Object.fromEntries(zip(dictKeys, values))
     );
   };
 

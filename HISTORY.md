@@ -19,7 +19,8 @@ Features:
 
 - Add `Dict.fromEntries` (773e81e)
 - Add `Dict.fromOptional` (cc6829c)
-- Handle JSON serialization with `toJSON` method and add static `fromJSON` hydrators (7074d59)
+- Handle JSON serialization with `toJSON` method and add static `fromJSON`
+  hydrators (7074d59)
 
 Changes:
 
@@ -66,7 +67,8 @@ Features:
 Changes:
 
 - Make patterns use `const` parameter for more precise handling (ebbc808)
-- Make `Array` functions accept `ReadonlyArray` (687b688) (thanks [@runeh](https://github.com/runeh))
+- Make `Array` functions accept `ReadonlyArray` (687b688) (thanks
+  [@runeh](https://github.com/runeh))
 
 # 1.2.0
 
@@ -78,7 +80,8 @@ Fixes:
 
 Features:
 
-- Add `Option.isOption`, `Result.isResult`, `AsyncData.isAsyncData` & `Future.isFuture` guards (8b7841c)
+- Add `Option.isOption`, `Result.isResult`, `AsyncData.isAsyncData` &
+  `Future.isFuture` guards (8b7841c)
 
 # 1.0.2
 
@@ -164,7 +167,8 @@ Features:
 
 Changes:
 
-- Improve type inference when returning newly constructed `Result`, `Option` or `AsyncData` from a `.match` function (ae74ba8)
+- Improve type inference when returning newly constructed `Result`, `Option` or
+  `AsyncData` from a `.match` function (ae74ba8)
 
 # 0.6.4
 
@@ -204,7 +208,8 @@ Breaking changes:
 
 Fixes:
 
-- Fixed `get` typing for `Result` type (thanks [@ansavchenco](https://github.com/ansavchenco)!) (54fe9aa)
+- Fixed `get` typing for `Result` type (thanks
+  [@ansavchenco](https://github.com/ansavchenco)!) (54fe9aa)
 
 # 0.5.2
 
@@ -240,7 +245,8 @@ Fixes:
 
 Breaking changes:
 
-- In case of `Error`, `Result` class stores the value in `result.error` (57e254b)
+- In case of `Error`, `Result` class stores the value in `result.error`
+  (57e254b)
 
 Features:
 
@@ -280,7 +286,8 @@ Features:
 
 Features:
 
-- Add tap functions on `Option`, `Result` and `AsyncData` for debugging (cb63dcf)
+- Add tap functions on `Option`, `Result` and `AsyncData` for debugging
+  (cb63dcf)
 - Add `mapError` and `flatMapError` to `Result` (0d36a03)
 
 # 0.3.1
@@ -288,7 +295,8 @@ Features:
 Changes:
 
 - Improve typing for `Future` (f8d9e12)
-- Make `Future.flatMapOk` & `Future.flatMapError` behave like the result ones (f8d9e12)
+- Make `Future.flatMapOk` & `Future.flatMapError` behave like the result ones
+  (f8d9e12)
 
 # 0.3.0
 
@@ -300,13 +308,15 @@ Changes:
 
 Features:
 
-- Reexport `Array` static methods than can be shadowed when importing `Array` from boxed (2dd970b)
+- Reexport `Array` static methods than can be shadowed when importing `Array`
+  from boxed (2dd970b)
 
 # 0.2.0
 
 Changes:
 
-- Better guaratees on `Dict.entries` and `Dict.keys` (Thanks [0xCAFEADD1C7](https://github.com/0xCAFEADD1C7)) (ec67c64, c572dab)
+- Better guaratees on `Dict.entries` and `Dict.keys` (Thanks
+  [0xCAFEADD1C7](https://github.com/0xCAFEADD1C7)) (ec67c64, c572dab)
 - Better typing for `Result.fromExecution` and `Result.fromPromise` (c25623f)
 
 # 0.1.2

@@ -42,11 +42,13 @@ class __AsyncData<A> {
 
     while (true) {
       if (index >= length) {
-        return acc as AsyncData<{
-          [K in keyof AsyncDatas]: AsyncDatas[K] extends AsyncData<infer T>
-            ? T
-            : never;
-        }>;
+        return acc as AsyncData<
+          {
+            [K in keyof AsyncDatas]: AsyncDatas[K] extends AsyncData<infer T>
+              ? T
+              : never;
+          }
+        >;
       }
 
       const item = asyncDatas[index];
@@ -69,13 +71,15 @@ class __AsyncData<A> {
    */
   static allFromDict = <Dict extends LooseRecord<AsyncData<any>>>(
     dict: Dict,
-  ): AsyncData<{
-    [K in keyof Dict]: Dict[K] extends AsyncData<infer T> ? T : never;
-  }> => {
+  ): AsyncData<
+    {
+      [K in keyof Dict]: Dict[K] extends AsyncData<infer T> ? T : never;
+    }
+  > => {
     const dictKeys = keys(dict);
 
     return AsyncData.all(values(dict)).map((values) =>
-      Object.fromEntries(zip(dictKeys, values)),
+      Object.fromEntries(zip(dictKeys, values))
     );
   };
 
@@ -97,8 +101,8 @@ class __AsyncData<A> {
     return value.tag === "NotAsked"
       ? AsyncData.NotAsked()
       : value.tag === "Loading"
-        ? AsyncData.Loading()
-        : AsyncData.Done(value.value);
+      ? AsyncData.Loading()
+      : AsyncData.Done(value.value);
   };
 
   map<B>(this: AsyncData<A>, func: (value: A) => B): AsyncData<B> {
@@ -173,7 +177,6 @@ class __AsyncData<A> {
    * For AsyncData<Result<*>>:
    *
    * Takes a callback taking the Error value and returning a new error value and returns an AsyncData to this new result
-   *
    */
   mapError<A, E, B>(
     this: AsyncData<Result<A, E>>,

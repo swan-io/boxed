@@ -1,4 +1,4 @@
-import { expect } from "@std/expect"
+import { expect } from "@std/expect";
 
 import {
   binarySearchBy,
@@ -16,40 +16,46 @@ import { Option } from "../src/OptionResult.ts";
 
 Deno.test("Array.filterMap", () => {
   expect(
-    filterMap([1, 2, 3, 4], (a: number) =>
-      Option.fromNullable(a % 2 === 0 ? a * 2 : null),
+    filterMap(
+      [1, 2, 3, 4],
+      (a: number) => Option.fromNullable(a % 2 === 0 ? a * 2 : null),
     ),
   ).toEqual([4, 8]);
 
   expect(
-    filterMap([1, 2, 3, 4], (a: number) =>
-      Option.fromNullable(a % 2 === 0 ? a * 2 : undefined),
+    filterMap(
+      [1, 2, 3, 4],
+      (a: number) => Option.fromNullable(a % 2 === 0 ? a * 2 : undefined),
     ),
   ).toEqual([4, 8]);
 
   expect(
-    filterMap([1, 2, 3, 4, undefined, null], (a) =>
-      Option.fromNullable(a != null ? a : null),
+    filterMap(
+      [1, 2, 3, 4, undefined, null],
+      (a) => Option.fromNullable(a != null ? a : null),
     ),
   ).toEqual([1, 2, 3, 4]);
 });
 
 Deno.test("Array.findMap", () => {
   expect(
-    findMap([1, 2, 3, 4], (a: number) =>
-      Option.fromNullable(a % 2 === 0 ? a * 2 : null),
+    findMap(
+      [1, 2, 3, 4],
+      (a: number) => Option.fromNullable(a % 2 === 0 ? a * 2 : null),
     ),
   ).toEqual(Option.Some(4));
 
   expect(
-    findMap([1, 2, 3, 4], (a: number) =>
-      Option.fromNullable(a % 2 === 0 ? a * 2 : undefined),
+    findMap(
+      [1, 2, 3, 4],
+      (a: number) => Option.fromNullable(a % 2 === 0 ? a * 2 : undefined),
     ),
   ).toEqual(Option.Some(4));
 
   expect(
-    findMap([1, 2, 3, 4, undefined, null], (a) =>
-      Option.fromNullable(a != null ? a : null),
+    findMap(
+      [1, 2, 3, 4, undefined, null],
+      (a) => Option.fromNullable(a != null ? a : null),
     ),
   ).toEqual(Option.Some(1));
 
@@ -88,8 +94,9 @@ Deno.test("Array.findIndex", () => {
   expect(findIndex([1, undefined, 2], (a) => a === 1)).toEqual(Option.Some(0));
 
   expect(
-    findIndex([Option.Some(1), Option.None(), Option.Some(2)], (x) =>
-      x.isNone(),
+    findIndex(
+      [Option.Some(1), Option.None(), Option.Some(2)],
+      (x) => x.isNone(),
     ),
   ).toEqual(Option.Some(1));
 });

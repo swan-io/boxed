@@ -62,9 +62,12 @@ export class __Future<A> {
 
     while (true) {
       if (index >= length) {
-        return acc as unknown as Future<{
-          [K in keyof Futures]: Futures[K] extends Future<infer T> ? T : never;
-        }>;
+        return acc as unknown as Future<
+          {
+            [K in keyof Futures]: Futures[K] extends Future<infer T> ? T
+              : never;
+          }
+        >;
       }
 
       const item = futures[index];
@@ -87,13 +90,15 @@ export class __Future<A> {
    */
   static allFromDict = <const Dict extends LooseRecord<Future<any>>>(
     dict: Dict,
-  ): Future<{
-    [K in keyof Dict]: Dict[K] extends Future<infer T> ? T : never;
-  }> => {
+  ): Future<
+    {
+      [K in keyof Dict]: Dict[K] extends Future<infer T> ? T : never;
+    }
+  > => {
     const dictKeys = keys(dict);
 
     return Future.all(values(dict)).map((values) =>
-      Object.fromEntries(zip(dictKeys, values)),
+      Object.fromEntries(zip(dictKeys, values))
     );
   };
 
@@ -142,21 +147,22 @@ export class __Future<A> {
         });
 
       array.slice(0, concurrency).forEach(run);
-    }) as unknown as Future<{
-      [K in keyof Futures]: Futures[K] extends () => Future<infer T>
-        ? T
-        : never;
-    }>;
+    }) as unknown as Future<
+      {
+        [K in keyof Futures]: Futures[K] extends () => Future<infer T> ? T
+          : never;
+      }
+    >;
   };
 
   // Not accessible from the outside
   private _state:
     | {
-        tag: "Pending";
-        resolveCallbacks?: Array<(value: A) => void>;
-        cancel?: void | (() => void);
-        cancelCallbacks?: Array<() => void>;
-      }
+      tag: "Pending";
+      resolveCallbacks?: Array<(value: A) => void>;
+      cancel?: void | (() => void);
+      cancelCallbacks?: Array<() => void>;
+    }
     | { tag: "Cancelled" }
     | { tag: "Resolved"; value: A };
 

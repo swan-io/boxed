@@ -8,14 +8,16 @@
 
 > Essential building-blocks for functional & safe TypeScript code
 
-**Boxed** provides essential building-blocks (in the form of types and functions) so that you can write functional, safe TypeScript code.
+**Boxed** provides essential building-blocks (in the form of types and
+functions) so that you can write functional, safe TypeScript code.
 
 ## Design principles
 
 - Provide utility types that **make data-manipulation and storage easier**
 - **Immutable** (all provided types are)
 - Give a **good development experience** (chaining API, reliable types)
-- Simple **interoperability** (you can convert back and forth to JS native types)
+- Simple **interoperability** (you can convert back and forth to JS native
+  types)
 - Compatibility with `ts-pattern` (using `patterns` we provide).
 
 ## What's in the box?

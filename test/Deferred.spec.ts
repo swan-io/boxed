@@ -1,4 +1,4 @@
-import { expect } from "@std/expect"
+import { expect } from "@std/expect";
 
 import { Deferred } from "../src/Deferred.ts";
 

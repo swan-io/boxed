@@ -13,16 +13,14 @@ export const unzip = <TupleArray extends [any, any][]>(array: TupleArray) => {
   return [arrayA, arrayB] as [
     {
       [I in keyof TupleArray]: TupleArray[I] extends [any, any]
-        ? TupleArray[I][0] extends infer T
-          ? T
-          : never
+        ? TupleArray[I][0] extends infer T ? T
+        : never
         : never;
     },
     {
       [I in keyof TupleArray]: TupleArray[I] extends [any, any]
-        ? TupleArray[I][1] extends infer T
-          ? T
-          : never
+        ? TupleArray[I][1] extends infer T ? T
+        : never
         : never;
     },
   ];
