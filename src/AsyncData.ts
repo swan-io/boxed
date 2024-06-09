@@ -1,8 +1,8 @@
-import { keys, values } from "./Dict";
-import { Option, Result } from "./OptionResult";
-import { BOXED_TYPE } from "./symbols";
-import { JsonAsyncData, LooseRecord } from "./types";
-import { zip } from "./ZipUnzip";
+import { keys, values } from "./Dict.ts";
+import { Option, Result } from "./OptionResult.ts";
+import { BOXED_TYPE } from "./symbols.ts";
+import { JsonAsyncData, LooseRecord } from "./types.ts";
+import { zip } from "./ZipUnzip.ts";
 
 class __AsyncData<A> {
   static P = {

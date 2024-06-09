@@ -1,5 +1,5 @@
-import { Option } from "./OptionResult";
-import { LooseRecord } from "./types";
+import { Option } from "./OptionResult.ts";
+import { LooseRecord } from "./types.ts";
 
 export const fromEntries = Object.fromEntries;
 

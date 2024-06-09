@@ -1,6 +1,6 @@
-import { AsyncData } from "./AsyncData";
-import { Option, Result } from "./OptionResult";
-import { BOXED_TYPE } from "./symbols";
+import { AsyncData } from "./AsyncData.ts";
+import { Option, Result } from "./OptionResult.ts";
+import { BOXED_TYPE } from "./symbols.ts";
 
 export const encode = (value: any, indent?: number | undefined) => {
   return JSON.stringify(

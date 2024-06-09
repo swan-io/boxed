@@ -1,7 +1,7 @@
-import { keys, values } from "./Dict";
-import { Result } from "./OptionResult";
-import { LooseRecord } from "./types";
-import { zip } from "./ZipUnzip";
+import { keys, values } from "./Dict.ts";
+import { Result } from "./OptionResult.ts";
+import { LooseRecord } from "./types.ts";
+import { zip } from "./ZipUnzip.ts";
 
 export class __Future<A> {
   /**

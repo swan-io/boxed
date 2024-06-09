@@ -1,4 +1,4 @@
-import { Future } from "./Future";
+import { Future } from "./Future.ts";
 
 export const Deferred = {
   make<Value>() {

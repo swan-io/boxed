@@ -1,7 +1,7 @@
-import { keys, values } from "./Dict";
-import { BOXED_TYPE } from "./symbols";
-import { JsonOption, JsonResult, LooseRecord } from "./types";
-import { zip } from "./ZipUnzip";
+import { keys, values } from "./Dict.ts";
+import { BOXED_TYPE } from "./symbols.ts";
+import { JsonOption, JsonResult, LooseRecord } from "./types.ts";
+import { zip } from "./ZipUnzip.ts";
 
 class __Option<A> {
   static P = {

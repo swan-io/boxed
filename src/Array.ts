@@ -1,4 +1,4 @@
-import { Option } from "./OptionResult";
+import { Option } from "./OptionResult.ts";
 
 export const from = Array.from;
 
@@ -101,4 +101,4 @@ export const binarySearchBy = <A>(
   }
 };
 
-export { unzip, zip } from "./ZipUnzip";
+export { unzip, zip } from "./ZipUnzip.ts";
