@@ -12,6 +12,13 @@ test("Serializer", () => {
           nothing: Option.None(),
           loading: AsyncData.Loading(),
           notAsked: AsyncData.NotAsked(),
+          nullable: null,
+          undefinable: undefined,
+          string: "Hello",
+          number: 1209,
+          boolean: true,
+          array: [1, 2, 3],
+          object: { a: 1, b: "two" },
         }),
       ),
     ),
@@ -22,4 +29,6 @@ test("Serializer", () => {
   expect(decode(encode(start)).value.map(() => "Hello")).toEqual(
     AsyncData.Done("Hello"),
   );
+  expect(encode(null)).toEqual("null");
+  expect(encode(undefined)).toEqual(undefined);
 });

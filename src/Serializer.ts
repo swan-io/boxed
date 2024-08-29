@@ -6,6 +6,9 @@ export const encode = (value: any, indent?: number | undefined) => {
   return JSON.stringify(
     value,
     (key, value) => {
+      if (value == null) {
+        return value;
+      }
       if (typeof value[BOXED_TYPE] === "string") {
         return { ...value, __boxed_type__: value[BOXED_TYPE] };
       }
