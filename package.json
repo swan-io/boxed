@@ -40,6 +40,7 @@
     "format": "prettier '**/*' -u -w",
     "prepack": "yarn test && yarn build",
     "test": "vitest run",
+    "test:typecheck": "tsc --noEmit -p tsconfig.test.json",
     "typecheck": "tsc --noEmit",
     "benchmark": "node benchmark/src/option && node benchmark/src/result && node benchmark/src/future && node benchmark/src/future-result"
   },
