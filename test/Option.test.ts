@@ -202,3 +202,12 @@ test("Option.isOption", async () => {
   expect(Option.isOption([])).toEqual(false);
   expect(Option.isOption({})).toEqual(false);
 });
+
+test("Option JSON serialization", () => {
+  const option = Option.None();
+  expect(
+    Option.fromJSON(option.toJSON()).tap(() => {
+      // Use option
+    }),
+  ).toEqual(option);
+});
