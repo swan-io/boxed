@@ -464,7 +464,7 @@ test("Future concurrent", async () => {
           --parallel;
         }),
       () =>
-        Future.make<4>((resolve) => {
+        Future.make((resolve) => {
           expect(++parallel).toBeLessThanOrEqual(2);
           setTimeout(() => resolve(undefined), 75);
         })

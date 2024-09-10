@@ -253,3 +253,19 @@ test("Result.isResult", async () => {
   expect(Result.isResult([])).toEqual(false);
   expect(Result.isResult({})).toEqual(false);
 });
+
+test("Result JSON serialization", async () => {
+  const resultOk = Result.Ok({ thing: "hello" });
+  expect(
+    Result.fromJSON(resultOk.toJSON()).tap(() => {
+      // Use result
+    }),
+  ).toEqual(resultOk);
+
+  const resultError = Result.Error(new Error("Oops"));
+  expect(
+    Result.fromJSON(resultError.toJSON()).tap(() => {
+      // Use result
+    }),
+  ).toEqual(resultError);
+});

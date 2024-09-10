@@ -380,3 +380,12 @@ test("AsyncData isAsyncData", async () => {
   expect(AsyncData.isAsyncData([])).toEqual(false);
   expect(AsyncData.isAsyncData({})).toEqual(false);
 });
+
+test("AsyncData JSON serialization", () => {
+  const data = AsyncData.Loading<number>();
+  expect(
+    AsyncData.fromJSON(data.toJSON()).tap(() => {
+      // use async data
+    }),
+  ).toEqual(data);
+});

@@ -421,7 +421,7 @@ class __Result<A, E> {
     return false;
   };
 
-  static fromJSON = <A, E>(value: JsonResult<A, E>) => {
+  static fromJSON = <A, E>(value: JsonResult<A, E>): Result<A, E> => {
     return value.tag === "Ok"
       ? Result.Ok(value.value)
       : Result.Error(value.error);
