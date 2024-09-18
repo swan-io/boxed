@@ -43,7 +43,7 @@ Future<Result<A, E>>.mapErrorToResult<B, F>(
 ): Future<Result<A | B, F>>
 ```
 
-Takes a `Future<Result<Ok, Error>>` and a `f` function taking `Error` and returning `Result<ReturnValue, Error>` and returns a new `Future<Result<ReturnValue, Error>>`
+Takes a `Future<Result<Ok, Error>>` and a `f` function taking `Error` and returning `Result<Ok, ReturnError>` and returns a new `Future<Result<Ok, ReturnError>>`
 
 ```ts title="Examples"
 Future.value(Result.Error(3)).mapErrorToResult((ok) => {
