@@ -48,7 +48,7 @@ const FeatureList = [
     description: (
       <>
         We provide a very <strong>small API surface</strong>. With easy interop,
-        and <strong>compatiblity</strong> with the ecosystem (like{" "}
+        and <strong>compatibility</strong> with the ecosystem (like{" "}
         <a href="https://github.com/gvergnaud/ts-pattern">ts-pattern</a>)
       </>
     ),
