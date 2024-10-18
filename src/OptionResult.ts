@@ -1,7 +1,10 @@
 import { keys, values } from "./Dict";
+import { createStore } from "./referenceStore";
 import { BOXED_TYPE } from "./symbols";
 import { JsonOption, JsonResult, LooseRecord } from "./types";
 import { zip } from "./ZipUnzip";
+
+const OptionStore = createStore();
 
 class __Option<A> {
   static P = {
@@ -10,10 +13,16 @@ class __Option<A> {
   };
 
   static Some = <A = never>(value: A): Option<A> => {
-    const option = Object.create(OPTION_PROTO) as Some<A>;
-    option.tag = "Some";
-    option.value = value;
-    return option;
+    const existing = OptionStore.get(value);
+    if (existing === undefined) {
+      const option = Object.create(OPTION_PROTO) as Some<A>;
+      option.tag = "Some";
+      option.value = value;
+      OptionStore.set(value, option);
+      return option;
+    } else {
+      return existing as Some<A>;
+    }
   };
 
   static None = <A = never>(): Option<A> => NONE as None<A>;
@@ -284,6 +293,9 @@ interface None<A> extends __Option<A> {
 export const Option = __Option;
 export type Option<A> = Some<A> | None<A>;
 
+const OkStore = createStore();
+const ErrorStore = createStore();
+
 class __Result<A, E> {
   static P = {
     Ok: <const A>(value: A) => ({ tag: "Ok", value }) as const,
@@ -291,17 +303,29 @@ class __Result<A, E> {
   };
 
   static Ok = <A = never, E = never>(value: A): Result<A, E> => {
-    const result = Object.create(RESULT_PROTO) as Ok<A, E>;
-    result.tag = "Ok";
-    result.value = value;
-    return result;
+    const existing = OkStore.get(value);
+    if (existing === undefined) {
+      const result = Object.create(RESULT_PROTO) as Ok<A, E>;
+      result.tag = "Ok";
+      result.value = value;
+      OkStore.set(value, result);
+      return result;
+    } else {
+      return existing as Ok<A, E>;
+    }
   };
 
   static Error = <A = never, E = never>(error: E): Result<A, E> => {
-    const result = Object.create(RESULT_PROTO) as Error<A, E>;
-    result.tag = "Error";
-    result.error = error;
-    return result;
+    const existing = ErrorStore.get(error);
+    if (existing === undefined) {
+      const result = Object.create(RESULT_PROTO) as Error<A, E>;
+      result.tag = "Error";
+      result.error = error;
+      ErrorStore.set(error, result);
+      return result;
+    } else {
+      return existing as Error<A, E>;
+    }
   };
 
   static isResult = (value: unknown): value is Result<unknown, unknown> =>

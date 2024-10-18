@@ -211,3 +211,10 @@ test("Option JSON serialization", () => {
     }),
   ).toEqual(option);
 });
+
+test("Option equality", () => {
+  expect(Option.Some(1)).toBe(Option.Some(1));
+  expect(Option.Some({})).not.toBe(Option.Some({}));
+  const x = {};
+  expect(Option.Some(x)).toBe(Option.Some(x));
+});

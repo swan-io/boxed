@@ -389,3 +389,10 @@ test("AsyncData JSON serialization", () => {
     }),
   ).toEqual(data);
 });
+
+test("AsyncData equality", () => {
+  expect(AsyncData.Done(1)).toBe(AsyncData.Done(1));
+  expect(AsyncData.Done({})).not.toBe(AsyncData.Done({}));
+  const x = {};
+  expect(AsyncData.Done(x)).toBe(AsyncData.Done(x));
+});

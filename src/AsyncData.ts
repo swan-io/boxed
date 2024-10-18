@@ -1,8 +1,11 @@
 import { keys, values } from "./Dict";
 import { Option, Result } from "./OptionResult";
+import { createStore } from "./referenceStore";
 import { BOXED_TYPE } from "./symbols";
 import { JsonAsyncData, LooseRecord } from "./types";
 import { zip } from "./ZipUnzip";
+
+const AsyncDataStore = createStore();
 
 class __AsyncData<A> {
   static P = {
@@ -14,10 +17,16 @@ class __AsyncData<A> {
    * Create an AsyncData.Done value
    */
   static Done = <A = never>(value: A): AsyncData<A> => {
-    const asyncData = Object.create(ASYNC_DATA_PROTO) as Done<A>;
-    asyncData.tag = "Done";
-    asyncData.value = value;
-    return asyncData;
+    const existing = AsyncDataStore.get(value);
+    if (existing === undefined) {
+      const asyncData = Object.create(ASYNC_DATA_PROTO) as Done<A>;
+      asyncData.tag = "Done";
+      asyncData.value = value;
+      AsyncDataStore.set(value, asyncData);
+      return asyncData;
+    } else {
+      return existing as Done<A>;
+    }
   };
 
   /**
