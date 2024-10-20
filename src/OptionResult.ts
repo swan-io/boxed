@@ -4,7 +4,7 @@ import { BOXED_TYPE } from "./symbols";
 import { JsonOption, JsonResult, LooseRecord } from "./types";
 import { zip } from "./ZipUnzip";
 
-const OptionStore = createStore();
+const SomeStore = createStore();
 
 class __Option<A> {
   static P = {
@@ -13,7 +13,7 @@ class __Option<A> {
   };
 
   static Some = <A = never>(value: A): Option<A> => {
-    const existing = OptionStore.get(value);
+    const existing = SomeStore.get(value);
     if (existing === undefined) {
       const option = Object.create(OPTION_PROTO) as Some<A>;
       // @ts-expect-error
@@ -21,7 +21,7 @@ class __Option<A> {
       // @ts-expect-error
       option.value = value;
       Object.freeze(option);
-      OptionStore.set(value, option);
+      SomeStore.set(value, option);
       return option;
     } else {
       return existing as Some<A>;
