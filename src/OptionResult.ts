@@ -16,8 +16,11 @@ class __Option<A> {
     const existing = OptionStore.get(value);
     if (existing === undefined) {
       const option = Object.create(OPTION_PROTO) as Some<A>;
+      // @ts-expect-error
       option.tag = "Some";
+      // @ts-expect-error
       option.value = value;
+      Object.freeze(option);
       OptionStore.set(value, option);
       return option;
     } else {
@@ -270,24 +273,23 @@ class __Option<A> {
 // @ts-expect-error
 __Option.prototype.__boxed_type__ = "Option";
 
-const OPTION_PROTO = Object.create(
-  null,
-  Object.getOwnPropertyDescriptors(__Option.prototype),
-);
+const OPTION_PROTO = __Option.prototype;
 
 const NONE = (() => {
   const option = Object.create(OPTION_PROTO) as None<unknown>;
+  // @ts-expect-error
   option.tag = "None";
+  Object.freeze(option);
   return option;
 })();
 
 interface Some<A> extends __Option<A> {
-  tag: "Some";
-  value: A;
+  readonly tag: "Some";
+  readonly value: A;
 }
 
 interface None<A> extends __Option<A> {
-  tag: "None";
+  readonly tag: "None";
 }
 
 export const Option = __Option;
@@ -306,8 +308,11 @@ class __Result<A, E> {
     const existing = OkStore.get(value);
     if (existing === undefined) {
       const result = Object.create(RESULT_PROTO) as Ok<A, E>;
+      // @ts-expect-error
       result.tag = "Ok";
+      // @ts-expect-error
       result.value = value;
+      Object.freeze(result);
       OkStore.set(value, result);
       return result;
     } else {
@@ -319,8 +324,11 @@ class __Result<A, E> {
     const existing = ErrorStore.get(error);
     if (existing === undefined) {
       const result = Object.create(RESULT_PROTO) as Error<A, E>;
+      // @ts-expect-error
       result.tag = "Error";
+      // @ts-expect-error
       result.error = error;
+      Object.freeze(result);
       ErrorStore.set(error, result);
       return result;
     } else {
@@ -607,19 +615,16 @@ class __Result<A, E> {
 // @ts-expect-error
 __Result.prototype.__boxed_type__ = "Result";
 
-const RESULT_PROTO = Object.create(
-  null,
-  Object.getOwnPropertyDescriptors(__Result.prototype),
-);
+const RESULT_PROTO = __Result.prototype;
 
 interface Ok<A, E> extends __Result<A, E> {
-  tag: "Ok";
-  value: A;
+  readonly tag: "Ok";
+  readonly value: A;
 }
 
 interface Error<A, E> extends __Result<A, E> {
-  tag: "Error";
-  error: E;
+  readonly tag: "Error";
+  readonly error: E;
 }
 
 export const Result = __Result;
