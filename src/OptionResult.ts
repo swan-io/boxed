@@ -1,7 +1,10 @@
 import { keys, values } from "./Dict";
+import { createStore } from "./referenceStore";
 import { BOXED_TYPE } from "./symbols";
 import { JsonOption, JsonResult, LooseRecord } from "./types";
 import { zip } from "./ZipUnzip";
+
+const SomeStore = createStore();
 
 class __Option<A> {
   static P = {
@@ -10,10 +13,19 @@ class __Option<A> {
   };
 
   static Some = <A = never>(value: A): Option<A> => {
-    const option = Object.create(OPTION_PROTO) as Some<A>;
-    option.tag = "Some";
-    option.value = value;
-    return option;
+    const existing = SomeStore.get(value);
+    if (existing === undefined) {
+      const option = Object.create(OPTION_PROTO) as Some<A>;
+      // @ts-expect-error
+      option.tag = "Some";
+      // @ts-expect-error
+      option.value = value;
+      Object.freeze(option);
+      SomeStore.set(value, option);
+      return option;
+    } else {
+      return existing as Some<A>;
+    }
   };
 
   static None = <A = never>(): Option<A> => NONE as None<A>;
@@ -261,28 +273,30 @@ class __Option<A> {
 // @ts-expect-error
 __Option.prototype.__boxed_type__ = "Option";
 
-const OPTION_PROTO = Object.create(
-  null,
-  Object.getOwnPropertyDescriptors(__Option.prototype),
-);
+const OPTION_PROTO = __Option.prototype;
 
 const NONE = (() => {
   const option = Object.create(OPTION_PROTO) as None<unknown>;
+  // @ts-expect-error
   option.tag = "None";
+  Object.freeze(option);
   return option;
 })();
 
 interface Some<A> extends __Option<A> {
-  tag: "Some";
-  value: A;
+  readonly tag: "Some";
+  readonly value: A;
 }
 
 interface None<A> extends __Option<A> {
-  tag: "None";
+  readonly tag: "None";
 }
 
 export const Option = __Option;
 export type Option<A> = Some<A> | None<A>;
+
+const OkStore = createStore();
+const ErrorStore = createStore();
 
 class __Result<A, E> {
   static P = {
@@ -291,17 +305,35 @@ class __Result<A, E> {
   };
 
   static Ok = <A = never, E = never>(value: A): Result<A, E> => {
-    const result = Object.create(RESULT_PROTO) as Ok<A, E>;
-    result.tag = "Ok";
-    result.value = value;
-    return result;
+    const existing = OkStore.get(value);
+    if (existing === undefined) {
+      const result = Object.create(RESULT_PROTO) as Ok<A, E>;
+      // @ts-expect-error
+      result.tag = "Ok";
+      // @ts-expect-error
+      result.value = value;
+      Object.freeze(result);
+      OkStore.set(value, result);
+      return result;
+    } else {
+      return existing as Ok<A, E>;
+    }
   };
 
   static Error = <A = never, E = never>(error: E): Result<A, E> => {
-    const result = Object.create(RESULT_PROTO) as Error<A, E>;
-    result.tag = "Error";
-    result.error = error;
-    return result;
+    const existing = ErrorStore.get(error);
+    if (existing === undefined) {
+      const result = Object.create(RESULT_PROTO) as Error<A, E>;
+      // @ts-expect-error
+      result.tag = "Error";
+      // @ts-expect-error
+      result.error = error;
+      Object.freeze(result);
+      ErrorStore.set(error, result);
+      return result;
+    } else {
+      return existing as Error<A, E>;
+    }
   };
 
   static isResult = (value: unknown): value is Result<unknown, unknown> =>
@@ -583,19 +615,16 @@ class __Result<A, E> {
 // @ts-expect-error
 __Result.prototype.__boxed_type__ = "Result";
 
-const RESULT_PROTO = Object.create(
-  null,
-  Object.getOwnPropertyDescriptors(__Result.prototype),
-);
+const RESULT_PROTO = __Result.prototype;
 
 interface Ok<A, E> extends __Result<A, E> {
-  tag: "Ok";
-  value: A;
+  readonly tag: "Ok";
+  readonly value: A;
 }
 
 interface Error<A, E> extends __Result<A, E> {
-  tag: "Error";
-  error: E;
+  readonly tag: "Error";
+  readonly error: E;
 }
 
 export const Result = __Result;

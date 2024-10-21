@@ -1,8 +1,11 @@
 import { keys, values } from "./Dict";
 import { Option, Result } from "./OptionResult";
+import { createStore } from "./referenceStore";
 import { BOXED_TYPE } from "./symbols";
 import { JsonAsyncData, LooseRecord } from "./types";
 import { zip } from "./ZipUnzip";
+
+const AsyncDataStore = createStore();
 
 class __AsyncData<A> {
   static P = {
@@ -14,10 +17,19 @@ class __AsyncData<A> {
    * Create an AsyncData.Done value
    */
   static Done = <A = never>(value: A): AsyncData<A> => {
-    const asyncData = Object.create(ASYNC_DATA_PROTO) as Done<A>;
-    asyncData.tag = "Done";
-    asyncData.value = value;
-    return asyncData;
+    const existing = AsyncDataStore.get(value);
+    if (existing === undefined) {
+      const asyncData = Object.create(ASYNC_DATA_PROTO) as Done<A>;
+      // @ts-expect-error
+      asyncData.tag = "Done";
+      // @ts-expect-error
+      asyncData.value = value;
+      Object.freeze(asyncData);
+      AsyncDataStore.set(value, asyncData);
+      return asyncData;
+    } else {
+      return existing as Done<A>;
+    }
   };
 
   /**
@@ -295,34 +307,35 @@ class __AsyncData<A> {
 // @ts-expect-error
 __AsyncData.prototype.__boxed_type__ = "AsyncData";
 
-const ASYNC_DATA_PROTO = Object.create(
-  null,
-  Object.getOwnPropertyDescriptors(__AsyncData.prototype),
-);
+const ASYNC_DATA_PROTO = __AsyncData.prototype;
 
 const LOADING = (() => {
   const asyncData = Object.create(ASYNC_DATA_PROTO) as Loading<unknown>;
+  // @ts-expect-error
   asyncData.tag = "Loading";
+  Object.freeze(asyncData);
   return asyncData;
 })();
 
 const NOT_ASKED = (() => {
   const asyncData = Object.create(ASYNC_DATA_PROTO) as NotAsked<unknown>;
+  // @ts-expect-error
   asyncData.tag = "NotAsked";
+  Object.freeze(asyncData);
   return asyncData;
 })();
 
-interface Done<A> extends __AsyncData<A> {
-  tag: "Done";
-  value: A;
+interface Done<A> extends Readonly<__AsyncData<A>> {
+  readonly tag: "Done";
+  readonly value: A;
 }
 
-interface Loading<A> extends __AsyncData<A> {
-  tag: "Loading";
+interface Loading<A> extends Readonly<__AsyncData<A>> {
+  readonly tag: "Loading";
 }
 
-interface NotAsked<A> extends __AsyncData<A> {
-  tag: "NotAsked";
+interface NotAsked<A> extends Readonly<__AsyncData<A>> {
+  readonly tag: "NotAsked";
 }
 
 export const AsyncData = __AsyncData;

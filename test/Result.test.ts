@@ -269,3 +269,13 @@ test("Result JSON serialization", async () => {
     }),
   ).toEqual(resultError);
 });
+
+test("Result equality", () => {
+  expect(Result.Ok(1)).toBe(Result.Ok(1));
+  expect(Result.Error(1)).toBe(Result.Error(1));
+  expect(Result.Ok({})).not.toBe(Result.Ok({}));
+  expect(Result.Error({})).not.toBe(Result.Error({}));
+  const x = {};
+  expect(Result.Ok(x)).toBe(Result.Ok(x));
+  expect(Result.Error(x)).toBe(Result.Error(x));
+});
