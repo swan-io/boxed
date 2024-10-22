@@ -81,6 +81,11 @@ test("Option.fromUndefined", () => {
   expect(Option.fromUndefined(undefined)).toEqual(Option.None());
 });
 
+test("Option.fromPredicate", () => {
+  expect(Option.fromPredicate(1, (x) => x === 1)).toEqual(Option.Some(1));
+  expect(Option.fromPredicate(1, (x) => x === 2)).toEqual(Option.None());
+});
+
 test("Option.equals", () => {
   expect(Option.equals(Option.None(), Option.None(), (a, b) => a === b)).toBe(
     true,

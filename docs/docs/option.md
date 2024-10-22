@@ -264,6 +264,76 @@ option.tapSome(console.log).map((x) => x * 2);
 
 ## Statics
 
+### Option.fromNullable(value)
+
+```ts
+fromNullable(nullable: A | null | undefined): Option<A>
+```
+
+Creates an option from a nullable value, excluding `null` & `undefined`
+
+```ts title="Examples"
+Option.fromNullable(null);
+// Option.None()
+
+Option.fromNullable(undefined);
+// Option.None()
+
+Option.fromNullable(1);
+// Option.Some(1)
+```
+
+### Option.fromNull(value)
+
+```ts
+fromNull(nullable: A | null): Option<A>
+```
+
+Creates an option from a nullable value, excluding `null`
+
+```ts title="Examples"
+Option.fromNull(null);
+// Option.None()
+
+Option.fromNull(undefined);
+// Option.Some(undefined)
+
+Option.fromNull(1);
+// Option.Some(1)
+```
+
+### Option.fromUndefined(value)
+
+```ts
+fromUndefined(nullable: A | undefined): Option<A>
+```
+
+Creates an option from a nullable value, excluding `undefined`
+
+```ts title="Examples"
+Option.fromUndefined(null);
+// Option.Some(null)
+
+Option.fromUndefined(undefined);
+// Option.None()
+
+Option.fromUndefined(1);
+// Option.Some(1)
+```
+
+### Option.fromPredicate(value, predicate)
+
+```ts
+fromPredicate(value: A, f: (value: A) => boolean): Option<A>
+```
+
+Creates an option from a value and a predicate. Will return `Some(value)` if predicate returns `true`, `None` if `false`
+
+```ts title="Examples"
+Option.fromPredicate(value, (value) => value % 2 === 0);
+// Option<number> where `number` is even
+```
+
 ### Option.isOption(value)
 
 ```ts

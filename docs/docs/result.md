@@ -319,6 +319,23 @@ result.tapError(console.log).map((x) => x * 2);
 
 ## Statics
 
+### Result.fromPredicate(value, predicate, error)
+
+```ts
+fromPredicate(value: A, f: (value: A) => boolean, errorIfFalse: E): Result<A, E>
+```
+
+Creates an option from a value and a predicate. Will return `Ok(value)` if predicate returns `true`, `Error(errorIfFalse)` if `false`
+
+```ts title="Examples"
+Result.fromPredicate(
+  value,
+  (value) => value % 2 === 0,
+  new Error("Odd number"),
+);
+// Ok<number> if `number` is even, Error<Error> if odd
+```
+
 ### Result.isResult(value)
 
 ```ts

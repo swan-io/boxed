@@ -58,6 +58,29 @@ class __Option<A> {
   };
 
   /**
+   * Create an Option from a value & predicate
+   */
+
+  static fromPredicate<A, B extends A>(
+    value: A,
+    predicate: (value: A) => value is B,
+  ): Option<B>;
+  static fromPredicate<A>(
+    value: A,
+    predicate: (value: A) => boolean,
+  ): Option<A>;
+  static fromPredicate<A>(
+    value: A,
+    predicate: (value: A) => boolean,
+  ): Option<A> {
+    if (predicate(value)) {
+      return Option.Some(value);
+    } else {
+      return NONE as Option<A>;
+    }
+  }
+
+  /**
    * Turns an array of options into an option of array
    */
   static all = <Options extends Option<any>[] | []>(options: Options) => {
