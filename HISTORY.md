@@ -1,3 +1,22 @@
+# 3.0.0
+
+Changes:
+
+- Freeze `Option`, `Result` and `AsyncData` values (a0112d4)
+- Make `Option`, `Result` and `AsyncData` referentially equal when their values are (a0112d4)
+
+# 2.3.2
+
+Fixes:
+
+- Fix type for `Result.fromJSON` (3c53fb0) (thanks @nobrayner!)
+
+# 2.3.1
+
+Fixes:
+
+- Make `Serializer.encode` not throw on nullable values (d9e3483) (thanks @nobrayner!)
+
 # 2.3.0
 
 Features:
