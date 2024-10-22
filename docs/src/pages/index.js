@@ -172,7 +172,7 @@ export default function Home() {
                   }}
                   muted
                   loop
-                  src="/boxed/video/ide.mov"
+                  src="/boxed/video/ide.m4v"
                   playsInline
                   controls={false}
                   preload="metadata"

@@ -25,6 +25,10 @@ const loading = AsyncData.Loading();
 const done = AsyncData.Done(1);
 ```
 
+:::tip Since v3.0.0
+`AsyncData` values are referentially equal if they contain the same value, meaning that `AsyncData.Done(1) === AsyncData.Done(1)`.
+:::
+
 ## Methods
 
 The async data type provides a few manipulation functions:

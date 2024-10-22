@@ -40,6 +40,10 @@ const b = Option.fromNull(value);
 const c = Option.fromUndefined(value);
 ```
 
+:::tip Since v3.0.0
+`Option` values are referentially equal if they contain the same value, meaning that `Option.Some(1) === Option.Some(1)`.
+:::
+
 ## Methods
 
 The option type provides a few manipulation functions:

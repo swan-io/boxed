@@ -60,6 +60,10 @@ const value = await Result.fromPromise(() => fetch("/api"));
 // - Error(error)
 ```
 
+:::tip Since v3.0.0
+`Result` values are referentially equal if they contain the same value, meaning that `Result.Ok(1) === Result.Ok(1)` and `Result.Error(1) === Result.Error(1)`.
+:::
+
 ## Methods
 
 The result type provides a few manipulation functions:
