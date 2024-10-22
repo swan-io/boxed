@@ -14,7 +14,7 @@ class __Option<A> {
 
   static Some = <A = never>(value: A): Option<A> => {
     const existing = SomeStore.get(value);
-    if (existing === undefined) {
+    if (existing == undefined) {
       const option = Object.create(OPTION_PROTO) as Some<A>;
       // @ts-expect-error
       option.tag = "Some";
@@ -329,7 +329,7 @@ class __Result<A, E> {
 
   static Ok = <A = never, E = never>(value: A): Result<A, E> => {
     const existing = OkStore.get(value);
-    if (existing === undefined) {
+    if (existing == undefined) {
       const result = Object.create(RESULT_PROTO) as Ok<A, E>;
       // @ts-expect-error
       result.tag = "Ok";
@@ -345,7 +345,7 @@ class __Result<A, E> {
 
   static Error = <A = never, E = never>(error: E): Result<A, E> => {
     const existing = ErrorStore.get(error);
-    if (existing === undefined) {
+    if (existing == undefined) {
       const result = Object.create(RESULT_PROTO) as Error<A, E>;
       // @ts-expect-error
       result.tag = "Error";

@@ -18,7 +18,7 @@ class __AsyncData<A> {
    */
   static Done = <A = never>(value: A): AsyncData<A> => {
     const existing = AsyncDataStore.get(value);
-    if (existing === undefined) {
+    if (existing == undefined) {
       const asyncData = Object.create(ASYNC_DATA_PROTO) as Done<A>;
       // @ts-expect-error
       asyncData.tag = "Done";
