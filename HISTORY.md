@@ -1,3 +1,9 @@
+# 3.1.0
+
+Features:
+
+- Add `Option.fromPredicate` (9818bcf)
+
 # 3.0.0
 
 Changes:
