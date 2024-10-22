@@ -1,3 +1,9 @@
+# 3.1.1
+
+Fixes:
+
+- Handle null checks in store getter (c79d04b)
+
 # 3.1.0
 
 Features:
