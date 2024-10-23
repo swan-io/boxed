@@ -89,7 +89,7 @@ module.exports = {
             position: "left",
           },
           {
-            href: "https://codesandbox.io/s/boxed-playground-m79x9k?file=/src/index.ts",
+            href: "https://codesandbox.io/p/devbox/boxed-playground-forked-2nzs58",
             label: "Playground",
             position: "left",
           },
