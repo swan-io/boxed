@@ -72,6 +72,8 @@ module.exports = {
         "form-validation",
         "nested-optional-values",
         "cancellable-request",
+        "retry",
+        "concurrency",
       ],
     },
     {
