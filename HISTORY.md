@@ -1,3 +1,16 @@
+# 3.1.2
+
+Features:
+
+- Add `option.mapOr` (8aa1793)
+- Add `result.mapOr` (8aa1793)
+- Add `asyncData.mapOr` (8aa1793)
+- Add `option.orElse` (8aa1793)
+
+Changes:
+
+- Deprecate `getWithDefault` in favor of `getOr` (8aa1793)
+
 # 3.1.1
 
 Fixes:
