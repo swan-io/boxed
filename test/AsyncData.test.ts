@@ -57,6 +57,12 @@ test("AsyncData.getOr", () => {
   expect(AsyncData.Done(5).getOr(0)).toEqual(5);
 });
 
+test("AsyncData.mapOk", () => {
+  expect(AsyncData.NotAsked<number>().mapOr(0, (x) => x * 2)).toEqual(0);
+  expect(AsyncData.Loading<number>().mapOr(0, (x) => x * 2)).toEqual(0);
+  expect(AsyncData.Done(5).mapOr(0, (x) => x * 2)).toEqual(10);
+});
+
 test("AsyncData.toOption", () => {
   expect(AsyncData.NotAsked<number>().toOption()).toEqual(Option.None());
   expect(AsyncData.Loading<number>().toOption()).toEqual(Option.None());

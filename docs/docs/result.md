@@ -168,6 +168,22 @@ Result.Error(2).getOr(1);
 // 1
 ```
 
+### .mapOr(defaultValue, mapper)
+
+```ts
+Result<A, E>.mapOr(defaultValue: B, mapper: (a: A) => B): B
+```
+
+If the option is `Ok(value)` returns `mapper(value)`, otherwise returns `defaultValue`.
+
+```ts title="Examples"
+Result.Ok(2).mapOr(1, (x) => x * 2);
+// 4
+
+Result.Error("error").mapOr(1, (x) => x * 2);
+// 1
+```
+
 ### .get()
 
 ```ts

@@ -103,6 +103,25 @@ AsyncData.NotAsked().getOr(1);
 // 1
 ```
 
+### .mapOr(defaultValue, mapper)
+
+```ts
+AsyncData<A>.mapOr(defaultValue: B, mapper: (a: A) => B): B
+```
+
+If the option is `Done(value)` returns `mapper(value)`, otherwise returns `defaultValue`.
+
+```ts title="Examples"
+AsyncData.Done(2).mapOr(1, (x) => x * 2);
+// 4
+
+AsyncData.NotAsked().mapOr(1, (x) => x * 2);
+// 1
+
+AsyncData.Loading().mapOr(1, (x) => x * 2);
+// 1
+```
+
 ### .get()
 
 ```ts

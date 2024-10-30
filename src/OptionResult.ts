@@ -190,6 +190,7 @@ class __Option<A> {
    * Return the value if present, and the fallback otherwise
    *
    * (Option\<A>, A) => A
+   * @deprecated
    */
   getWithDefault(this: Option<A>, defaultValue: A): A {
     if (this === NONE) {
@@ -207,6 +208,30 @@ class __Option<A> {
       return defaultValue;
     }
     return (this as Some<A>).value;
+  }
+
+  /**
+   * Return the value if present, and the fallback otherwise
+   *
+   * (Option\<A>, Option\<A>) => Option\<A>
+   */
+  orElse(this: Option<A>, other: Option<A>): Option<A> {
+    if (this === NONE) {
+      return other;
+    }
+    return this;
+  }
+
+  /**
+   * Maps the value if present, returns the fallback otherwise
+   *
+   * (Option\<A>, B, A => B) => B
+   */
+  mapOr<B>(this: Option<A>, defaultValue: B, mapper: (value: A) => B): B {
+    if (this === NONE) {
+      return defaultValue;
+    }
+    return mapper((this as Some<A>).value);
   }
 
   /**
@@ -549,6 +574,7 @@ class __Result<A, E> {
    * Return the value if present, and the fallback otherwise
    *
    * (Result\<A, E>, A) => A
+   * @deprecated
    */
   getWithDefault(this: Result<A, E>, defaultValue: A): A {
     return this.tag === "Ok" ? this.value : defaultValue;
@@ -561,6 +587,18 @@ class __Result<A, E> {
    */
   getOr(this: Result<A, E>, defaultValue: A): A {
     return this.tag === "Ok" ? this.value : defaultValue;
+  }
+
+  /**
+   * Maps the value if present, returns the fallback otherwise
+   *
+   * (Result\<A, E>, B, A => B) => B
+   */
+  mapOr<B>(this: Result<A, E>, defaultValue: B, mapper: (value: A) => B): B {
+    if (this.tag === "Error") {
+      return defaultValue;
+    }
+    return mapper((this as Ok<A, E>).value);
   }
 
   /**

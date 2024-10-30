@@ -240,6 +240,9 @@ class __AsyncData<A> {
     return this.value;
   }
 
+  /**
+   * @deprecated
+   */
   getWithDefault(this: AsyncData<A>, defaultValue: A): A {
     if (this === NOT_ASKED || this === LOADING) {
       return defaultValue;
@@ -252,6 +255,18 @@ class __AsyncData<A> {
       return defaultValue;
     }
     return (this as Done<A>).value;
+  }
+
+  /**
+   * Maps the value if present, returns the fallback otherwise
+   *
+   * (AsyncData\<A>, B, A => B) => B
+   */
+  mapOr<B>(this: AsyncData<A>, defaultValue: B, mapper: (value: A) => B): B {
+    if (this === NOT_ASKED || this === LOADING) {
+      return defaultValue;
+    }
+    return mapper((this as Done<A>).value);
   }
 
   match<B>(

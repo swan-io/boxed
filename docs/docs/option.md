@@ -117,6 +117,44 @@ Option.None().getOr(1);
 // 1
 ```
 
+### .mapOr(defaultValue, mapper)
+
+```ts
+Option<A>.mapOr(defaultValue: B, mapper: (a: A) => B): B
+```
+
+If the option is `Some(value)` returns `mapper(value)`, otherwise returns `defaultValue`.
+
+```ts title="Examples"
+Option.Some(2).mapOr(1, (x) => x * 2);
+// 4
+
+Option.None().mapOr(1, (x) => x * 2);
+// 1
+```
+
+### .orElse(option)
+
+```ts
+Option<A>.orElse(fallback: Option<A>): Option<A>
+```
+
+If the option is `Some(value)` return it, otherwise return the fallback value.
+
+```ts title="Examples"
+Option.Some(2).orElse(Option.Some(3));
+// Some<2>
+
+Option.Some(2).orElse(Option.None());
+// Some<2>
+
+Option.None().orElse(Option.Some(3));
+// Some<3>
+
+Option.None().orElse(Option.None());
+// None
+```
+
 ### .get()
 
 ```ts

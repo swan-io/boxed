@@ -71,6 +71,11 @@ test("Result.getOr", () => {
   expect(Result.Error<number, number>(1).getOr(0)).toEqual(0);
 });
 
+test("Result.mapOr", () => {
+  expect(Result.Ok(1).mapOr(0, (x) => x * 2)).toEqual(2);
+  expect(Result.Error<number, number>(1).mapOr(0, (x) => x * 2)).toEqual(0);
+});
+
 test("Result.match", () => {
   Result.Error<number, number>(1).match({
     Error: (value) => expect(value).toBe(1),

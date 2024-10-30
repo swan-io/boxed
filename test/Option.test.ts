@@ -42,6 +42,17 @@ test("Option.getOr", () => {
   expect(Option.None<number>().getOr(0)).toEqual(0);
 });
 
+test("Option.mapOr", () => {
+  expect(Option.Some(1).mapOr(0, (x) => x * 2)).toEqual(2);
+  expect(Option.None<number>().mapOr(0, (x) => x * 2)).toEqual(0);
+});
+
+test("Option.orElse", () => {
+  expect(Option.Some(1).orElse(Option.None())).toEqual(Option.Some(1));
+  expect(Option.None().orElse(Option.None())).toEqual(Option.None());
+  expect(Option.None<number>().orElse(Option.Some(1))).toEqual(Option.Some(1));
+});
+
 test("Option.match", () => {
   Option.None<number>().match({
     None: () => expect(true).toBe(true),
