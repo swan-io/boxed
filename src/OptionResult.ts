@@ -331,12 +331,12 @@ const NONE = (() => {
   return option;
 })();
 
-interface Some<A> extends __Option<A> {
+export interface Some<A> extends __Option<A> {
   readonly tag: "Some";
   readonly value: A;
 }
 
-interface None<A> extends __Option<A> {
+export interface None<A> extends __Option<A> {
   readonly tag: "None";
 }
 
@@ -678,12 +678,12 @@ __Result.prototype.__boxed_type__ = "Result";
 
 const RESULT_PROTO = __Result.prototype;
 
-interface Ok<A, E> extends __Result<A, E> {
+export interface Ok<A, E> extends __Result<A, E> {
   readonly tag: "Ok";
   readonly value: A;
 }
 
-interface Error<A, E> extends __Result<A, E> {
+export interface Error<A, E> extends __Result<A, E> {
   readonly tag: "Error";
   readonly error: E;
 }

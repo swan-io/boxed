@@ -340,16 +340,16 @@ const NOT_ASKED = (() => {
   return asyncData;
 })();
 
-interface Done<A> extends Readonly<__AsyncData<A>> {
+export interface Done<A> extends Readonly<__AsyncData<A>> {
   readonly tag: "Done";
   readonly value: A;
 }
 
-interface Loading<A> extends Readonly<__AsyncData<A>> {
+export interface Loading<A> extends Readonly<__AsyncData<A>> {
   readonly tag: "Loading";
 }
 
-interface NotAsked<A> extends Readonly<__AsyncData<A>> {
+export interface NotAsked<A> extends Readonly<__AsyncData<A>> {
   readonly tag: "NotAsked";
 }
 
