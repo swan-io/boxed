@@ -1,3 +1,9 @@
+# 3.2.0
+
+Changes:
+
+- Make `.match()` handlers signature more permissive (062830e, f9f98d4)
+
 # 3.1.2
 
 Features:
