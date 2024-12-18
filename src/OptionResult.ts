@@ -237,10 +237,10 @@ class __Option<A> {
   /**
    * Explodes the Option given its case
    */
-  match<B>(
+  match<B1, B2 = B1>(
     this: Option<A>,
-    config: { Some: (value: A) => B; None: () => B },
-  ): B {
+    config: { Some: (value: A) => B1; None: () => B2 },
+  ): B1 | B2 {
     if (this === NONE) {
       return config.None();
     }
@@ -604,10 +604,10 @@ class __Result<A, E> {
   /**
    * Explodes the Result given its case
    */
-  match<B>(
+  match<B1, B2 = B1>(
     this: Result<A, E>,
-    config: { Ok: (value: A) => B; Error: (error: E) => B },
-  ): B {
+    config: { Ok: (value: A) => B1; Error: (error: E) => B2 },
+  ): B1 | B2 {
     return this.tag === "Ok" ? config.Ok(this.value) : config.Error(this.error);
   }
 

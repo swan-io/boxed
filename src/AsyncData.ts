@@ -269,14 +269,14 @@ class __AsyncData<A> {
     return mapper((this as Done<A>).value);
   }
 
-  match<B>(
+  match<B1, B2 = B1, B3 = B1>(
     this: AsyncData<A>,
     config: {
-      Done: (value: A) => B;
-      Loading: () => B;
-      NotAsked: () => B;
+      Done: (value: A) => B1;
+      Loading: () => B2;
+      NotAsked: () => B3;
     },
-  ): B {
+  ): B1 | B2 | B3 {
     if (this === NOT_ASKED) {
       return config.NotAsked();
     }
