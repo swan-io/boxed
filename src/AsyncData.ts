@@ -269,7 +269,7 @@ class __AsyncData<A> {
     return mapper((this as Done<A>).value);
   }
 
-  match<B1, B2 = B1, B3 = B1>(
+  match<B1, B2 = B1, B3 = B1 | B2>(
     this: AsyncData<A>,
     config: {
       Done: (value: A) => B1;
