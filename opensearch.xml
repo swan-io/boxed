@@ -4,8 +4,8 @@
   <ShortName>Boxed</ShortName>
   <Description>Search Boxed</Description>
   <InputEncoding>UTF-8</InputEncoding>
-  <Image width="16" height="16" type="image/x-icon">https://swan-io.github.io/boxed/img/favicon.png</Image>
-  <Url type="text/html" method="get" template="https://swan-io.github.io/boxed/search?q={searchTerms}"/>
-  <Url type="application/opensearchdescription+xml" rel="self" template="https://swan-io.github.io/boxed/opensearch.xml" />
-  <moz:SearchForm>https://swan-io.github.io/boxed/</moz:SearchForm>
+  <Image width="16" height="16" type="image/x-icon">https://boxed.cool/img/favicon.png</Image>
+  <Url type="text/html" method="get" template="https://boxed.cool/search?q={searchTerms}"/>
+  <Url type="application/opensearchdescription+xml" rel="self" template="https://boxed.cool/opensearch.xml" />
+  <moz:SearchForm>https://boxed.cool/</moz:SearchForm>
 </OpenSearchDescription>
