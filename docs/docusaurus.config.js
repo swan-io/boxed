@@ -4,14 +4,14 @@
 const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/oceanicNext");
 
-const url = "https://swan-io.github.io/boxed";
+const url = "https://boxed.cool";
 
 /** @type {import('@docusaurus/types').Config} */
 module.exports = {
   title: "Boxed",
   tagline: "Essential building-blocks for functional & safe TypeScript code",
-  url: "https://swan-io.github.io",
-  baseUrl: "/boxed/",
+  url: "https://boxed.cool",
+  baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.png",

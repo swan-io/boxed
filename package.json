@@ -4,7 +4,7 @@
   "license": "MIT",
   "description": "Utility types for functional TypeScript",
   "author": "Matthias Le Brun <bloodyowl@swan.io>",
-  "homepage": "https://swan-io.github.io/boxed",
+  "homepage": "https://boxed.cool",
   "repository": {
     "type": "git",
     "url": "https://github.com/swan-io/boxed.git"

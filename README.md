@@ -37,5 +37,5 @@ $ npm install --save @swan-io/boxed
 
 ## Links
 
-- 📘 [**Documentation**](https://swan-io.github.io/boxed)
+- 📘 [**Documentation**](https://boxed.cool)
 - ⚖️ [**License**](./LICENSE)
