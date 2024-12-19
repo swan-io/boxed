@@ -112,7 +112,7 @@ export default function Home() {
               <img
                 style={{ width: "100%", borderRadius: "1rem" }}
                 loading="lazy"
-                src="/boxed/img/react.jpg"
+                src="/img/react.jpg"
                 alt="Example of a request lifecycle management in a React component using Boxed.AsyncData"
               />
             }
@@ -172,7 +172,7 @@ export default function Home() {
                   }}
                   muted
                   loop
-                  src="/boxed/video/ide.m4v"
+                  src="/video/ide.m4v"
                   playsInline
                   controls={false}
                   preload="metadata"
@@ -200,7 +200,7 @@ export default function Home() {
               <img
                 style={{ width: "100%", borderRadius: "1rem" }}
                 loading="lazy"
-                src="/boxed/img/cheatsheet.jpg"
+                src="/img/cheatsheet.jpg"
                 alt="Cheatsheet table for the types of the map and flatMap functions"
               />
             }
