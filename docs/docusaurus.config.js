@@ -50,7 +50,7 @@ module.exports = {
 
   scripts: [
     {
-      src: "/boxed/try.js",
+      src: "/try.js",
       async: true,
     },
   ],

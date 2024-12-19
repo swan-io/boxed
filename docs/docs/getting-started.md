@@ -25,4 +25,4 @@ Boxed provides useful data-structures designed in way that **completely eliminat
 
 ![Monads & functors](/img/monads-functors.png)
 
-Now, let's get into the details with the [core concepts](/boxed/core-concepts).
+Now, let's get into the details with the [core concepts](/core-concepts).
