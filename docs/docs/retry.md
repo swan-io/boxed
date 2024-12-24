@@ -15,7 +15,7 @@ Future.retry(() => getUserById(userId), { max: 3 });
 // Future<Result<...>>
 ```
 
-## Rety with delay
+## Retry with delay
 
 The function you pass `Future.retry` takes an `attempt` parameter, which is the current number of attempts. The count starts at `0`.
 
