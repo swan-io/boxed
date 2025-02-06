@@ -125,6 +125,13 @@ test("Result.fromPromise", async () => {
   ).toEqual(Result.Error(2));
 });
 
+test("Result.fromPredicate", () => {
+  expect(Result.fromPredicate(2, (x) => x >= 2, "Error")).toEqual(Result.Ok(2));
+  expect(Result.fromPredicate(1, (x) => x >= 2, "Error")).toEqual(
+    Result.Error("Error"),
+  );
+});
+
 test("Result.equals", () => {
   expect(
     Result.equals(Result.Error(1), Result.Error(2), (a, b) => a === b),

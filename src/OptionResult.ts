@@ -414,6 +414,22 @@ class __Result<A, E> {
   };
 
   /**
+   * Create a Result from a value, a predicate and an error condition
+   */
+  
+  static fromPredicate<A, E>(
+    value: A,
+    predicate: (value: A) => boolean,
+    errorIfFalse: E
+  ): Result<A, E> {
+    if (predicate(value)) {
+      return Result.Ok(value);
+    } else {
+      return Result.Error(errorIfFalse);
+    }
+  }
+
+  /**
    * Takes the option and turns it into Ok(value) is Some, or Error(valueWhenNone)
    */
   static fromOption = <A, E>(
