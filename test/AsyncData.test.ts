@@ -170,6 +170,40 @@ test("AsyncData.tap", () => {
   ).toEqual(AsyncData.Done(1))
 })
 
+test("AsyncData.tapOk", () => {
+  expect(
+    AsyncData.NotAsked().tapOk((value) =>
+      expect(value).toEqual(AsyncData.NotAsked()),
+    ),
+  ).toEqual(AsyncData.NotAsked())
+  expect(
+    AsyncData.Loading().tapOk((value) =>
+      expect(value).toEqual(AsyncData.Loading()),
+    ),
+  ).toEqual(AsyncData.Loading())
+  expect(
+    AsyncData.Done(Result.Ok(1)).tapOk((value) => expect(value).toEqual(1)),
+  ).toEqual(AsyncData.Done(Result.Ok(1)))
+})
+
+test("AsyncData.tapError", () => {
+  expect(
+    AsyncData.NotAsked().tapError((value) =>
+      expect(value).toEqual(AsyncData.NotAsked()),
+    ),
+  ).toEqual(AsyncData.NotAsked())
+  expect(
+    AsyncData.Loading().tapError((value) =>
+      expect(value).toEqual(AsyncData.Loading()),
+    ),
+  ).toEqual(AsyncData.Loading())
+  expect(
+    AsyncData.Done(Result.Error(1)).tapError((value) =>
+      expect(value).toEqual(1),
+    ),
+  ).toEqual(AsyncData.Done(Result.Error(1)))
+})
+
 test("AsyncData.all", () => {
   expect(AsyncData.all([])).toEqual(AsyncData.Done([]))
   expect(
