@@ -291,6 +291,32 @@ class __AsyncData<A> {
     return this
   }
 
+  /**
+   * Runs the callback if ok and returns `this`
+   */
+  tapOk<A, E>(
+    this: AsyncData<Result<A, E>>,
+    func: (value: A) => unknown,
+  ): AsyncData<Result<A, E>> {
+    if (this.tag === "Done" && this.value.tag === "Ok") {
+      func(this.value.value)
+    }
+    return this
+  }
+
+  /**
+   * Runs the callback if error and returns `this`
+   */
+  tapError<A, E>(
+    this: AsyncData<Result<A, E>>,
+    func: (error: E) => unknown,
+  ): AsyncData<Result<A, E>> {
+    if (this.tag === "Done" && this.value.tag === "Error") {
+      func(this.value.error)
+    }
+    return this
+  }
+
   toOption(this: AsyncData<A>): Option<A> {
     if (this === NOT_ASKED || this === LOADING) {
       return Option.None()
